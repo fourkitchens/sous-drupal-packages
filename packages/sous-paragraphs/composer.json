@@ -1,29 +1,29 @@
 {
-    "name": "fourkitchens/sous-paragraphs",
-    "description": "A collection of recipes and configuration for Sous with Paragraphs.",
-    "keywords": [
-        "recipe",
-        "Drupal recipes",
-        "drupal recipe"
-    ],
-    "type": "drupal-recipe",
-    "license": "GPL-2.0-or-later",
-    "authors": [
-        {
-            "name": "Laura Johnson",
-            "role": "Maintainer"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {
-        "drupal/core": "^11.4.11",
-        "drupal/paragraphs_features": "^2.1",
-        "fourkitchens/sous-content-types": "^2.0",
-        "fourkitchens/sous-paragraph-types": "^2.0"
-    },
-    "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
-    "support": {
-        "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
-        "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-paragraphs"
+  "name": "fourkitchens/sous-paragraphs",
+  "description": "A collection of recipes and configuration for Sous with Paragraphs.",
+  "keywords": [
+    "recipe",
+    "Drupal recipes",
+    "drupal recipe"
+  ],
+  "type": "drupal-recipe",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Laura Johnson",
+      "role": "Maintainer"
     }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "drupal/core": "^11.4.11",
+    "drupal/paragraphs_features": "^2.1",
+    "fourkitchens/sous-content-types": "^1.0",
+    "fourkitchens/sous-paragraph-types": "^1.0"
+  },
+  "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
+  "support": {
+    "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
+    "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-paragraphs"
+  }
 }

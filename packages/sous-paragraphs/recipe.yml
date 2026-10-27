@@ -60,7 +60,7 @@ config:
           settings:
             view_mode: default
             link: ''
-          third_party_settings: {  }
+          third_party_settings: {}
           weight: 10
           region: content
     core.entity_form_display.node.frontpage.default:
@@ -83,7 +83,7 @@ config:
             features:
               add_above: add_above
               collapse_edit_all: collapse_edit_all
-          third_party_settings: { }
+          third_party_settings: {}
       simpleConfigUpdate:
         third_party_settings.field_group.group_content.children:
           - body
@@ -99,4 +99,4 @@ config:
           settings:
             view_mode: default
             link: ''
-          third_party_settings: { }
+          third_party_settings: {}

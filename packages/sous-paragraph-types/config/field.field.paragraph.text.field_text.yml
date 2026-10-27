@@ -15,7 +15,7 @@ label: Text
 description: ''
 required: true
 translatable: false
-default_value: {  }
+default_value: {}
 default_value_callback: ''
 settings:
   allowed_formats:

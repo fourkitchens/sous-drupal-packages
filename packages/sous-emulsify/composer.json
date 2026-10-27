@@ -1,32 +1,32 @@
 {
-    "name": "fourkitchens/sous-emulsify",
-    "description": "A recipe that installs Emulsify dependencies and sets Emulsify as the default theme.",
-    "keywords": [
-        "recipe",
-        "Drupal recipes",
-        "drupal recipe"
-    ],
-    "type": "drupal-recipe",
-    "license": "GPL-2.0-or-later",
-    "authors": [
-        {
-            "name": "Laura Johnson",
-            "role": "Maintainer"
-        },
-        {
-            "name": "Callin Mullaney",
-            "role": "Maintainer"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {
-        "drupal/core": "^11.4.11",
-        "drupal/emulsify": "^7.2.1",
-        "drupal/emulsify_tools": "^2.2.2"
+  "name": "fourkitchens/sous-emulsify",
+  "description": "A recipe that installs Emulsify dependencies and sets Emulsify as the default theme.",
+  "keywords": [
+    "recipe",
+    "Drupal recipes",
+    "drupal recipe"
+  ],
+  "type": "drupal-recipe",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Laura Johnson",
+      "role": "Maintainer"
     },
-    "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
-    "support": {
-        "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
-        "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-emulsify"
+    {
+      "name": "Callin Mullaney",
+      "role": "Maintainer"
     }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "drupal/core": "^11.4.11",
+    "drupal/emulsify": "^7.2.1",
+    "drupal/emulsify_tools": "^2.2.2"
+  },
+  "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
+  "support": {
+    "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
+    "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-emulsify"
+  }
 }

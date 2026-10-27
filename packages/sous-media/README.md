@@ -31,7 +31,7 @@ Sous index and Drupal repository:
     "name": "dropzone/dropzone",
     "version": "6.3.5",
     "type": "drupal-library",
-    "extra": {"installer-name": "dropzone"},
+    "extra": { "installer-name": "dropzone" },
     "dist": {
       "url": "https://github.com/enyo/dropzone/releases/download/dropzone%406.3.5/dist.zip",
       "type": "zip"
@@ -45,28 +45,25 @@ Dependencies retain their own licenses; this recipe does not vendor Dropzone.
 
 ## Installation and application
 
-This source is a **candidate for the coordinated 2.0 release**; it has not been
-published by this migration. After publication, configure the scoped Sous
-Composer index, Drupal repositories and installer paths as described in the
-[collection guide](https://github.com/fourkitchens/sous-drupal-packages/blob/main/README.md). Retain this package in Composer using the
-root native recipe-unpack exclusion setting. From a configured consuming site:
+Configure the Sous Composer index, Drupal repositories and installer paths as
+shown in the [collection guide](../../README.md). Retain this package using the
+root native recipe-unpack exclusion setting. Once the first collection release
+is published, from a configured consuming site:
 
 ```sh
-ddev composer require fourkitchens/sous-media:^2.0
+ddev composer require fourkitchens/sous-media:^1.0
 ddev drush recipe /var/www/html/web/recipes/sous-media
 ddev drush cache:rebuild
 ```
 
 Recipe application is explicit. Requiring or updating the package does not
-apply configuration again. Existing sites keep their database and complete
-configuration export and adopt changes through reviewed native migrations.
+reapply configuration. Projects maintain their complete configuration export
+after initial recipe application.
 
-## Contributing and checks
+## Contributing
 
-Source, issues and releases live in
-[fourkitchens/sous-drupal-packages](https://github.com/fourkitchens/sous-drupal-packages).
-See the [contributor guide](https://github.com/fourkitchens/sous-drupal-packages/blob/main/CONTRIBUTING.md). Shared package and composition checks run in disposable fixtures; maintainer
-tools and probes are excluded from consumer ZIPs. A package source checkout is not a runnable Drupal application.
+Edit this package here in Sous Drupal Packages. See the
+[contributor guide](../../CONTRIBUTING.md) for scaffolding and syntax/style checks.
+A package source checkout is not a runnable Drupal application.
 
-[GPL-2.0-or-later](LICENSE); dependency and original source notices remain
-applicable. Source commit provenance is recorded in the collection.
+[GPL-2.0-or-later](LICENSE); dependency and package notices remain applicable.

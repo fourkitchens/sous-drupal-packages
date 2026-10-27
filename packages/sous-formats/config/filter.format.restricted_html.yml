@@ -1,6 +1,6 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies: {}
 name: 'Restricted HTML'
 format: restricted_html
 weight: 1
@@ -10,7 +10,7 @@ filters:
     provider: filter
     status: true
     weight: 0
-    settings: {  }
+    settings: {}
   filter_html:
     id: filter_html
     provider: filter
@@ -25,7 +25,7 @@ filters:
     provider: filter
     status: true
     weight: 10
-    settings: {  }
+    settings: {}
   filter_url:
     id: filter_url
     provider: filter
