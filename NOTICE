@@ -1,0 +1,7 @@
+Sous recipe collection
+Copyright (c) 2023 Four Kitchens
+
+Source origins and reviewed commits are recorded in provenance/source-imports.json.
+Sous source is distributed under GPL-2.0-or-later. The imported Paragraphs
+source also retains its original MIT notice in packages/sous-paragraphs/NOTICE.
+Dependencies retain their original copyright and license notices.

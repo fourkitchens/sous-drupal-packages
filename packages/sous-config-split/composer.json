@@ -1,0 +1,27 @@
+{
+    "name": "fourkitchens/sous-config-split",
+    "description": "Optional native local/staging configuration split definitions for Sous projects.",
+    "keywords": [
+        "recipe",
+        "Drupal recipes",
+        "drupal recipe"
+    ],
+    "type": "drupal-recipe",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Four Kitchens",
+            "role": "Maintainer"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "drupal/config_split": "^2.0.2",
+        "drupal/core": "^11.4.11"
+    },
+    "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
+    "support": {
+        "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
+        "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-config-split"
+    }
+}

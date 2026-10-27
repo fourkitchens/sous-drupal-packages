@@ -1,0 +1,153 @@
+name: 'Sous Admin'
+description: 'A recipe that contains modules, themes, and configuration for the Sous administration experience.'
+type: 'Site'
+recipes:
+  # Install core recipes
+  - core/recipes/core_recommended_performance
+  # Share the profile without applying the full Formats/CKEditor recipe.
+  # Slash-containing includes are Drupal-root relative, matching web/recipes.
+  - recipes/sous-formats/recipes/linkit
+install:
+  # Install core dependencies.
+  - automated_cron
+  - block_content
+  - media
+  - media_library
+  - node
+  - taxonomy
+  - views
+  # Install Autosave Form.
+  - autosave_form
+  # Install Config log.
+  - config_log
+  # Install Gin theme and base modules that extend it.
+  - gin
+  # Install Entity Usuage
+  - entity_usage
+  # Install Field Group and dependencies
+  - field_group
+  # Install Field UI
+  - field_ui
+  # Install Login Destination
+  - login_destination
+  # Install Login History
+  - login_history
+  # Install Media Library Edit
+  - media_library_edit
+  # Install Navigation
+  - navigation
+  - navigation_extra_tools
+  # Install Publication Date
+  - publication_date
+  # Install Save and Edit
+  - save_edit
+  # Install Scheduler
+  - scheduler
+  # Install Tagify
+  - tagify
+  # Install Trash.
+  - trash
+  # Install Views AJAX History
+  - views_ajax_history
+  # Install Views Bulk Operations
+  - views_bulk_operations
+config:
+  # Preserve existing roles while validating the Gin baseline. The shared
+  # Linkit subrecipe separately preserves project-owned profiles.
+  strict:
+    - gin.settings
+    - block.block.gin_breadcrumbs
+    - block.block.gin_content
+    - block.block.gin_local_actions
+    - block.block.gin_messages
+    - block.block.gin_page_title
+    - block.block.gin_primary_local_tasks
+    - block.block.gin_secondary_local_tasks
+    - login_destination.destination.admins_and_editors_login_destination
+  import:
+    gin:
+      - gin.settings
+      - block.block.gin_breadcrumbs
+      - block.block.gin_content
+      - block.block.gin_local_actions
+      - block.block.gin_messages
+      - block.block.gin_page_title
+      - block.block.gin_primary_local_tasks
+      - block.block.gin_secondary_local_tasks
+    navigation:
+      - system.menu.content
+    login_destination:
+      - login_destination.destination.admins_and_editors_login_destination
+    # Import native management Views without overwriting project-owned variants.
+    block_content:
+      - views.view.block_content
+    node:
+      - views.view.content
+      - views.view.glossary
+    file:
+      - views.view.files
+    media:
+      - views.view.media
+    media_library:
+      - views.view.media_library
+    taxonomy:
+      - views.view.taxonomy_term
+    user:
+      - views.view.who_s_new
+      - views.view.who_s_online
+    login_history:
+      - views.view.login_history
+  actions:
+    # Disable legacy Gin blocks only when that Gin version provides them.
+    '?block.block.gin_admin':
+      simpleConfigUpdate:
+        status: false
+    '?block.block.gin_branding':
+      simpleConfigUpdate:
+        status: false
+    block.block.gin_local_actions:
+      simpleConfigUpdate:
+        region: content
+        weight: -10
+    '?block.block.gin_local_tasks':
+      simpleConfigUpdate:
+        status: false
+    block.block.gin_page_title:
+      simpleConfigUpdate:
+        region: header
+        weight: -10
+    block.block.gin_primary_local_tasks:
+      simpleConfigUpdate:
+        region: header
+        weight: -5
+    '?block.block.gin_tools':
+      simpleConfigUpdate:
+        status: false
+    # Update entity_usage
+    entity_usage.settings:
+      simpleConfigUpdate:
+        track_enabled_base_fields: true
+        local_task_enabled_entity_types:
+          - media
+    # Update gin settings
+    gin.settings:
+      simpleConfigUpdate:
+        preset_accent_color: 'green'
+        classic_toolbar: 'horizontal'
+    # Update login_destination settings
+    login_destination.settings:
+      simpleConfigUpdate:
+        preserve_destination: TRUE
+    # Update the node settings to use the admin theme.
+    node.settings:
+      simpleConfigUpdate:
+        use_admin_theme: true
+    # Update save_edit settings
+    save_edit.settings:
+      simpleConfigUpdate:
+        button_value: ''
+        button_weight: '-10'
+    # Update the admin theme to Gin in Theme settings.
+    system.theme:
+      simpleConfigUpdate:
+        admin: gin

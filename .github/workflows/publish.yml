@@ -1,0 +1,85 @@
+name: Publish reviewed package collection
+
+# Disabled by default. This operation creates a tag/release and deploys Pages.
+# See docs/RELEASING.md before enabling the repository variable or dispatching.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Stable 2.x version (for example 2.0.0)
+        required: true
+        type: string
+      confirmation:
+        description: Type publish followed by a space and the exact version
+        required: true
+        type: string
+      starter_acceptance_sha:
+        description: Full starter acceptance commit (40-character SHA)
+        required: true
+        type: string
+      full_starter_gate_passed:
+        description: Full starter acceptance passed, including generated-theme lint/build
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: package-publication
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'fourkitchens/sous-drupal-packages' && github.ref == 'refs/heads/main' && vars.SOUS_PUBLISHING_ENABLED == 'true' && inputs.full_starter_gate_passed
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    environment: package-release
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
+        with:
+          php-version: '8.4'
+          extensions: gd, mbstring, pdo_sqlite, sqlite3, zip
+          coverage: none
+          tools: composer:2.10.3
+      - run: npm run check && npm test
+      - run: npm run test:consumer
+      - name: Create immutable release and verify all public archive bytes
+        run: node tools/release.mjs publish "$SOUS_VERSION"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOUS_IMMUTABILITY_READ_TOKEN: ${{ secrets.SOUS_IMMUTABILITY_READ_TOKEN }}
+          SOUS_VERSION: ${{ inputs.version }}
+          SOUS_CONFIRM: ${{ inputs.confirmation }}
+          SOUS_PUBLISHING_ENABLED: ${{ vars.SOUS_PUBLISHING_ENABLED }}
+          SOUS_STARTER_ACCEPTANCE_SHA: ${{ inputs.starter_acceptance_sha }}
+          SOUS_FULL_STARTER_GATE_PASSED: ${{ inputs.full_starter_gate_passed }}
+      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+        with:
+          path: build/site
+
+  deploy-index:
+    needs: publish
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy complete verified Composer index
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

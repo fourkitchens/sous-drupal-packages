@@ -1,0 +1,46 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.limited_html
+  module:
+    - ckeditor5
+  enforced:
+    config:
+      - linkit.linkit_profile.default
+    module:
+      - linkit
+format: limited_html
+editor: ckeditor5
+settings:
+  toolbar:
+    items:
+      - bold
+      - italic
+      - '|'
+      - link
+      - '|'
+      - bulletedList
+      - numberedList
+      - '|'
+      - sourceEditing
+  plugins:
+    ckeditor5_list:
+      properties:
+        reversed: true
+        startIndex: true
+        styles: false
+      multiBlock: true
+    ckeditor5_sourceEditing:
+      allowed_tags:
+        - '<cite>'
+        - '<dl>'
+        - '<dt>'
+        - '<dd>'
+        - '<a hreflang title>'
+        - '<i>'
+    linkit_extension:
+      linkit_enabled: true
+      linkit_profile: default
+image_upload:
+  status: false

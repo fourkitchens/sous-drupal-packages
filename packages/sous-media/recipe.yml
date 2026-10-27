@@ -1,0 +1,87 @@
+name: 'Sous Media'
+description: 'A recipe that contains modules and configuration for Sous media.'
+type: 'Site'
+install:
+  # Core modules
+  - file
+  - image
+  - link
+  - media
+  - media_library
+  - taxonomy
+  - views
+  # Contrib modules
+  - dropzonejs
+  - field_group
+  - focal_point
+  - media_library_edit
+  - scheduler
+config:
+  # Protect bundle/field/display and provider defaults. Native management Views
+  # may already belong to Admin or the project; import missing Views only.
+  strict:
+    - core.entity_form_display.media.file.default
+    - core.entity_form_display.media.image.default
+    - core.entity_form_display.media.video.default
+    - core.entity_form_mode.media.media_library
+    - core.entity_view_display.media.file.default
+    - core.entity_view_display.media.file.media_library
+    - core.entity_view_display.media.file.preview
+    - core.entity_view_display.media.image.default
+    - core.entity_view_display.media.image.media_library
+    - core.entity_view_display.media.image.preview
+    - core.entity_view_display.media.video.default
+    - core.entity_view_display.media.video.media_library
+    - core.entity_view_display.media.video.preview
+    - core.entity_view_mode.file.token
+    - core.entity_view_mode.media.full
+    - core.entity_view_mode.media.media_library
+    - core.entity_view_mode.media.preview
+    - core.entity_view_mode.media.token
+    - crop.type.focal_point
+    - field.field.media.file.field_description
+    - field.field.media.file.field_media_file
+    - field.field.media.file.field_tags
+    - field.field.media.image.field_caption
+    - field.field.media.image.field_copyright
+    - field.field.media.image.field_description
+    - field.field.media.image.field_media_image
+    - field.field.media.image.field_tags
+    - field.field.media.video.field_caption
+    - field.field.media.video.field_copyright
+    - field.field.media.video.field_description
+    - field.field.media.video.field_media_oembed_video
+    - field.field.media.video.field_tags
+    - field.field.media.video.field_transcript
+    - field.storage.media.field_caption
+    - field.storage.media.field_copyright
+    - field.storage.media.field_description
+    - field.storage.media.field_media_file
+    - field.storage.media.field_media_image
+    - field.storage.media.field_media_oembed_video
+    - field.storage.media.field_tags
+    - field.storage.media.field_transcript
+    - focal_point.settings
+    - image.settings
+    - image.style.large
+    - image.style.media_library
+    - image.style.medium
+    - image.style.thumbnail
+    - image.style.wide
+    - media.settings
+    - media.type.file
+    - media.type.image
+    - media.type.video
+    - media_library.settings
+    - system.action.media_delete_action
+    - system.action.media_publish_action
+    - system.action.media_save_action
+    - system.action.media_unpublish_action
+    - taxonomy.vocabulary.media_tags
+  import:
+    # Core.
+    image: '*'
+    media: '*'
+    media_library: '*'
+    # Contrib.
+    focal_point: '*'

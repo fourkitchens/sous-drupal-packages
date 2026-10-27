@@ -1,0 +1,54 @@
+name: 'Sous Paragraph Types'
+description: 'A recipe that contains modules and configuration for the default Sous paragraph types.'
+type: 'Site'
+recipes:
+  - sous-formats
+  - sous-media
+install:
+  # Core modules
+  - file
+  - image
+  - media
+  - media_library
+  - options
+  - text
+  - paragraphs
+  - paragraphs_collapsible
+  - paragraphs_ee
+  - taxonomy
+  - views
+  # Contrib modules
+  - focal_point
+  - media_library_edit
+config:
+  # Protect this recipe's field/type/display defaults. The shared Paragraphs
+  # preview mode comes from its module and may already be customized.
+  strict:
+    - core.entity_form_display.paragraph.image.default
+    - core.entity_form_display.paragraph.text.default
+    - core.entity_form_display.paragraph.text_with_media.default
+    - core.entity_form_display.paragraph.video.default
+    - core.entity_view_display.paragraph.image.default
+    - core.entity_view_display.paragraph.text.default
+    - core.entity_view_display.paragraph.text_with_media.default
+    - core.entity_view_display.paragraph.video.default
+    - field.field.paragraph.image.field_image
+    - field.field.paragraph.text.field_text
+    - field.field.paragraph.text_with_media.field_media
+    - field.field.paragraph.text_with_media.field_media_alignment
+    - field.field.paragraph.text_with_media.field_text
+    - field.field.paragraph.video.field_video
+    - field.storage.paragraph.field_image
+    - field.storage.paragraph.field_media
+    - field.storage.paragraph.field_media_alignment
+    - field.storage.paragraph.field_text
+    - field.storage.paragraph.field_video
+    - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.text
+    - paragraphs.paragraphs_type.text_with_media
+    - paragraphs.paragraphs_type.video
+    - paragraphs_ee.paragraphs_category.media_components
+    - paragraphs_ee.paragraphs_category.text_components
+  import:
+    paragraphs:
+      - core.entity_view_mode.paragraph.preview

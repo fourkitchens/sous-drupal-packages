@@ -1,0 +1,34 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.page.body
+    - field.field.node.page.field_metadata
+    - field.field.node.page.field_seo_title
+    - field.field.node.page.field_tags
+    - field.field.node.page.field_teaser_image
+    - field.field.node.page.field_teaser_text
+    - node.type.page
+  module:
+    - text
+    - user
+id: node.page.default
+targetEntityType: node
+bundle: page
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_metadata: true
+  field_seo_title: true
+  field_tags: true
+  field_teaser_image: true
+  field_teaser_text: true
+  links: true
+  published_at: true

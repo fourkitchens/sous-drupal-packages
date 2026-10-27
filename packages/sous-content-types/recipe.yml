@@ -1,0 +1,35 @@
+name: 'Sous Content Types'
+description: 'Page and Frontpage content types, fields, displays, and URL aliases for Sous.'
+type: 'Site'
+recipes:
+  - sous-formats
+  - sous-media
+install:
+  # Install core dependencies.
+  - media
+  - media_library
+  - node
+  - text
+  - user
+  - menu_ui
+  - path
+  - pathauto
+  # Install the modules used by Page fields, widgets, and settings.
+  - field_group
+  - metatag
+  - publication_date
+  - scheduler
+  - tagify
+config:
+  import:
+    metatag: '*'
+  actions:
+    core.entity_form_display.node.page.default:
+      setComponent:
+        name: path
+        options:
+          type: path
+          weight: 30
+          region: content
+          settings: { }
+          third_party_settings: { }

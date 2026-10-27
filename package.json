@@ -1,0 +1,15 @@
+{
+  "name": "sous-drupal-packages",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "24.22.1", "npm": "11.21.1" },
+  "packageManager": "npm@11.21.1",
+  "scripts": {
+    "check": "node tools/build.mjs --check",
+    "build": "node tools/build.mjs",
+    "test": "node --test tests/distribution.test.mjs tests/release.test.mjs tests/release.integration.test.mjs",
+    "test:consumer": "node tests/consumer.mjs",
+    "release:prepare": "node tools/release.mjs prepare",
+    "release:publish": "node tools/release.mjs publish"
+  }
+}
