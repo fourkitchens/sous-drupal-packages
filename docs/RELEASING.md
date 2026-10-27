@@ -3,7 +3,7 @@
 A merge to `main` runs syntax, code-sniffing and formatting checks, then
 semantic-release publishes the collection. Review branches and pull requests
 run checks without publishing. There is one version for the repository and all
-hosted packages, starting at `1.0.0`.
+hosted packages, starting at `2.0.0`.
 
 ## Version rules
 
@@ -17,9 +17,13 @@ Use Conventional Commits for commits merged into `main`, including squash titles
 | Other changes, including docs and CI                   | `docs: improve the package guide`  | Patch     |
 
 A `BREAKING CHANGE:` footer also requests a major release. semantic-release
-selects the largest increment since the previous release. It produces `1.0.0`
-when no earlier collection release exists; contributors do not manually edit
-package versions or create release tags.
+selects the largest increment since the previous release. The `1.0.0` tag at
+`d3dcd219d251e322a3b206a6bf12889712b2b3f0` records the release baseline on
+`main`; it has no hosted packages, release assets or Composer index entry.
+The first merge after that baseline produces `2.0.0`, including when a PR is
+squashed. Subsequent releases follow the rules above. The workflow verifies the
+baseline commit and excludes only that tag from its published-asset checks.
+Contributors do not manually edit package versions or create release tags.
 
 ## Repository setup
 

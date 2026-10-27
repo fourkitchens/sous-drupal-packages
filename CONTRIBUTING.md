@@ -50,8 +50,8 @@ consumer ZIPs contain only recipe files and their notices.
 From a committed checkout, substitute the full commit SHA for `COMMIT`:
 
 ```sh
-npm run build -- --version 1.0.0 --reference COMMIT --output build \
-  --dist-base-url https://github.com/fourkitchens/sous-drupal-packages/releases/download/1.0.0/
+npm run build -- --version 2.0.0 --reference COMMIT --output build \
+  --dist-base-url https://github.com/fourkitchens/sous-drupal-packages/releases/download/2.0.0/
 ```
 
 The ignored `build/` directory contains one ZIP per package, a release manifest

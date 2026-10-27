@@ -7,7 +7,7 @@ ZIP; sharing a repository and release version does not install the entire collec
 ## Package catalog
 
 Every package uses the `fourkitchens/` Composer namespace and the collection's
-shared version, beginning with `1.0.0`.
+shared version, beginning with `2.0.0`.
 
 | Package                                                       | Purpose                                                                 | Installation choice                   |
 | ------------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------- |
@@ -55,16 +55,16 @@ exception `drupal/login_destination:^2.0.0-beta10@beta`.
 Once the first collection release is published, for example:
 
 ```sh
-ddev composer require fourkitchens/sous-core-layout-builder:^1.0
+ddev composer require fourkitchens/sous-core-layout-builder:^2.0
 ddev drush recipe /var/www/html/web/recipes/sous-core-layout-builder
 ddev drush cache:rebuild
 ```
 
 | Content choice             | Direct package to require/apply              |
 | -------------------------- | -------------------------------------------- |
-| Default Page and Frontpage | `fourkitchens/sous-content-types:^1.0`       |
-| Layout Builder             | `fourkitchens/sous-core-layout-builder:^1.0` |
-| Paragraphs                 | `fourkitchens/sous-paragraphs:^1.0`          |
+| Default Page and Frontpage | `fourkitchens/sous-content-types:^2.0`       |
+| Layout Builder             | `fourkitchens/sous-core-layout-builder:^2.0` |
+| Paragraphs                 | `fourkitchens/sous-paragraphs:^2.0`          |
 | Administration only        | No content package                           |
 
 Admin and Emulsify can be required and applied independently. Recipe application
@@ -94,7 +94,7 @@ for contribution and local build instructions.
 
 Merges to `main` automatically create a semantic release, publish every package's
 ZIP at the same version and update the static Composer index. The first release
-is `1.0.0`; see [RELEASING.md](docs/RELEASING.md) for version rules and setup.
+is `2.0.0`; see [RELEASING.md](docs/RELEASING.md) for version rules and setup.
 
 Distributed under [GPL-2.0-or-later](LICENSE), matching Sous Drupal Project.
 Copyright and dependency notices are retained in [NOTICE](NOTICE) and the packages.

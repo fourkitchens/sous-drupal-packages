@@ -20,8 +20,8 @@
     "drupal/paragraphs": "^1.23",
     "drupal/paragraphs_collapsible": "^1.6",
     "drupal/paragraphs_ee": "^10.2",
-    "fourkitchens/sous-formats": "^1.0",
-    "fourkitchens/sous-media": "^1.0"
+    "fourkitchens/sous-formats": "^2.0",
+    "fourkitchens/sous-media": "^2.0"
   },
   "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
   "support": {

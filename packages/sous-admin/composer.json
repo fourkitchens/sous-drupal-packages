@@ -34,7 +34,7 @@
     "drupal/trash": "^3.1.2",
     "drupal/views_ajax_history": "^1.8.0",
     "drupal/views_bulk_operations": "^4.4.9",
-    "fourkitchens/sous-formats": "^1.0"
+    "fourkitchens/sous-formats": "^2.0"
   },
   "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
   "support": {

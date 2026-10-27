@@ -10,6 +10,25 @@ import { build, makeIndex, catalog, validateRelease } from './build.mjs';
 const repository = 'fourkitchens/sous-drupal-packages';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const output = join(root, 'build');
+// This tag records release history only; hosted package versions begin at 2.0.0.
+const baselineTag = '1.0.0';
+const baselineReference = 'd3dcd219d251e322a3b206a6bf12889712b2b3f0';
+
+function verifyBaseline(cwd) {
+  const reference = execFileSync(
+    'git',
+    ['rev-parse', `refs/tags/${baselineTag}^{commit}`],
+    { cwd, encoding: 'utf8' }
+  ).trim();
+  if (reference !== baselineReference)
+    throw new Error(
+      `Release baseline ${baselineTag} must point to ${baselineReference}.`
+    );
+}
+
+export function verifyConditions(_config, { cwd }) {
+  verifyBaseline(cwd);
+}
 const stable = /^[1-9]\d*\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 const baseURL = (version) =>
   `https://github.com/${repository}/releases/download/${version}/`;
@@ -40,7 +59,11 @@ async function history() {
   const manifests = [];
   await mkdir(join(output, 'history'), { recursive: true });
   for (const release of releases.filter(
-    (entry) => !entry.draft && !entry.prerelease && stable.test(entry.tag_name)
+    (entry) =>
+      !entry.draft &&
+      !entry.prerelease &&
+      entry.tag_name !== baselineTag &&
+      stable.test(entry.tag_name)
   )) {
     const manifest = validateRelease(
       JSON.parse(
@@ -62,8 +85,9 @@ async function history() {
 }
 
 // A merge always produces at least a patch; Conventional Commits can raise it.
-export function analyzeCommits(_config, { commits }) {
-  return commits.length ? 'patch' : null;
+export function analyzeCommits(_config, { commits, lastRelease }) {
+  if (!commits.length) return null;
+  return lastRelease.gitTag === baselineTag ? 'major' : 'patch';
 }
 
 // Called before semantic-release creates its tag and publishes all release assets.
@@ -90,6 +114,7 @@ export async function prepare(_config, { nextRelease, logger }) {
 
 // Always rebuild from published manifests, including when a Pages deploy is retried.
 async function index() {
+  verifyBaseline(root);
   const manifests = await history();
   if (!manifests.length)
     throw new Error(
@@ -110,7 +135,9 @@ async function index() {
     .split('\n')
     .filter((tag) => stable.test(tag));
   const missing = tags.filter(
-    (tag) => !manifests.some((manifest) => manifest.version === tag)
+    (tag) =>
+      tag !== baselineTag &&
+      !manifests.some((manifest) => manifest.version === tag)
   );
   if (missing.length)
     throw new Error(

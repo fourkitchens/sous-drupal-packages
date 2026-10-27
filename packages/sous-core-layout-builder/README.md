@@ -21,7 +21,7 @@ root native recipe-unpack exclusion setting. Once the first collection release
 is published, from a configured consuming site:
 
 ```sh
-ddev composer require fourkitchens/sous-core-layout-builder:^1.0
+ddev composer require fourkitchens/sous-core-layout-builder:^2.0
 ddev drush recipe /var/www/html/web/recipes/sous-core-layout-builder
 ddev drush cache:rebuild
 ```

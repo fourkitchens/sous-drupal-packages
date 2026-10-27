@@ -51,7 +51,7 @@ root native recipe-unpack exclusion setting. Once the first collection release
 is published, from a configured consuming site:
 
 ```sh
-ddev composer require fourkitchens/sous-media:^1.0
+ddev composer require fourkitchens/sous-media:^2.0
 ddev drush recipe /var/www/html/web/recipes/sous-media
 ddev drush cache:rebuild
 ```

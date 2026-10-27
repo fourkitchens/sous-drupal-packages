@@ -43,7 +43,7 @@ root native recipe-unpack exclusion setting. Once the first collection release
 is published, from a configured consuming site:
 
 ```sh
-ddev composer require fourkitchens/sous-config-split:^1.0
+ddev composer require fourkitchens/sous-config-split:^2.0
 ddev drush recipe /var/www/html/web/recipes/sous-config-split
 ddev drush cache:rebuild
 ```

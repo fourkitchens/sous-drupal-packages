@@ -21,7 +21,7 @@ shared version; do not add `version`, `source`, or `dist` to `composer.json`.
 
 ## Install and apply
 
-Configure the [Sous Composer repository](../../README.md) in the consuming project,
+Configure the [Sous Composer repository](https://github.com/fourkitchens/sous-drupal-packages/blob/main/README.md) in the consuming project,
 then install the published recipe and apply it explicitly:
 
 ```sh

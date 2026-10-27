@@ -38,7 +38,7 @@ root native recipe-unpack exclusion setting. Once the first collection release
 is published, from a configured consuming site:
 
 ```sh
-ddev composer require fourkitchens/sous-admin:^1.0
+ddev composer require fourkitchens/sous-admin:^2.0
 ddev drush recipe /var/www/html/web/recipes/sous-admin
 ddev drush cache:rebuild
 ```

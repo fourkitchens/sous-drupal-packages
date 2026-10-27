@@ -30,7 +30,7 @@ root native recipe-unpack exclusion setting. Once the first collection release
 is published, from a configured consuming site:
 
 ```sh
-ddev composer require fourkitchens/sous-paragraph-types:^1.0
+ddev composer require fourkitchens/sous-paragraph-types:^2.0
 ddev drush recipe /var/www/html/web/recipes/sous-paragraph-types
 ddev drush cache:rebuild
 ```
