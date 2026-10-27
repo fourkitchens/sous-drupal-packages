@@ -1,4 +1,4 @@
-name: Package validation
+name: Code quality and release
 
 on:
   pull_request:
@@ -10,11 +10,12 @@ permissions:
   contents: read
 
 concurrency:
-  group: package-validation-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  group: packages-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  distribution:
+  lint:
+    name: Syntax, code style and formatting
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -24,38 +25,54 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .nvmrc
-          package-manager-cache: false
-      - run: npm run check
+          cache: npm
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
+        with:
+          php-version: '8.4'
+          coverage: none
+      - run: npm ci
       - run: npm test
-      - run: npm run build -- --version 2.0.0 --reference "$GITHUB_SHA" --output build --dist-base-url https://github.com/fourkitchens/sous-drupal-packages/releases/download/2.0.0/
 
-  consumer:
+  release:
+    needs: lint
+    if: github.repository == 'fourkitchens/sous-drupal-packages' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
-    strategy:
-      fail-fast: false
-      matrix:
-        composition: [default, core-layout-builder, paragraphs, admin-only]
-        config-split: [false, true]
+    timeout-minutes: 20
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .nvmrc
-          package-manager-cache: false
-      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
-        with:
-          php-version: '8.4'
-          extensions: gd, mbstring, pdo_sqlite, sqlite3, zip
-          coverage: none
-          tools: composer:2.10.3
-      - name: Test selected composition and optional splits
-        run: |
-          args=(--case "$SOUS_COMPOSITION")
-          if [[ "$SOUS_CONFIG_SPLIT" == 'true' ]]; then args+=(--config-split); fi
-          npm run test:consumer -- "${args[@]}"
+          cache: npm
+      - run: npm ci
+      - name: Release the package collection
+        run: npm run release
         env:
-          SOUS_COMPOSITION: ${{ matrix.composition }}
-          SOUS_CONFIG_SPLIT: ${{ matrix.config-split }}
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Rebuild Composer index from published releases
+        run: node tools/release.mjs index
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+        with:
+          path: build/site
+
+  deploy-index:
+    needs: release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy Composer index
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

@@ -1,6 +1,6 @@
 langcode: en
 status: false
-dependencies: {  }
+dependencies: {}
 id: sous_local
 label: 'Sous local'
 description: 'Project-owned module and configuration differences for local development.'
@@ -9,7 +9,7 @@ stackable: false
 no_patching: false
 storage: folder
 folder: ../config/local
-module: {  }
-theme: {  }
-complete_list: {  }
-partial_list: {  }
+module: {}
+theme: {}
+complete_list: {}
+partial_list: {}

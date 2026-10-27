@@ -20,4 +20,4 @@ selection_criteria:
       frontpage: frontpage
 selection_logic: and
 weight: -5
-relationships: {  }
+relationships: {}

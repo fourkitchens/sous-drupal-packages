@@ -1,0 +1,9 @@
+node_modules/
+vendor/
+**/vendor/
+build/
+.local-reference/
+.git/
+**/LICENSE*
+**/NOTICE*
+**/.gitkeep

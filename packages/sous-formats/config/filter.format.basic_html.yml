@@ -13,31 +13,31 @@ filters:
     provider: editor
     status: false
     weight: -38
-    settings: {  }
+    settings: {}
   entity_links:
     id: entity_links
     provider: filter
     status: false
     weight: -42
-    settings: {  }
+    settings: {}
   filter_align:
     id: filter_align
     provider: filter
     status: false
     weight: -41
-    settings: {  }
+    settings: {}
   filter_autop:
     id: filter_autop
     provider: filter
     status: true
     weight: -49
-    settings: {  }
+    settings: {}
   filter_caption:
     id: filter_caption
     provider: filter
     status: false
     weight: -40
-    settings: {  }
+    settings: {}
   filter_html:
     id: filter_html
     provider: filter
@@ -60,19 +60,19 @@ filters:
     provider: filter
     status: false
     weight: -43
-    settings: {  }
+    settings: {}
   filter_html_image_secure:
     id: filter_html_image_secure
     provider: filter
     status: false
     weight: -39
-    settings: {  }
+    settings: {}
   filter_htmlcorrector:
     id: filter_htmlcorrector
     provider: filter
     status: true
     weight: -45
-    settings: {  }
+    settings: {}
   filter_url:
     id: filter_url
     provider: filter

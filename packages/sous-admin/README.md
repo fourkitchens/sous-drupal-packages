@@ -22,44 +22,35 @@ updates are not a reason to reapply it.
 
 The `superuser` role uses `is_admin: true` and receives every permission,
 including future module permissions. Admin preserves an existing role and its
-account assignments. Existing sites that received it from Sous Emulsify keep
-it in their complete configuration export. If the role is missing, review the
-explicit [missing-role migration](migrations/2026-10-superuser-role/README.md)
-instead of replaying Admin; it creates a missing role and never promotes or
-replaces an existing customized role.
+account assignments. Keep project-owned role changes in the complete site export.
 
 Autosave Form, Config Log, Entity Usage, Login History/Destination, Save and Edit,
 Scheduler, Tagify, Trash, Views AJAX History and Views Bulk Operations remain
 installed conveniences. A project can replace them through a project-owned
-recipe or reviewed module uninstall/configuration migration. Removing a Composer
+recipe or reviewed module uninstall/configuration change. Removing a Composer
 requirement or recipe entry alone does not uninstall a module or preserve its data.
 
 ## Installation and application
 
-This source is a **candidate for the coordinated 2.0 release**; it has not been
-published by this migration. After publication, configure the scoped Sous
-Composer index, Drupal repositories and installer paths as described in the
-[collection guide](https://github.com/fourkitchens/sous-drupal-packages/blob/main/README.md). Retain this package in Composer using the
-root native recipe-unpack exclusion setting. From a configured consuming site:
+Configure the Sous Composer index, Drupal repositories and installer paths as
+shown in the [collection guide](../../README.md). Retain this package using the
+root native recipe-unpack exclusion setting. Once the first collection release
+is published, from a configured consuming site:
 
 ```sh
-ddev composer require fourkitchens/sous-admin:^2.0
+ddev composer require fourkitchens/sous-admin:^1.0
 ddev drush recipe /var/www/html/web/recipes/sous-admin
 ddev drush cache:rebuild
 ```
 
 Recipe application is explicit. Requiring or updating the package does not
-apply configuration again. Existing sites keep their database and complete
-configuration export and adopt changes through reviewed native migrations.
+reapply configuration. Projects maintain their complete configuration export
+after initial recipe application.
 
-## Contributing and checks
+## Contributing
 
-Source, issues and releases live in
-[fourkitchens/sous-drupal-packages](https://github.com/fourkitchens/sous-drupal-packages).
-See the [contributor guide](https://github.com/fourkitchens/sous-drupal-packages/blob/main/CONTRIBUTING.md). Maintainer probes live in
-[`tests/recipes/sous-admin`](https://github.com/fourkitchens/sous-drupal-packages/tree/main/tests/recipes/sous-admin) when this package has
-runtime checks; they are mounted into disposable fixtures and excluded from
-consumer ZIPs. A package source checkout is not a runnable Drupal application.
+Edit this package here in Sous Drupal Packages. See the
+[contributor guide](../../CONTRIBUTING.md) for scaffolding and syntax/style checks.
+A package source checkout is not a runnable Drupal application.
 
-[GPL-2.0-or-later](LICENSE); dependency and original source notices remain
-applicable. Source commit provenance is recorded in the collection.
+[GPL-2.0-or-later](LICENSE); dependency and package notices remain applicable.

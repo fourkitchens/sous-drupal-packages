@@ -1,6 +1,6 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies: {}
 name: admins_and_editors_login_destination
 label: 'Admins and Editors Login Destination'
 triggers:

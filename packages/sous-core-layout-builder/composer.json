@@ -1,27 +1,27 @@
 {
-    "name": "fourkitchens/sous-core-layout-builder",
-    "description": "Core Layout Builder composition for Sous Page and Frontpage content.",
-    "keywords": [
-        "recipe",
-        "Drupal recipes",
-        "drupal recipe"
-    ],
-    "type": "drupal-recipe",
-    "license": "GPL-2.0-or-later",
-    "authors": [
-        {
-            "name": "Four Kitchens",
-            "role": "Maintainer"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {
-        "drupal/core": "^11.4.11",
-        "fourkitchens/sous-content-types": "^2.0"
-    },
-    "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
-    "support": {
-        "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
-        "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-core-layout-builder"
+  "name": "fourkitchens/sous-core-layout-builder",
+  "description": "Core Layout Builder composition for Sous Page and Frontpage content.",
+  "keywords": [
+    "recipe",
+    "Drupal recipes",
+    "drupal recipe"
+  ],
+  "type": "drupal-recipe",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Four Kitchens",
+      "role": "Maintainer"
     }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "drupal/core": "^11.4.11",
+    "fourkitchens/sous-content-types": "^1.0"
+  },
+  "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
+  "support": {
+    "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
+    "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-core-layout-builder"
+  }
 }
