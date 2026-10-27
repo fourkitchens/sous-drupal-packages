@@ -209,6 +209,11 @@ try {
     await verifyInstall(clone, expected, requestStart);
     for (const folder of ['default', '_splits', 'local', 'staging']) await mkdir(join(clone, 'config', folder), { recursive: true });
     await cp(database, join(clone, 'site.sqlite'));
+    // Restore fixture-owned content alongside its database, as a real site copy
+    // does. Composer-managed code/recipes were rebuilt and checked above.
+    await cp(join(project, 'web/sites/default/files'), join(clone, 'web/sites/default/files'), {
+      recursive: true, filter: (source) => basename(source) !== 'php',
+    });
     await settings(clone, join(clone, 'site.sqlite'));
     await drush(['cache:rebuild'], {}, clone);
     await drush(['config:import', '--yes'], {}, clone);

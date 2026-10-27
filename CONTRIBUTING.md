@@ -38,6 +38,11 @@ native recipe-unpack exclusions retain only selected Sous recipes and that a
 clean clone can restore them from a cold Composer cache. They also validate
 native Drupal recipes, authoring configuration and mutually optional payloads.
 
+The clone starts with tracked manifests/configuration only and rebuilds all
+Composer-owned files before restoring the disposable database and matching
+public files for runtime probes. This verifies code/recipe recovery; it does
+not claim to install a brand-new database from exported configuration alone.
+
 Probes belong under `tests/recipes/<basename>/`; integrations belong under
 `tests/`. Never add maintainer tests/tools or release dependencies inside a
 production package. A fixture is not a replacement for the full starter
