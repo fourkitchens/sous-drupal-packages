@@ -221,8 +221,18 @@ try {
     if (split) await probe('split-verify', {}, clone);
     console.log(`PASS: ${label} cold ZIP resolution, native Drupal application, export/import, clean clone and prefer-source fallback.`);
   }
+  if (!keep) {
+    // Drupal makes sites/default read-only after install. Only these known
+    // disposable sites need their directory writable again for cleanup.
+    for (const { selection, split } of selectedCases) {
+      const label = selection + (split ? '-config-split' : '');
+      for (const suffix of ['', '-clean-clone']) {
+        await chmod(join(work, label + suffix, 'web/sites/default'), 0o755);
+      }
+    }
+    await rm(work, { recursive: true, force: true });
+  }
   console.log(`PASS: all ${selectedCases.length} selected consumer case(s). No existing site was modified.`);
-  if (!keep) await rm(work, { recursive: true, force: true });
 }
 catch (error) {
   keep = true;
