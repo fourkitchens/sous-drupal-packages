@@ -21,7 +21,7 @@
   "minimum-stability": "stable",
   "require": {
     "drupal/core": "^11.4.11",
-    "drupal/emulsify": "^7.2.1",
+    "drupal/emulsify": "^7.3.0",
     "drupal/emulsify_tools": "^2.2.2"
   },
   "homepage": "https://github.com/fourkitchens/sous-drupal-packages",

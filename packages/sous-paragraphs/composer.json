@@ -17,7 +17,7 @@
   "minimum-stability": "stable",
   "require": {
     "drupal/core": "^11.4.11",
-    "drupal/paragraphs_features": "^2.1",
+    "drupal/paragraphs_features": "^2.3.0",
     "fourkitchens/sous-content-types": "^2.0",
     "fourkitchens/sous-paragraph-types": "^2.0"
   },

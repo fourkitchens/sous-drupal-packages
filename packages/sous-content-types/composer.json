@@ -17,11 +17,11 @@
   "minimum-stability": "stable",
   "require": {
     "drupal/core": "^11.4.11",
-    "drupal/field_group": "^4.0",
-    "drupal/metatag": "^2.2.1",
-    "drupal/pathauto": "^1.15",
-    "drupal/publication_date": "^3.2",
-    "drupal/scheduler": "^2.3",
+    "drupal/field_group": "^4.0.0",
+    "drupal/metatag": "^2.2.3",
+    "drupal/pathauto": "^1.15.0",
+    "drupal/publication_date": "^3.2.0",
+    "drupal/scheduler": "^2.3.0",
     "drupal/tagify": "^2.0.5",
     "fourkitchens/sous-formats": "^2.0",
     "fourkitchens/sous-media": "^2.0"
