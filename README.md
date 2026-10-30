@@ -29,12 +29,7 @@ Sous layout recipe or its content display/override configuration.
 
 ## Use in a project
 
-[Sous Drupal Project](https://github.com/fourkitchens/sous-drupal-project) supplies
-the Composer repositories, installer paths and installation prompts. Select default
-content, Layout Builder, Paragraphs or administration only, then independently
-choose whether to install Config Split.
-
-For another application, add the static Composer repository to its root manifest:
+Add this scoped Composer repository to the site's `composer.json`:
 
 ```json
 {
@@ -44,34 +39,15 @@ For another application, add the static Composer repository to its root manifest
 }
 ```
 
-Keep the Drupal repository and appropriate Composer installer/plugin settings in
-that root manifest. Install recipes under `web/recipes` and add each retained Sous
-package to `extra.drupal-recipe-unpack.ignore` so Composer keeps it as a dependency
-and restores its files on clean clones. This setting does not install a package.
-The [Media guide](packages/sous-media/README.md) describes the root Dropzone library
-repository required by the content recipes. Admin requires the root stability
-exception `drupal/login_destination:^2.0.0-beta10@beta`.
-
-Once the first collection release is published, for example:
+Require and apply a recipe:
 
 ```sh
-ddev composer require fourkitchens/sous-core-layout-builder:^2.0
-ddev drush recipe /var/www/html/web/recipes/sous-core-layout-builder
-ddev drush cache:rebuild
+ddev composer require fourkitchens/sous-admin:^2.0 drupal/login_destination:^2.0.0-beta10@beta
+ddev drush recipe /var/www/html/web/recipes/sous-admin
 ```
 
-| Content choice             | Direct package to require/apply              |
-| -------------------------- | -------------------------------------------- |
-| Default Page and Frontpage | `fourkitchens/sous-content-types:^2.0`       |
-| Layout Builder             | `fourkitchens/sous-core-layout-builder:^2.0` |
-| Paragraphs                 | `fourkitchens/sous-paragraphs:^2.0`          |
-| Administration only        | No content package                           |
-
-Admin and Emulsify can be required and applied independently. Recipe application
-is explicit: Composer install/update does not reapply configuration. Apply recipes
-to the intended initial site, then maintain the site's complete configuration export.
-Config Split supplies inactive environment definitions; applications own their
-split directories and runtime settings. See the [Config Split guide](packages/sous-config-split/README.md).
+Recipes are applied once during setup and then unpacked, so the site owns its
+dependencies and configuration.
 
 ## Contribute
 
@@ -88,9 +64,9 @@ and fills in its name. Add the recipe's configuration, module requirements and
 Sous dependencies before using it. Packages are discovered automatically by the
 archive builder; no central package registry needs editing.
 
-Checks under `devops/tests` cover syntax, code standards and formatting. They do
-not install Drupal or test recipe behavior. See [CONTRIBUTING.md](CONTRIBUTING.md)
-for contribution and local build instructions.
+`npm test` checks syntax, code standards and formatting. The CI `recipes` job
+applies recipes to fresh SQLite Drupal sites in five compositions. See
+[CONTRIBUTING.md](CONTRIBUTING.md) for contribution and local build instructions.
 
 Merges to `main` automatically create a semantic release, publish every package's
 ZIP at the same version and update the static Composer index. The first release
