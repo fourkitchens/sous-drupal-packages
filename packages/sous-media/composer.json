@@ -17,7 +17,7 @@
   "minimum-stability": "stable",
   "require": {
     "dropzone/dropzone": "^6.3.5",
-    "drupal/core": "^11.4.11",
+    "drupal/core": "^11.1",
     "drupal/dropzonejs": "^2.11.0",
     "drupal/field_group": "^4.0.0",
     "drupal/focal_point": "^2.1.3",

@@ -46,7 +46,7 @@ config:
                 dialog_off_canvas: false
                 dialog_style: tiles
       # Keep Body visible while retaining the base recipe's other authoring tabs.
-      simpleConfigUpdate:
+      setProperties:
         third_party_settings.field_group.group_content.children:
           - body
           - field_content
@@ -84,7 +84,7 @@ config:
               add_above: add_above
               collapse_edit_all: collapse_edit_all
           third_party_settings: {}
-      simpleConfigUpdate:
+      setProperties:
         third_party_settings.field_group.group_content.children:
           - body
           - field_content

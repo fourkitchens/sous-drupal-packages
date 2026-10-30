@@ -16,7 +16,7 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "drupal/core": "^11.4.11",
+    "drupal/core": "^11.3",
     "fourkitchens/sous-content-types": "^2.0"
   },
   "homepage": "https://github.com/fourkitchens/sous-drupal-packages",

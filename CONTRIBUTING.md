@@ -28,6 +28,14 @@ The archive builder discovers package directories automatically. The generator
 creates a scaffold; it does not export configuration from a site or infer dependencies.
 Do not add another content composition as an incidental dependency of a shared recipe.
 
+## Drupal compatibility
+
+Config Split and Media require Drupal 11.1 for the recipe `config.strict` option.
+Formats, Content Types and Core Layout Builder require 11.3 for the `entity_links`
+filter; Emulsify requires 11.3 through its theme/tools. Admin requires 11.4 through
+Entity Usage, and Paragraph Types/Paragraphs require 11.4 through Paragraphs EE.
+Apply recipes on their minimum minor before lowering core constraints.
+
 ## Checks
 
 ```sh
