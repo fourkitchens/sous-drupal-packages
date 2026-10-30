@@ -1,8 +1,8 @@
 langcode: en
 status: false
 dependencies: {}
-id: sous_local
-label: 'Sous local'
+id: local
+label: 'Local'
 description: 'Project-owned module and configuration differences for local development.'
 weight: 0
 stackable: false

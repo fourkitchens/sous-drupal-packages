@@ -1,8 +1,8 @@
 langcode: en
 status: false
 dependencies: {}
-id: sous_staging
-label: 'Sous staging'
+id: staging
+label: 'Staging'
 description: 'Project-owned module and configuration differences for shared staging environments.'
 weight: 0
 stackable: false

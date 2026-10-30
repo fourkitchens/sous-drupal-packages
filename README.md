@@ -19,7 +19,7 @@ shared version, beginning with `2.0.0`.
 | [sous-paragraph-types](packages/sous-paragraph-types)         | Text, Image, Video and Text with Media components; Formats + Media      | Paragraphs only                       |
 | [sous-paragraphs](packages/sous-paragraphs)                   | Paragraphs authoring on Page/Frontpage; Content Types + Paragraph Types | Optional composition                  |
 | [sous-core-layout-builder](packages/sous-core-layout-builder) | Native Layout Builder on Page/Frontpage; Content Types                  | Optional composition                  |
-| [sous-config-split](packages/sous-config-split)               | Native `_splits`, local and staging definitions                         | Independent opt-in                    |
+| [sous-config-split](packages/sous-config-split)               | Inactive local and staging Config Split definitions                     | Independent opt-in                    |
 
 Core Layout Builder and Paragraphs are independently optional. Common packages
 require neither composition, and choosing Layout Builder adds no Paragraphs
