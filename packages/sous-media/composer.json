@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-media",
-  "description": "A recipe that contains modules and configuration for Sous media.",
+  "description": "Image, file and video media types with focal-point cropping and Dropzone uploads.",
   "keywords": [
     "recipe",
     "Drupal recipes",

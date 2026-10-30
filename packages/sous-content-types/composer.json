@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-content-types",
-  "description": "A recipe that contains modules, themes, and configuration for Sous content.",
+  "description": "Page and Frontpage content types with SEO, teasers, tags and URL aliases.",
   "keywords": [
     "recipe",
     "Drupal recipes",

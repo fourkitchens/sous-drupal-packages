@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-core-layout-builder",
-  "description": "Core Layout Builder composition for Sous Page and Frontpage content.",
+  "description": "Page and Frontpage layouts with Layout Builder and Basic inline blocks.",
   "keywords": [
     "recipe",
     "Drupal recipes",

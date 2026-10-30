@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-admin",
-  "description": "A recipe that contains modules, themes, and configuration for the Sous administration experience.",
+  "description": "Gin administration, navigation and editorial tools with a Superuser role.",
   "keywords": [
     "recipe",
     "Drupal recipes",

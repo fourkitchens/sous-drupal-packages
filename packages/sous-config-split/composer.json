@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-config-split",
-  "description": "Optional native local/staging configuration split definitions for Sous projects.",
+  "description": "Inactive local and staging configuration splits for environment overrides.",
   "keywords": [
     "recipe",
     "Drupal recipes",
