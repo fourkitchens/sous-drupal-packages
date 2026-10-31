@@ -7,5 +7,5 @@ install:
 config:
   actions:
     system.theme:
-      simple_config_update:
+      simpleConfigUpdate:
         default: emulsify

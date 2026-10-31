@@ -1,31 +1,36 @@
 {
-    "name": "fourkitchens/sous-paragraph-types",
-    "description": "A recipe that contains modules and configuration Sous paragraph types.",
-    "keywords": [
-        "recipe",
-        "Drupal recipes",
-        "drupal recipe"
-    ],
-    "type": "drupal-recipe",
-    "license": "GPL-2.0-or-later",
-    "authors": [
-        {
-            "name": "Laura Johnson",
-            "role": "Maintainer"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {
-        "drupal/core": "^11.4.11",
-        "drupal/paragraphs": "^1.23",
-        "drupal/paragraphs_collapsible": "^1.6",
-        "drupal/paragraphs_ee": "^10.2",
-        "fourkitchens/sous-formats": "^2.0",
-        "fourkitchens/sous-media": "^2.0"
-    },
-    "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
-    "support": {
-        "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
-        "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-paragraph-types"
+  "name": "fourkitchens/sous-paragraph-types",
+  "description": "Image, Text, Text with Media and Video Paragraph types and authoring displays.",
+  "keywords": [
+    "recipe",
+    "Drupal recipes",
+    "drupal recipe"
+  ],
+  "type": "drupal-recipe",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Laura Johnson",
+      "role": "Maintainer"
     }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "drupal/core": "^11.4",
+    "drupal/paragraphs": "^1.23.0",
+    "drupal/paragraphs_collapsible": "^1.6.0",
+    "drupal/paragraphs_ee": "^10.2.0",
+    "fourkitchens/sous-formats": "^2.0",
+    "fourkitchens/sous-media": "^2.0"
+  },
+  "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
+  "support": {
+    "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
+    "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-paragraph-types"
+  },
+  "extra": {
+    "sous": {
+      "menu": true
+    }
+  }
 }

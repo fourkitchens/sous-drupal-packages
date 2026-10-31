@@ -1,4 +1,4 @@
-name: Package validation
+name: Code quality and release
 
 on:
   pull_request:
@@ -10,11 +10,12 @@ permissions:
   contents: read
 
 concurrency:
-  group: package-validation-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  group: packages-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  distribution:
+  lint:
+    name: Syntax, code style and formatting
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -24,38 +25,126 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .nvmrc
-          package-manager-cache: false
-      - run: npm run check
+          cache: npm
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
+        with:
+          php-version: '8.4'
+          coverage: none
+      - run: npm ci
       - run: npm test
-      - run: npm run build -- --version 2.0.0 --reference "$GITHUB_SHA" --output build --dist-base-url https://github.com/fourkitchens/sous-drupal-packages/releases/download/2.0.0/
 
-  consumer:
+  recipes:
+    name: Apply recipe compositions
+    needs: lint
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
-    strategy:
-      fail-fast: false
-      matrix:
-        composition: [default, core-layout-builder, paragraphs, admin-only]
-        config-split: [false, true]
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .nvmrc
-          package-manager-cache: false
       - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: '8.4'
-          extensions: gd, mbstring, pdo_sqlite, sqlite3, zip
-          coverage: none
+          extensions: pdo_sqlite
           tools: composer:2.10.3
-      - name: Test selected composition and optional splits
+          coverage: none
+      - name: Install all recipe dependencies
         run: |
-          args=(--case "$SOUS_COMPOSITION")
-          if [[ "$SOUS_CONFIG_SPLIT" == 'true' ]]; then args+=(--config-split); fi
-          npm run test:consumer -- "${args[@]}"
+          site="$RUNNER_TEMP/sous-recipes"
+          composer create-project drupal/recommended-project:^11.4 "$site" --no-interaction
+          versions=$(jq -s 'map({key:.name,value:"2.0.0"})|from_entries' packages/*/composer.json)
+          jq --arg path "$GITHUB_WORKSPACE/packages/*" --argjson versions "$versions" '
+            .repositories += [
+              {type:"path",url:$path,options:{symlink:false,versions:$versions}},
+              {type:"package",package:{name:"dropzone/dropzone",version:"6.3.5",type:"drupal-library",
+                extra:{"installer-name":"dropzone"},
+                dist:{url:"https://github.com/enyo/dropzone/releases/download/dropzone%406.3.5/dist.zip",type:"zip"}}}
+            ]
+          ' "$site/composer.json" > "$site/composer.tmp"
+          mv "$site/composer.tmp" "$site/composer.json"
+          mapfile -t recipes < <(jq -r '.name' packages/*/composer.json)
+          cd "$site"
+          composer require 'drupal/login_destination:^2.0.0-beta10@beta' drush/drush --no-interaction
+          composer require "${recipes[@]}" --no-interaction
+      - name: Apply each composition to a fresh SQLite site
+        run: |
+          cd "$RUNNER_TEMP/sous-recipes"
+          for composition in admin content-types core-layout-builder paragraphs config-split; do
+            echo "::group::$composition"
+            chmod -R u+w web/sites/default
+            rm -f web/sites/default/settings.php site.sqlite
+            vendor/bin/drush site:install minimal --db-url="sqlite://localhost/$PWD/site.sqlite?module=sqlite" --yes
+            for recipe in sous-admin sous-emulsify; do
+              vendor/bin/drush recipe "$PWD/recipes/$recipe" --yes
+            done
+            if [[ "$composition" != admin ]]; then vendor/bin/drush recipe "$PWD/recipes/sous-$composition" --yes; fi
+            vendor/bin/drush status --field=bootstrap | grep -Fx Successful
+            # shellcheck disable=SC2016
+            COMPOSITION="$composition" vendor/bin/drush php:eval '
+            $case = getenv("COMPOSITION");
+            $content = in_array($case, ["content-types", "core-layout-builder", "paragraphs"], TRUE);
+            $modules = \Drupal::moduleHandler();
+            $storage = \Drupal::service("config.storage");
+            $checks = ["admin theme" => \Drupal::config("system.theme")->get("admin") === "gin", "default theme" => \Drupal::config("system.theme")->get("default") === "emulsify"];
+            foreach (["page", "frontpage"] as $type) {
+              $checks[$type] = $storage->exists("node.type.$type") === $content;
+              $display = \Drupal::entityTypeManager()->getStorage("entity_view_display")->load("node.$type.default");
+              $checks["layout.$type"] = (bool) $display?->getThirdPartySetting("layout_builder", "enabled", FALSE) === ($case === "core-layout-builder");
+            }
+            foreach (["linkit" => $content, "emulsify_tools" => TRUE, "ckeditor5" => $content, "paragraphs" => $case === "paragraphs", "config_split" => $case === "config-split"] as $module => $enabled) {
+              $checks[$module] = $modules->moduleExists($module) === $enabled;
+            }
+            foreach (["local", "staging"] as $id) {
+              $name = "config_split.config_split.$id";
+              $checks[$name] = $storage->exists($name) === ($case === "config-split") && ($case !== "config-split" || \Drupal::config($name)->get("status") === FALSE);
+            }
+            foreach ($checks as $name => $passed) { if (!$passed) { throw new \RuntimeException("$case: $name failed"); } }
+            echo "$case composition verified.\n";
+            '
+            echo '::endgroup::'
+          done
+
+  release:
+    needs: [lint, recipes]
+    if: github.repository == 'fourkitchens/sous-drupal-packages' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Release the package collection
+        run: npm run release
         env:
-          SOUS_COMPOSITION: ${{ matrix.composition }}
-          SOUS_CONFIG_SPLIT: ${{ matrix.config-split }}
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Rebuild Composer index from published releases
+        run: node tools/release.mjs index
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+        with:
+          path: build/site
+
+  deploy-index:
+    needs: release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy Composer index
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

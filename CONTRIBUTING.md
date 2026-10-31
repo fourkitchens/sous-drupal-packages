@@ -1,90 +1,82 @@
 # Contributing
 
-Edit `packages/<basename>/` for production recipe changes. Each package owns its
-Composer manifest, recipe, configuration, license and guide. Keep the existing
-Composer names, directory basenames, nested Linkit recipe and explicit Admin
-migration paths stable.
+Edit `packages/<name>/` for recipe changes. Each package owns its Composer
+manifest, recipe, configuration, license and guide. Keep dependencies explicit;
+common packages should not require either optional content composition.
 
-Use Node `24.22.1` (`nvm use`), npm `11.21.1`, PHP `8.4+`, Composer `2.10.3`, Git,
-`zip` and `unzip`. PHP needs SQLite/PDO SQLite, GD, mbstring, XML and ZIP. The
-repository has no npm dependencies, install step or npm lockfile. CI uses PHP
-8.4; newer compatible local PHP versions may run the fixture too.
+Use Node.js `24.22.1` (`nvm use`), npm `11.21.1`, PHP `8.4+`, Composer and `zip`.
+Install repository tooling with `npm ci`.
+
+## Create a recipe
+
+```sh
+npm run create-package sous-event
+```
+
+This copies `recipe-template/` into `packages/sous-event`, substitutes its Composer
+name (`fourkitchens/sous-event`) and human-readable name, and leaves the new recipe
+ready to customize. An existing package is never overwritten.
+Set `extra.sous.menu` to `true` in `composer.json` when a recipe is useful on its own.
+
+1. Edit the generated README and descriptions to explain the recipe's purpose.
+2. Add configuration YAML under `config/` and update `recipe.yml` with the modules,
+   prerequisite recipes and configuration actions it needs.
+3. Declare required Drupal modules and Sous packages in `composer.json`. Composer
+   dependencies download code; the recipe must explicitly install/apply what it uses.
+4. Run `npm test`, review the generated files and try the recipe in your application.
+
+The archive builder discovers package directories automatically. The generator
+creates a scaffold; it does not export configuration from a site or infer dependencies.
+Do not add another content composition as an incidental dependency of a shared recipe.
+
+## Drupal compatibility
+
+All packages and the recipe template require Drupal `^11.4`, the floor tested
+by recipe CI.
 
 ## Checks
 
 ```sh
-npm run check
 npm test
-npm run test:consumer
+npm run format
+npm test
 ```
 
-The first two commands validate boundaries and archive/index/publication
-contracts without network access. The consumer command creates a temporary
-HTTP index from actual built ZIPs, isolated Composer homes/caches and disposable
-SQLite Drupal fixtures. It requires internet access and never touches an
-existing site database. Run one case while iterating:
+Checks live under `devops/tests` and cover JavaScript/PHP syntax, code-sniffing and
+code/JSON/YAML formatting. The formatting command fixes supported files; review
+its changes before committing. After these checks, CI applies five recipe
+compositions to fresh SQLite Drupal sites and verifies their bootstrap and
+configuration. Contributors also try changes in the application where they will
+be used.
+
+Maintainer tools, repository dependencies and checks belong outside `packages/`;
+consumer ZIPs contain only recipe files and their notices.
+
+## Build locally
+
+From a committed checkout, substitute the full commit SHA for `COMMIT`:
 
 ```sh
-npm run test:consumer -- --case core-layout-builder
-```
-
-Cases are `default`, `core-layout-builder`, `paragraphs` and `admin-only`. Add
-`--config-split` to test any choice with native configuration splits;
-`--case config-split` is an alias for default content with splits. With no case
-selection all eight combinations run. Use `--keep` to retain a failing fixture for diagnosis. See the
-command output for its temporary location. Test-only root patches reproduce
-the starter's dependency policy and do not ship in packages. Tests verify that
-native recipe-unpack exclusions retain only selected Sous recipes and that a
-clean clone can restore them from a cold Composer cache. They also validate
-native Drupal recipes, authoring configuration and mutually optional payloads.
-
-The clone starts with tracked manifests/configuration only and rebuilds all
-Composer-owned files before restoring the disposable database and matching
-public files for runtime probes. This verifies code/recipe recovery; it does
-not claim to install a brand-new database from exported configuration alone.
-
-Probes belong under `tests/recipes/<basename>/`; integrations belong under
-`tests/`. Never add maintainer tests/tools or release dependencies inside a
-production package. A fixture is not a replacement for the full starter
-generated-theme and environment acceptance gate.
-
-## Building a candidate
-
-From a committed checkout, substitute the full reviewed commit for `COMMIT`:
-
-```sh
-node tools/build.mjs --version 2.0.0 --reference COMMIT --output build \
+npm run build -- --version 2.0.0 --reference COMMIT --output build \
   --dist-base-url https://github.com/fourkitchens/sous-drupal-packages/releases/download/2.0.0/
 ```
 
-Output is ignored by Git. Each ZIP contains a single package directly at its
-root. Build twice with identical inputs to compare hashes; tests do this too.
-For an offline historical snapshot add `--previous PATH/release-manifest.json`
-for every prior release. Published metadata is loaded from those manifests,
-not today's Composer source. Duplicate versions with changed bytes are errors.
+The ignored `build/` directory contains one ZIP per package, a release manifest
+with checksums, and the static Composer index/catalog. Each ZIP has the package's
+files directly at its root. The build command does not publish anything.
 
-## Testing source edits in a separate application
+Published manifests retain their own Composer metadata. To include history in an
+offline build, pass `--previous PATH/release-manifest.json` for each earlier release.
+The automatic release workflow loads that history itself.
 
-An explicit Composer path repository can map `packages/*` with
-`options.versions` set to `2.0.0` for all nine IDs. Put it before the scoped
-production index and retain the root's exact native unpack exclusions. Use a
-disposable application; do not replace customized recipe folders without review.
-Path installs are contributor conveniences, while CI consumer cases install
-real package ZIPs. Before releasing an application remove path overrides and
-perform a real update/install from public immutable assets with a clean cache.
-`composer update --lock` alone does not convert locked path distributions to ZIPs.
+## Commit and review
 
-## Review expectations
+Use Conventional Commits: `fix:` for corrections, `feat:` for additions, and a
+`BREAKING CHANGE:` footer or `!` for incompatible changes. Other merge commits
+produce a patch release. Keep the squash-merge title in this format as well.
 
-Common packages must require neither optional composition. Layout Builder must
-never copy/install Paragraphs code or config; Paragraphs must not enable Layout
-Builder on content displays or add its override fields. Core Navigation enables
-the shared core module independently. Preserve Admin's strict Gin/login
-whitelist and apply it once. New
-application settings, environment policies and project theme builds belong in
-the starter. Document dependency changes and include a relevant runtime probe.
-
-The existing repositories remain historical download sources. Do not move old
-tags, repoint legacy `dev-main`, delete repositories or close their PRs as part
-of a source change here. Publication requires the separate reviewed process in
-[docs/RELEASING.md](docs/RELEASING.md).
+A release applies to the whole collection, while installations still select
+individual packages. Source manifests omit `version`; release tooling supplies
+it and coordinates sibling constraints in the distributed metadata. Release
+assets and the Composer index are generated, not committed. See
+[RELEASING.md](docs/RELEASING.md).

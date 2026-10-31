@@ -18,7 +18,7 @@ content:
     label: visually_hidden
     settings:
       use_description_as_link_text: true
-    third_party_settings: {  }
+    third_party_settings: {}
     weight: 0
     region: content
 hidden:

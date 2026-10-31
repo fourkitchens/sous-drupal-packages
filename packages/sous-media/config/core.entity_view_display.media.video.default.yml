@@ -20,8 +20,8 @@ content:
   field_caption:
     type: basic_string
     label: above
-    settings: {  }
-    third_party_settings: {  }
+    settings: {}
+    third_party_settings: {}
     weight: 1
     region: content
   field_copyright:
@@ -29,7 +29,7 @@ content:
     label: above
     settings:
       link_to_entity: false
-    third_party_settings: {  }
+    third_party_settings: {}
     weight: 3
     region: content
   field_media_oembed_video:
@@ -40,7 +40,7 @@ content:
       max_height: 0
       loading:
         attribute: eager
-    third_party_settings: {  }
+    third_party_settings: {}
     weight: 0
     region: content
   field_transcript:
@@ -52,7 +52,7 @@ content:
       url_plain: false
       rel: ''
       target: ''
-    third_party_settings: {  }
+    third_party_settings: {}
     weight: 2
     region: content
 hidden:

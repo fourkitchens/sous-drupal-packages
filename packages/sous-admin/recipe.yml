@@ -4,9 +4,6 @@ type: 'Site'
 recipes:
   # Install core recipes
   - core/recipes/core_recommended_performance
-  # Share the profile without applying the full Formats/CKEditor recipe.
-  # Slash-containing includes are Drupal-root relative, matching web/recipes.
-  - recipes/sous-formats/recipes/linkit
 install:
   # Install core dependencies.
   - automated_cron
@@ -52,8 +49,7 @@ install:
   # Install Views Bulk Operations
   - views_bulk_operations
 config:
-  # Preserve existing roles while validating the Gin baseline. The shared
-  # Linkit subrecipe separately preserves project-owned profiles.
+  # Preserve existing roles while validating the Gin baseline.
   strict:
     - gin.settings
     - block.block.gin_breadcrumbs
@@ -100,28 +96,28 @@ config:
   actions:
     # Disable legacy Gin blocks only when that Gin version provides them.
     '?block.block.gin_admin':
-      simpleConfigUpdate:
+      setProperties:
         status: false
     '?block.block.gin_branding':
-      simpleConfigUpdate:
+      setProperties:
         status: false
     block.block.gin_local_actions:
-      simpleConfigUpdate:
+      setProperties:
         region: content
         weight: -10
     '?block.block.gin_local_tasks':
-      simpleConfigUpdate:
+      setProperties:
         status: false
     block.block.gin_page_title:
-      simpleConfigUpdate:
+      setProperties:
         region: header
         weight: -10
     block.block.gin_primary_local_tasks:
-      simpleConfigUpdate:
+      setProperties:
         region: header
         weight: -5
     '?block.block.gin_tools':
-      simpleConfigUpdate:
+      setProperties:
         status: false
     # Update entity_usage
     entity_usage.settings:

@@ -2,14 +2,39 @@
   "name": "sous-drupal-packages",
   "private": true,
   "type": "module",
-  "engines": { "node": "24.22.1", "npm": "11.21.1" },
+  "engines": {
+    "node": "24.22.1",
+    "npm": "11.21.1"
+  },
   "packageManager": "npm@11.21.1",
   "scripts": {
-    "check": "node tools/build.mjs --check",
+    "create-package": "node tools/create-package.mjs",
+    "test": "npm run lint && npm run format:check",
+    "check": "npm test",
+    "lint": "node devops/tests/lint.mjs && eslint .",
+    "format:check": "prettier --check .",
+    "format": "prettier --write .",
     "build": "node tools/build.mjs",
-    "test": "node --test tests/distribution.test.mjs tests/release.test.mjs tests/release.integration.test.mjs",
-    "test:consumer": "node tests/consumer.mjs",
-    "release:prepare": "node tools/release.mjs prepare",
-    "release:publish": "node tools/release.mjs publish"
+    "release": "semantic-release",
+    "release:dry-run": "semantic-release --dry-run"
+  },
+  "description": "Composable Drupal recipes for Sous projects",
+  "license": "GPL-2.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fourkitchens/sous-drupal-packages.git"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.13.0",
+    "globals": "17.13.0",
+    "prettier": "3.8.5",
+    "semantic-release": "25.0.9",
+    "conventional-changelog-conventionalcommits": "10.4.1"
+  },
+  "overrides": {
+    "@semantic-release/release-notes-generator": {
+      "conventional-changelog-writer": "^9.3.0"
+    }
   }
 }
