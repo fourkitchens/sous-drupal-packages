@@ -8,11 +8,8 @@ installs the Node, Media, Media Library, Block Content, Taxonomy and Views
 providers used by those management screens. It does not create Page/Frontpage
 or apply Sous Media bundle defaults.
 
-The package requires Sous Formats but applies only its shared
-`recipes/sous-formats/recipes/linkit` subrecipe. Install recipes under the Drupal
-root's `recipes/` directory (`web/recipes` in Sous) so this native include resolves.
-Admin alone does not install CKEditor/text-format defaults. An existing Linkit
-profile, including its UUID and customized matchers, remains unchanged.
+Admin does not install Linkit or CKEditor/text-format defaults. Projects that
+need text editing can apply Sous Formats independently.
 
 Apply Admin once to a supported Minimal baseline. The strict Gin/login import
 list intentionally validates that initial baseline. Native Views stay outside

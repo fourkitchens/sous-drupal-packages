@@ -22,7 +22,6 @@
     "drupal/entity_usage": "^5.0.1",
     "drupal/field_group": "^4.0.0",
     "drupal/gin": "^5.0.16",
-    "drupal/linkit": "^7.0.17",
     "drupal/login_destination": "^2.0.0-beta10@beta",
     "drupal/login_history": "^2.0.0",
     "drupal/media_library_edit": "^3.0.5",
@@ -33,8 +32,7 @@
     "drupal/tagify": "^2.0.5",
     "drupal/trash": "^3.1.2",
     "drupal/views_ajax_history": "^1.8.0",
-    "drupal/views_bulk_operations": "^4.4.9",
-    "fourkitchens/sous-formats": "^2.0"
+    "drupal/views_bulk_operations": "^4.4.9"
   },
   "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
   "support": {

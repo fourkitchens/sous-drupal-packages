@@ -52,7 +52,7 @@ jobs:
       - name: Install all recipe dependencies
         run: |
           site="$RUNNER_TEMP/sous-recipes"
-          composer create-project drupal/recommended-project:^11 "$site" --no-interaction
+          composer create-project drupal/recommended-project:^11.4 "$site" --no-interaction
           versions=$(jq -s 'map({key:.name,value:"2.0.0"})|from_entries' packages/*/composer.json)
           jq --arg path "$GITHUB_WORKSPACE/packages/*" --argjson versions "$versions" '
             .repositories += [
@@ -60,9 +60,7 @@ jobs:
               {type:"package",package:{name:"dropzone/dropzone",version:"6.3.5",type:"drupal-library",
                 extra:{"installer-name":"dropzone"},
                 dist:{url:"https://github.com/enyo/dropzone/releases/download/dropzone%406.3.5/dist.zip",type:"zip"}}}
-            ] |
-            .extra["installer-paths"] = {"web/recipes/{$name}":["type:drupal-recipe"]} +
-              (.extra["installer-paths"] | del(.["recipes/{$name}"]))
+            ]
           ' "$site/composer.json" > "$site/composer.tmp"
           mv "$site/composer.tmp" "$site/composer.json"
           mapfile -t recipes < <(jq -r '.name' packages/*/composer.json)
@@ -78,9 +76,9 @@ jobs:
             rm -f web/sites/default/settings.php site.sqlite
             vendor/bin/drush site:install minimal --db-url="sqlite://localhost/$PWD/site.sqlite?module=sqlite" --yes
             for recipe in sous-admin sous-emulsify; do
-              vendor/bin/drush recipe "$PWD/web/recipes/$recipe" --yes
+              vendor/bin/drush recipe "$PWD/recipes/$recipe" --yes
             done
-            if [[ "$composition" != admin ]]; then vendor/bin/drush recipe "$PWD/web/recipes/sous-$composition" --yes; fi
+            if [[ "$composition" != admin ]]; then vendor/bin/drush recipe "$PWD/recipes/sous-$composition" --yes; fi
             vendor/bin/drush status --field=bootstrap | grep -Fx Successful
             # shellcheck disable=SC2016
             COMPOSITION="$composition" vendor/bin/drush php:eval '
@@ -94,7 +92,7 @@ jobs:
               $display = \Drupal::entityTypeManager()->getStorage("entity_view_display")->load("node.$type.default");
               $checks["layout.$type"] = (bool) $display?->getThirdPartySetting("layout_builder", "enabled", FALSE) === ($case === "core-layout-builder");
             }
-            foreach (["linkit" => TRUE, "emulsify_tools" => TRUE, "ckeditor5" => $content, "paragraphs" => $case === "paragraphs", "config_split" => $case === "config-split"] as $module => $enabled) {
+            foreach (["linkit" => $content, "emulsify_tools" => TRUE, "ckeditor5" => $content, "paragraphs" => $case === "paragraphs", "config_split" => $case === "config-split"] as $module => $enabled) {
               $checks[$module] = $modules->moduleExists($module) === $enabled;
             }
             foreach (["local", "staging"] as $id) {

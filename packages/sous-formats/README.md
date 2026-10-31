@@ -3,23 +3,17 @@
 `fourkitchens/sous-formats` · `drupal-recipe` · GPL-2.0-or-later
 
 Provides Basic, Full, Limited and Restricted HTML formats, their editor defaults,
-and the shared default Linkit profile. Linkit is a direct Composer dependency.
+and the default Linkit profile. Linkit is a direct Composer dependency.
 No content composition or media bundle recipe is required.
 
-`recipes/linkit` is a separate native subrecipe so Admin can share the default
-node, media and external matchers without applying the full CKEditor/format
-recipe. Keep this nested directory in the installed package and install packages
-under `web/recipes` in Sous. An existing project-owned Linkit profile is retained
-with its UUID and matcher settings, including omitted/custom matchers.
-
-The full Formats recipe enables CKEditor 5, Linkit, Node and Media. The nested
-Linkit subrecipe enables its own providers and no editor defaults. Its media
-matcher uses Linkit's built-in media substitution to link to the source file;
-media bundles are supplied independently. Linkit-enabled editors retain their
+The recipe enables CKEditor 5, Linkit, Node and Media. Its Linkit profile provides
+node, media and external matchers. The media matcher uses Linkit's built-in media
+substitution to link to the source file; media bundles are supplied independently.
+An existing project-owned Linkit profile is retained with its UUID and matcher
+settings, including omitted/custom matchers. Linkit-enabled editors retain their
 module/profile configuration dependencies. Existing editor/format configuration
-must match the full recipe; only the shared Linkit profile is preserved when it
-differs. Applying that small subrecipe to create a missing profile is supported;
-replaying full Formats is not an existing-site update mechanism.
+must match the recipe; only the Linkit profile is preserved when it differs.
+Replaying Formats is not an existing-site update mechanism.
 
 Text formats are security configuration: review permitted HTML and the roles
 allowed to use each format in the generated project. Package updates do not

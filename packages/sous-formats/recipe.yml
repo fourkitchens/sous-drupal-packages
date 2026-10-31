@@ -1,16 +1,16 @@
 name: 'Sous Formats'
 description: 'A recipe that provides text and editor formats and shared Linkit defaults.'
 type: 'Site'
-recipes:
-  # Slash-containing includes are Drupal-root relative, matching web/recipes.
-  - recipes/sous-formats/recipes/linkit
 install:
   - ckeditor5
   - editor
   - filter
+  - linkit
+  - media
+  - node
 config:
-  # Editor/format defaults are strict. The shared Linkit subrecipe preserves
-  # existing project-owned profiles instead of treating them as fresh defaults.
+  # Validate editor and format defaults while preserving project-owned
+  # Linkit profiles.
   strict:
     - editor.editor.basic_html
     - editor.editor.full_html

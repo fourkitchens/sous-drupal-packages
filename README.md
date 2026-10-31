@@ -11,12 +11,12 @@ shared version, beginning with `2.0.0`.
 
 | Package                                                       | Purpose                                                                 | Installation choice                   |
 | ------------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------- |
-| [sous-admin](packages/sous-admin)                             | Gin, Navigation, Superuser, management Views and shared Linkit settings | Starter base                          |
+| [sous-admin](packages/sous-admin)                             | Gin, Navigation, Superuser and management Views                         | Starter base                          |
 | [sous-emulsify](packages/sous-emulsify)                       | Emulsify theme and tools                                                | Starter base                          |
 | [sous-content-types](packages/sous-content-types)             | Page, Frontpage, fields and aliases; Formats + Media                    | Default content and both compositions |
-| [sous-formats](packages/sous-formats)                         | Text formats and shared Linkit configuration                            | Shared dependency                     |
+| [sous-formats](packages/sous-formats)                         | Text formats, CKEditor 5 and Linkit defaults                            | Shared dependency                     |
 | [sous-media](packages/sous-media)                             | File, Image, Video and media authoring                                  | Shared dependency                     |
-| [sous-paragraph-types](packages/sous-paragraph-types)         | Text, Image, Video and Text with Media components; Formats + Media      | Paragraphs only                       |
+| [sous-paragraph-types](packages/sous-paragraph-types)         | Text, Image, Video and Text with Media components; Formats + Media      | Optional building blocks              |
 | [sous-paragraphs](packages/sous-paragraphs)                   | Paragraphs authoring on Page/Frontpage; Content Types + Paragraph Types | Optional composition                  |
 | [sous-core-layout-builder](packages/sous-core-layout-builder) | Native Layout Builder on Page/Frontpage; Content Types                  | Optional composition                  |
 | [sous-config-split](packages/sous-config-split)               | Inactive local and staging Config Split definitions                     | Independent opt-in                    |

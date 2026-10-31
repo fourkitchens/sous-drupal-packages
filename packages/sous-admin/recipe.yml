@@ -4,9 +4,6 @@ type: 'Site'
 recipes:
   # Install core recipes
   - core/recipes/core_recommended_performance
-  # Share the profile without applying the full Formats/CKEditor recipe.
-  # Slash-containing includes are Drupal-root relative, matching web/recipes.
-  - recipes/sous-formats/recipes/linkit
 install:
   # Install core dependencies.
   - automated_cron
@@ -52,8 +49,7 @@ install:
   # Install Views Bulk Operations
   - views_bulk_operations
 config:
-  # Preserve existing roles while validating the Gin baseline. The shared
-  # Linkit subrecipe separately preserves project-owned profiles.
+  # Preserve existing roles while validating the Gin baseline.
   strict:
     - gin.settings
     - block.block.gin_breadcrumbs
