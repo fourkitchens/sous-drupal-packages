@@ -16,6 +16,7 @@ npm run create-package sous-event
 This copies `recipe-template/` into `packages/sous-event`, substitutes its Composer
 name (`fourkitchens/sous-event`) and human-readable name, and leaves the new recipe
 ready to customize. An existing package is never overwritten.
+Set `extra.sous.menu` to `true` in `composer.json` when a recipe is useful on its own.
 
 1. Edit the generated README and descriptions to explain the recipe's purpose.
 2. Add configuration YAML under `config/` and update `recipe.yml` with the modules,
@@ -30,11 +31,8 @@ Do not add another content composition as an incidental dependency of a shared r
 
 ## Drupal compatibility
 
-Config Split and Media require Drupal 11.1 for the recipe `config.strict` option.
-Formats, Content Types and Core Layout Builder require 11.3 for the `entity_links`
-filter; Emulsify requires 11.3 through its theme/tools. Admin requires 11.4 through
-Entity Usage, and Paragraph Types/Paragraphs require 11.4 through Paragraphs EE.
-Apply recipes on their minimum minor before lowering core constraints.
+All packages and the recipe template require Drupal `^11.4`, the floor tested
+by recipe CI.
 
 ## Checks
 

@@ -3,6 +3,7 @@
 `fourkitchens/__PACKAGE_NAME__` · `drupal-recipe` · GPL-2.0-or-later
 
 Describe what this recipe provides and which projects should use it.
+Set `extra.sous.menu` to `true` in `composer.json` when the recipe is useful on its own.
 
 ## Customize this recipe
 
@@ -25,7 +26,7 @@ Configure the [Sous Composer repository](https://github.com/fourkitchens/sous-dr
 then install the published recipe and apply it explicitly:
 
 ```sh
-ddev composer require fourkitchens/__PACKAGE_NAME__:^1.0
+ddev composer require fourkitchens/__PACKAGE_NAME__:^2.0
 ddev drush recipe /var/www/html/web/recipes/__PACKAGE_NAME__
 ```
 

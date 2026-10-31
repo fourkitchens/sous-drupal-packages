@@ -13,9 +13,8 @@ Superuser role independently.
 ## Installation and application
 
 Configure the Sous Composer index, Drupal repositories and installer paths as
-shown in the [collection guide](../../README.md). Retain this package using the
-root native recipe-unpack exclusion setting. Once the first collection release
-is published, from a configured consuming site:
+shown in the [collection guide](../../README.md). Once the first collection
+release is published, from a configured consuming site:
 
 ```sh
 ddev composer require fourkitchens/sous-emulsify:^2.0
@@ -23,9 +22,8 @@ ddev drush recipe /var/www/html/web/recipes/sous-emulsify
 ddev drush cache:rebuild
 ```
 
-Recipe application is explicit. Requiring or updating the package does not
-reapply configuration. Projects maintain their complete configuration export
-after initial recipe application.
+Recipes are applied once and then unpacked. Package updates do not reapply
+configuration. Projects maintain their complete configuration export.
 
 ## Contributing
 

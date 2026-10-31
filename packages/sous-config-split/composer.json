@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-config-split",
-  "description": "Inactive local and staging configuration splits for environment overrides.",
+  "description": "Inactive local and staging Config Split definitions.",
   "keywords": [
     "recipe",
     "Drupal recipes",
@@ -17,11 +17,16 @@
   "minimum-stability": "stable",
   "require": {
     "drupal/config_split": "^2.0.2",
-    "drupal/core": "^11.1"
+    "drupal/core": "^11.4"
   },
   "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
   "support": {
     "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
     "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-config-split"
+  },
+  "extra": {
+    "sous": {
+      "menu": true
+    }
   }
 }

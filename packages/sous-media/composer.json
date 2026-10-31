@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-media",
-  "description": "Image, file and video media types with focal-point cropping and Dropzone uploads.",
+  "description": "Image, file and video media with focal-point cropping and Dropzone uploads.",
   "keywords": [
     "recipe",
     "Drupal recipes",
@@ -17,7 +17,7 @@
   "minimum-stability": "stable",
   "require": {
     "dropzone/dropzone": "^6.3.5",
-    "drupal/core": "^11.1",
+    "drupal/core": "^11.4",
     "drupal/dropzonejs": "^2.11.0",
     "drupal/field_group": "^4.0.0",
     "drupal/focal_point": "^2.1.3",
@@ -28,5 +28,10 @@
   "support": {
     "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
     "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-media"
+  },
+  "extra": {
+    "sous": {
+      "menu": true
+    }
   }
 }

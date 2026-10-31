@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-content-types",
-  "description": "Page and Frontpage content types with SEO, teasers, tags and URL aliases.",
+  "description": "Page and Frontpage content types with SEO, teasers and automatic URL aliases.",
   "keywords": [
     "recipe",
     "Drupal recipes",
@@ -16,7 +16,7 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "drupal/core": "^11.3",
+    "drupal/core": "^11.4",
     "drupal/field_group": "^4.0.0",
     "drupal/metatag": "^2.2.3",
     "drupal/pathauto": "^1.15.0",

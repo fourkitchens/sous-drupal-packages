@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-core-layout-builder",
-  "description": "Page and Frontpage layouts with Layout Builder and Basic inline blocks.",
+  "description": "Page and Frontpage layouts with core Layout Builder and inline Basic blocks.",
   "keywords": [
     "recipe",
     "Drupal recipes",
@@ -16,7 +16,7 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "drupal/core": "^11.3",
+    "drupal/core": "^11.4",
     "fourkitchens/sous-content-types": "^2.0"
   },
   "homepage": "https://github.com/fourkitchens/sous-drupal-packages",

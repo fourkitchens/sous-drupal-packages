@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-paragraph-types",
-  "description": "Image, Text, Text with Media and Video paragraph types for page building.",
+  "description": "Image, Text, Text with Media and Video Paragraph types and authoring displays.",
   "keywords": [
     "recipe",
     "Drupal recipes",
@@ -27,5 +27,10 @@
   "support": {
     "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
     "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-paragraph-types"
+  },
+  "extra": {
+    "sous": {
+      "menu": true
+    }
   }
 }

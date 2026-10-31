@@ -5,9 +5,10 @@ Both have `status: false` and empty module and configuration lists.
 Their folders are `../config/local` and `../config/staging`, relative to the
 Drupal web root. Create these directories before exporting configuration.
 
-Apply the recipe once using the [collection guide](../../README.md), then
-configure each split's modules and configuration and export the site's config.
-Package updates do not reapply the recipe.
+Recipes are applied once and then unpacked. Follow the
+[collection guide](../../README.md), then configure each split's modules and
+configuration and export the site's config. Package updates do not reapply the
+recipe.
 
 Enable the local split in the site's `settings.local.php`:
 

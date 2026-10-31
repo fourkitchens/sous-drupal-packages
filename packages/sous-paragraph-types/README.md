@@ -7,8 +7,8 @@ authoring displays, plus the Text and Media component categories. It applies
 Formats and Media and requires Paragraphs, Paragraphs Collapsible and Paragraphs
 EE. It does not attach a Paragraph field to a node type.
 
-The selected Paragraphs EE 10.2 line requires Drupal 11.4; this collection's
-minimum is core 11.4.11. Paragraphs Collapsible 1.6 remains for compatibility.
+The collection requires Drupal 11.4. Paragraphs Collapsible 1.6 remains for
+compatibility.
 Review the [project's maintenance and security coverage](https://www.drupal.org/project/paragraphs_collapsible)
 when choosing its widget for a project.
 A replacement belongs in a separately reviewed dependency/widget change.
@@ -25,9 +25,8 @@ shared Paragraphs preview mode preserves an existing project's customization.
 ## Installation and application
 
 Configure the Sous Composer index, Drupal repositories and installer paths as
-shown in the [collection guide](../../README.md). Retain this package using the
-root native recipe-unpack exclusion setting. Once the first collection release
-is published, from a configured consuming site:
+shown in the [collection guide](../../README.md). Once the first collection
+release is published, from a configured consuming site:
 
 ```sh
 ddev composer require fourkitchens/sous-paragraph-types:^2.0
@@ -35,9 +34,8 @@ ddev drush recipe /var/www/html/web/recipes/sous-paragraph-types
 ddev drush cache:rebuild
 ```
 
-Recipe application is explicit. Requiring or updating the package does not
-reapply configuration. Projects maintain their complete configuration export
-after initial recipe application.
+Recipes are applied once and then unpacked. Package updates do not reapply
+configuration. Projects maintain their complete configuration export.
 
 ## Contributing
 

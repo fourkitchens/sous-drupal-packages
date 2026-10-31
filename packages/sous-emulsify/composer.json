@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-emulsify",
-  "description": "Emulsify default theme and supporting theme development tools.",
+  "description": "The Emulsify default theme and tools for theme development.",
   "keywords": [
     "recipe",
     "Drupal recipes",
@@ -20,7 +20,7 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "drupal/core": "^11.3",
+    "drupal/core": "^11.4",
     "drupal/emulsify": "^7.3.0",
     "drupal/emulsify_tools": "^2.2.2"
   },
