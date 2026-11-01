@@ -1,6 +1,6 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies: {}
 id: tabs_item
 label: 'Tab Item'
 revision: true
