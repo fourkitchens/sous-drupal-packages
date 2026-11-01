@@ -3,15 +3,20 @@
 `fourkitchens/sous-core-layout-builder` · `drupal-recipe` · GPL-2.0-or-later
 
 Optional **native Drupal core** Layout Builder composition for Page and
-Frontpage. It applies Content Types and core's Basic block recipe, installs the
-core layout/UI dependencies, enables Layout Builder on both default displays,
-and permits per-node overrides. Their visible fields, including Body, remain
-available as field blocks; authors can add Basic inline blocks.
+Frontpage. It applies Content Types, enables Layout Builder on both default
+displays and permits per-node overrides. Existing fields, including Body,
+remain available as field blocks.
 
-No Paragraphs recipe/package/module/type/host-field dependency is introduced.
-A core-layout project downloads only this composition and its common
-prerequisites. Paragraphs projects can omit this recipe and its configuration;
-Layout Builder's PHP code is itself part of Drupal core.
+Authors can add Text, Text with Media, Video and Image inline custom blocks.
+Their fields, media selectors, Content/Display Options tabs and presentation
+choices match the Paragraph components, using block fields and displays instead
+of Paragraph entities. Text keeps its simpler heading/text form.
+
+No Paragraphs recipe, module, type or host-field dependency is introduced.
+The shared Page/Frontpage forms place Title above the horizontal tabs and omit
+SEO Title and Info. Paragraphs projects omit this composition and keep Layout
+Builder disabled on those entity displays, even when Navigation requires the
+core module itself.
 
 ## Installation and application
 
@@ -21,12 +26,27 @@ release is published, from a configured consuming site:
 
 ```sh
 ddev composer require fourkitchens/sous-core-layout-builder:^2.0
+mkdir -p patches
+cp web/recipes/sous-core-layout-builder/assets/patches/style-selector-drupal11-compatibility.patch patches/
+```
+
+The Style Selector widgets require the supplied Drupal 11 compatibility patch.
+Sous Drupal Project registers it automatically; other consumers must register
+this persistent copy with Composer Patches 2 using the manifest entry in
+[Style Selector compatibility](../sous-paragraph-types/README.md#style-selector-compatibility).
+That patch includes the upstream library discovery fix and custom field-default
+schema additions; it does not require the Paragraphs recipe or modules.
+
+```sh
+ddev composer patches-relock
+ddev composer patches-repatch
 ddev drush recipe /var/www/html/web/recipes/sous-core-layout-builder
 ddev drush cache:rebuild
 ```
 
-Recipes are applied once and then unpacked. Package updates do not reapply
-configuration. Projects maintain their complete configuration export.
+Keep the copied patch and lock in the site; recipe unpacking does not register
+its patch metadata. Recipes apply once and then unpack; sites own subsequent
+dependencies and complete configuration exports.
 
 ## Contributing
 

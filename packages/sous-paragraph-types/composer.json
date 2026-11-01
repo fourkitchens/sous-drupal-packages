@@ -17,9 +17,12 @@
   "minimum-stability": "stable",
   "require": {
     "drupal/core": "^11.4",
+    "drupal/entity_usage": "^5.0.1",
+    "drupal/field_group": "^4.0",
     "drupal/paragraphs": "^1.23.0",
     "drupal/paragraphs_collapsible": "^1.6.0",
     "drupal/paragraphs_ee": "^10.2.0",
+    "drupal/style_selector": "^2.0",
     "fourkitchens/sous-formats": "^2.0",
     "fourkitchens/sous-media": "^2.0"
   },

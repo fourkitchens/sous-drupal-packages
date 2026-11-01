@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-content-types",
-  "description": "Page and Frontpage content types with SEO, teasers and automatic URL aliases.",
+  "description": "Page and Frontpage content types with Body, teasers and URL aliases.",
   "keywords": [
     "recipe",
     "Drupal recipes",
@@ -17,14 +17,7 @@
   "minimum-stability": "stable",
   "require": {
     "drupal/core": "^11.4",
-    "drupal/field_group": "^4.0.0",
-    "drupal/metatag": "^2.2.3",
-    "drupal/pathauto": "^1.15.0",
-    "drupal/publication_date": "^3.2.0",
-    "drupal/scheduler": "^2.3.0",
-    "drupal/tagify": "^2.0.5",
-    "fourkitchens/sous-formats": "^2.0",
-    "fourkitchens/sous-media": "^2.0"
+    "fourkitchens/sous-content-base": "^2.0"
   },
   "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
   "support": {

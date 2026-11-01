@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {}
+id: image
+label: Image
+revision: true
+description: 'Displays a single image.'

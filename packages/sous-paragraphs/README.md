@@ -2,37 +2,83 @@
 
 `fourkitchens/sous-paragraphs` · `drupal-recipe` · GPL-2.0-or-later
 
-Optional Paragraphs composition for both Sous Page and Frontpage. It applies
-Content Types and Paragraph Types, installs Paragraphs Features, and adds the
-shared `field_content` host field and its editor/display to both node types.
-Both Content tabs retain the original Body field alongside components and keep
-the base recipe's Info, Teaser and other authoring tabs.
+Optional Layout Paragraphs composition for Sous Page and Frontpage. It applies
+[Content Base](../sous-content-base) and [Paragraph Types](../sous-paragraph-types),
+then attaches `field_content` with the Layout Paragraphs widget and formatter.
+Each Content tab contains only that component reference; Body and SEO Title are
+absent, and Title sits above the horizontal tabs with no Info tab.
 
-Require/apply this recipe only when a project chooses Paragraphs. Neither the
-default content model nor the Core Layout Builder composition depends on it.
-No artificial Composer conflict prevents a project from deliberately designing
-its own combined composition, but the standard installer selects one path.
+Text, Text with Media, Video and Image share grouped authoring forms and media
+selectors. The module suite includes Paragraphs Library, its Layout Paragraphs
+integration, Paragraphs Features, per-type permissions and Layout Paragraphs
+Limit. The component chooser uses a searchable list with icons, matching the
+reference authoring workflow. Layout Discovery is required by Layout Paragraphs.
+Navigation also requires core Layout Builder, but these node displays do not
+enable Layout Builder or its per-node overrides.
 
-Package updates do not rename existing fields or change stored content.
-Projects own subsequent changes to their content model.
+Require this recipe only when choosing Paragraphs. The default content model
+and Core Layout Builder composition do not require it. Package updates do not
+rename existing fields or migrate stored content; sites own subsequent model
+changes.
 
-The collection distributes this package under GPL-2.0-or-later. The additional
+The collection distributes this package under GPL-2.0-or-later. Its additional
 copyright and permission notice is retained in [NOTICE](NOTICE).
 
 ## Installation and application
 
-Configure the Sous Composer index, Drupal repositories and installer paths as
-shown in the [collection guide](../../README.md). Once the first collection
-release is published, from a configured consuming site:
+Configure the Sous index, Drupal repositories and recipe installer paths as
+shown in the [collection guide](../../README.md), then require this recipe:
 
 ```sh
 ddev composer require fourkitchens/sous-paragraphs:^2.0
+```
+
+The component chooser uses the [#3487314 UI patch](https://www.drupal.org/project/layout_paragraphs/issues/3487314),
+tested with Layout Paragraphs 3.0.1. The
+[Style Selector compatibility patch](../sous-paragraph-types/README.md#style-selector-compatibility)
+is also required. Sous Drupal Project registers both persistent copies. Other
+consumers need Composer Patches 2, with
+`cweagans/composer-patches` allowed in `config.allow-plugins`:
+
+```sh
+ddev composer require cweagans/composer-patches:^2.0
+mkdir -p patches
+cp web/recipes/sous-paragraphs/assets/patches/layout-paragraphs-component-list-3487314.patch patches/
+cp web/recipes/sous-paragraph-types/assets/patches/style-selector-drupal11-compatibility.patch patches/
+```
+
+Configure `extra.composer-patches.patches-file` to use the site's patch manifest
+(for example `patches/patches.json`). Register the Style Selector entry linked
+above and add this Layout Paragraphs entry to that manifest:
+
+```json
+{
+  "patches": {
+    "drupal/layout_paragraphs": [
+      {
+        "description": "Improve Layout Paragraphs component selection (#3487314)",
+        "url": "patches/layout-paragraphs-component-list-3487314.patch",
+        "sha256": "1f41f7ef7024f9c4c88b98f8250539581357c62f2306b5b89b3368ac19d7ffaa",
+        "depth": 1
+      }
+    ]
+  }
+}
+```
+
+Rebuild the patch lock, apply both patches, then apply the recipe:
+
+```sh
+ddev composer patches-relock
+ddev composer patches-repatch
 ddev drush recipe /var/www/html/web/recipes/sous-paragraphs
 ddev drush cache:rebuild
 ```
 
-Recipes are applied once and then unpacked. Package updates do not reapply
-configuration. Projects maintain their complete configuration export.
+Keep the copied patch and patch lock in the site. Recipe unpacking moves
+requirements into the project; it does not register recipe patch definitions.
+Recipes apply once and then unpack, and sites own the resulting dependencies
+and configuration export.
 
 ## Contributing
 

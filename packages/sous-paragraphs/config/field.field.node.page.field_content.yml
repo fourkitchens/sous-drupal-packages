@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.storage.node.field_content
     - node.type.page
+    - paragraphs.paragraphs_type.from_library
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.text
     - paragraphs.paragraphs_type.text_with_media
@@ -24,22 +25,26 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
-      image: image
       text: text
       text_with_media: text_with_media
       video: video
+      image: image
+      from_library: from_library
     negate: 0
     target_bundles_drag_drop:
-      image:
-        weight: 5
-        enabled: true
       text:
-        weight: 6
+        weight: -54
         enabled: true
       text_with_media:
-        weight: 7
+        weight: -53
         enabled: true
       video:
-        weight: 8
+        weight: -51
+        enabled: true
+      image:
+        weight: -46
+        enabled: true
+      from_library:
+        weight: 5
         enabled: true
 field_type: entity_reference_revisions

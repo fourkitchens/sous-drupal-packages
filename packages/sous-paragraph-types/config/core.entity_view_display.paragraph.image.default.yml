@@ -2,13 +2,28 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.paragraph.image.field_heading
     - field.field.paragraph.image.field_image
+    - field.field.paragraph.image.field_show_captions
+    - field.field.paragraph.image.field_style_layout_width
+    - field.field.paragraph.image.field_text
     - paragraphs.paragraphs_type.image
+  module:
+    - options
+    - text
 id: paragraph.image.default
 targetEntityType: paragraph
 bundle: image
 mode: default
 content:
+  field_heading:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {}
+    weight: 0
+    region: content
   field_image:
     type: entity_reference_entity_view
     label: hidden
@@ -16,6 +31,30 @@ content:
       view_mode: default
       link: false
     third_party_settings: {}
-    weight: 0
+    weight: 2
+    region: content
+  field_show_captions:
+    type: boolean
+    label: hidden
+    settings:
+      format: true-false
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {}
+    weight: 4
+    region: content
+  field_style_layout_width:
+    type: list_key
+    label: hidden
+    settings: {}
+    third_party_settings: {}
+    weight: 3
+    region: content
+  field_text:
+    type: text_default
+    label: hidden
+    settings: {}
+    third_party_settings: {}
+    weight: 1
     region: content
 hidden: {}

@@ -47,12 +47,16 @@ jobs:
         with:
           php-version: '8.4'
           extensions: pdo_sqlite
+          ini-values: memory_limit=512M
           tools: composer:2.10.3
           coverage: none
       - name: Install all recipe dependencies
         run: |
           site="$RUNNER_TEMP/sous-recipes"
           composer create-project drupal/recommended-project:^11.4 "$site" --no-interaction
+          mkdir -p "$site/patches"
+          cp packages/sous-paragraphs/assets/patches/layout-paragraphs-component-list-3487314.patch "$site/patches/"
+          cp packages/sous-paragraph-types/assets/patches/style-selector-drupal11-compatibility.patch "$site/patches/"
           versions=$(jq -s 'map({key:.name,value:"2.0.0"})|from_entries' packages/*/composer.json)
           jq --arg path "$GITHUB_WORKSPACE/packages/*" --argjson versions "$versions" '
             .repositories += [
@@ -60,7 +64,20 @@ jobs:
               {type:"package",package:{name:"dropzone/dropzone",version:"6.3.5",type:"drupal-library",
                 extra:{"installer-name":"dropzone"},
                 dist:{url:"https://github.com/enyo/dropzone/releases/download/dropzone%406.3.5/dist.zip",type:"zip"}}}
-            ]
+            ] |
+            .require."cweagans/composer-patches" = "^2.0" |
+            .config."allow-plugins"."cweagans/composer-patches" = true |
+            .extra.patches = {"drupal/layout_paragraphs": [{
+              description: "Improve Layout Paragraphs component selection",
+              url: "patches/layout-paragraphs-component-list-3487314.patch",
+              sha256: "1f41f7ef7024f9c4c88b98f8250539581357c62f2306b5b89b3368ac19d7ffaa",
+              depth: 1,
+              extra: {"issue-tracker-url": "https://www.drupal.org/project/layout_paragraphs/issues/3487314"}
+            }], "drupal/style_selector": [{
+              description: "Custom Drupal 11 field-default schema and library discovery compatibility",
+              url: "patches/style-selector-drupal11-compatibility.patch",
+              depth: 1
+            }]}
           ' "$site/composer.json" > "$site/composer.tmp"
           mv "$site/composer.tmp" "$site/composer.json"
           mapfile -t recipes < <(jq -r '.name' packages/*/composer.json)
@@ -80,28 +97,7 @@ jobs:
             done
             if [[ "$composition" != admin ]]; then vendor/bin/drush recipe "$PWD/recipes/sous-$composition" --yes; fi
             vendor/bin/drush status --field=bootstrap | grep -Fx Successful
-            # shellcheck disable=SC2016
-            COMPOSITION="$composition" vendor/bin/drush php:eval '
-            $case = getenv("COMPOSITION");
-            $content = in_array($case, ["content-types", "core-layout-builder", "paragraphs"], TRUE);
-            $modules = \Drupal::moduleHandler();
-            $storage = \Drupal::service("config.storage");
-            $checks = ["admin theme" => \Drupal::config("system.theme")->get("admin") === "gin", "default theme" => \Drupal::config("system.theme")->get("default") === "emulsify"];
-            foreach (["page", "frontpage"] as $type) {
-              $checks[$type] = $storage->exists("node.type.$type") === $content;
-              $display = \Drupal::entityTypeManager()->getStorage("entity_view_display")->load("node.$type.default");
-              $checks["layout.$type"] = (bool) $display?->getThirdPartySetting("layout_builder", "enabled", FALSE) === ($case === "core-layout-builder");
-            }
-            foreach (["linkit" => $content, "emulsify_tools" => TRUE, "ckeditor5" => $content, "paragraphs" => $case === "paragraphs", "config_split" => $case === "config-split"] as $module => $enabled) {
-              $checks[$module] = $modules->moduleExists($module) === $enabled;
-            }
-            foreach (["local", "staging"] as $id) {
-              $name = "config_split.config_split.$id";
-              $checks[$name] = $storage->exists($name) === ($case === "config-split") && ($case !== "config-split" || \Drupal::config($name)->get("status") === FALSE);
-            }
-            foreach ($checks as $name => $passed) { if (!$passed) { throw new \RuntimeException("$case: $name failed"); } }
-            echo "$case composition verified.\n";
-            '
+            COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-composition.php"
             echo '::endgroup::'
           done
 

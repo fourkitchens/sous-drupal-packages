@@ -2,33 +2,37 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.page.body
+    - core.entity_view_mode.node.teaser
     - field.field.node.page.field_metadata
-    - field.field.node.page.field_seo_title
     - field.field.node.page.field_tags
     - field.field.node.page.field_teaser_image
     - field.field.node.page.field_teaser_text
     - node.type.page
   module:
-    - text
     - user
-id: node.page.default
+id: node.page.teaser
 targetEntityType: node
 bundle: page
-mode: default
+mode: teaser
 content:
-  body:
-    type: text_default
+  field_teaser_image:
+    type: entity_reference_entity_view
     label: hidden
-    settings: {}
+    settings:
+      view_mode: default
+      link: true
     third_party_settings: {}
     weight: 0
     region: content
+  field_teaser_text:
+    type: basic_string
+    label: hidden
+    settings: {}
+    third_party_settings: {}
+    weight: 1
+    region: content
 hidden:
   field_metadata: true
-  field_seo_title: true
   field_tags: true
-  field_teaser_image: true
-  field_teaser_text: true
   links: true
   published_at: true

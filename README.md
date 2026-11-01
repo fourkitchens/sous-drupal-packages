@@ -9,23 +9,27 @@ ZIP; sharing a repository and release version does not install the entire collec
 Every package uses the `fourkitchens/` Composer namespace and the collection's
 shared version, beginning with `2.0.0`.
 
-| Package                                                       | Purpose                                                                 | Installation choice                   |
-| ------------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------- |
-| [sous-admin](packages/sous-admin)                             | Gin, Navigation, Superuser and management Views                         | Starter base                          |
-| [sous-emulsify](packages/sous-emulsify)                       | Emulsify theme and tools                                                | Starter base                          |
-| [sous-content-types](packages/sous-content-types)             | Page, Frontpage, fields and aliases; Formats + Media                    | Default content and both compositions |
-| [sous-formats](packages/sous-formats)                         | Text formats, CKEditor 5 and Linkit defaults                            | Shared dependency                     |
-| [sous-media](packages/sous-media)                             | File, Image, Video and media authoring                                  | Shared dependency                     |
-| [sous-paragraph-types](packages/sous-paragraph-types)         | Text, Image, Video and Text with Media components; Formats + Media      | Optional building blocks              |
-| [sous-paragraphs](packages/sous-paragraphs)                   | Paragraphs authoring on Page/Frontpage; Content Types + Paragraph Types | Optional composition                  |
-| [sous-core-layout-builder](packages/sous-core-layout-builder) | Native Layout Builder on Page/Frontpage; Content Types                  | Optional composition                  |
-| [sous-config-split](packages/sous-config-split)               | Inactive local and staging Config Split definitions                     | Independent opt-in                    |
+| Package                                                       | Purpose                                                     | Installation choice      |
+| ------------------------------------------------------------- | ----------------------------------------------------------- | ------------------------ |
+| [sous-admin](packages/sous-admin)                             | Gin, Navigation, Superuser and management Views             | Starter base             |
+| [sous-emulsify](packages/sous-emulsify)                       | Emulsify theme and tools                                    | Starter base             |
+| [sous-content-base](packages/sous-content-base)               | Shared Page/Frontpage fields, tabs, teasers and aliases     | Shared dependency        |
+| [sous-content-types](packages/sous-content-types)             | Page and Frontpage with Body                                | Default content          |
+| [sous-formats](packages/sous-formats)                         | Text formats, CKEditor 5 and Linkit defaults                | Shared dependency        |
+| [sous-media](packages/sous-media)                             | File, Image, Video and media authoring                      | Shared dependency        |
+| [sous-paragraph-types](packages/sous-paragraph-types)         | Text, Text with Media, Video and Image Paragraph components | Optional building blocks |
+| [sous-paragraphs](packages/sous-paragraphs)                   | Layout Paragraphs on Page/Frontpage without Body            | Optional composition     |
+| [sous-core-layout-builder](packages/sous-core-layout-builder) | Native layouts with four matching inline block types        | Optional composition     |
+| [sous-config-split](packages/sous-config-split)               | Inactive local and staging Config Split definitions         | Independent opt-in       |
 
-Core Layout Builder and Paragraphs are independently optional. Common packages
-require neither composition, and choosing Layout Builder adds no Paragraphs
-recipe, modules or configuration. Drupal's Navigation module, included by Admin,
-enables the shared core Layout Builder module; it does not apply the optional
-Sous layout recipe or its content display/override configuration.
+The content compositions share a Body-free base. The default content package
+adds Body; Paragraphs adds its component reference instead. Page and Frontpage
+place Title above the horizontal tabs, with no separate SEO Title or Info tab.
+Layout Builder adds no Paragraphs recipe, modules or configuration.
+
+Navigation, included by Admin, requires core Layout Builder, and Layout
+Paragraphs requires Layout Discovery. Those module dependencies do not enable
+Layout Builder on the Paragraphs composition's entity displays.
 
 ## Use in a project
 

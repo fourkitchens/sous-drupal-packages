@@ -13,6 +13,8 @@ Recipe CI verifies recipes.
 - No new abstraction layers, environment frameworks or "policy" files.
 - Don't work around upstream bugs (Emulsify, contrib modules) with scripts
   here. Use a Composer patch with an issue link, or fix the upstream project.
+- The Style Selector Drupal 11 compatibility patch is intentionally custom;
+  upstream schema issue tracking is deferred to the maintainer.
 - No defensive checks for situations the scripts can't reach.
 - Comments: at most two lines, plain English, explaining why.
   Don't narrate edge cases.

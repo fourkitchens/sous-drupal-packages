@@ -2,20 +2,20 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.paragraph.field_media_alignment
+    - field.storage.paragraph.field_component_focus
     - paragraphs.paragraphs_type.text_with_media
   module:
-    - options
-id: paragraph.text_with_media.field_media_alignment
-field_name: field_media_alignment
+    - style_selector
+id: paragraph.text_with_media.field_component_focus
+field_name: field_component_focus
 entity_type: paragraph
 bundle: text_with_media
-label: 'Media Alignment'
+label: 'Component Focus'
 description: ''
 required: true
 translatable: false
 default_value:
-  - value: left
+  - value: focus-balanced
 default_value_callback: ''
 settings: {}
-field_type: list_string
+field_type: style_selector_css_class

@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_content
+    - style_selector
+id: block_content.field_style_media_alignment
+field_name: field_style_media_alignment
+entity_type: block_content
+type: style_selector_css_class
+settings:
+  allowed_values:
+    - value: media-alignment-left
+      label: 'Media Left'
+    - value: media-alignment-right
+      label: 'Media Right'
+  allowed_values_function: ''
+module: style_selector
+locked: false
+cardinality: 1
+translatable: true
+indexes: {}
+persist_with_no_fields: false
+custom_storage: false

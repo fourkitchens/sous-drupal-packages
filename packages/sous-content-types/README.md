@@ -2,28 +2,23 @@
 
 `fourkitchens/sous-content-types` · `drupal-recipe` · GPL-2.0-or-later
 
-Provides Page and Frontpage content types with Body, SEO metadata, teaser image
-and text, shared fields, authoring displays and title-based Pathauto aliases.
-Page additionally has tags. Media and Formats are explicit prerequisite recipes;
-Pathauto and the modules referenced by the fields/widgets are direct dependencies.
-Admin is independently optional and is never reapplied by this recipe.
+Provides the default Page and Frontpage composition with Body. It applies
+[Content Base](../sous-content-base), which owns shared fields, authoring tabs,
+teasers and title-based Pathauto aliases, and attaches Body to both types.
+Page additionally has tags. Formats and Media come through the shared base;
+Admin remains independently optional.
 
-Create content at `/node/add/page` or `/node/add/frontpage`, enter the required
-SEO Title and write Body in the Content tab. The default display renders Body;
-Page's teaser display uses its dedicated teaser fields. The recipe provides the
-Frontpage content model, not a pre-created node or an automatic site-front-page
+Create content at `/node/add/page` or `/node/add/frontpage`. Title appears above
+the horizontal tabs, and Body lives in Content; there is no separate SEO Title
+field or Info tab. Page's teaser display uses its dedicated teaser fields.
+Frontpage is a content model, not a pre-created node or automatic front-page
 route assignment.
 
-This content recipe adds neither Paragraphs host fields nor Layout Builder
-display/override configuration. Core Navigation can enable the core Layout
-Builder module transitively; its module state alone does not select the Sous
-layout composition. Choose
-[`sous-core-layout-builder`](https://github.com/fourkitchens/sous-drupal-packages/blob/main/packages/sous-core-layout-builder/README.md) or
-[`sous-paragraphs`](https://github.com/fourkitchens/sous-drupal-packages/blob/main/packages/sous-paragraphs/README.md) when that project needs a
-composition. Both retain Body. Do not replay the base recipe after a composition
-has changed its displays; strict defaults protect those changes. Matching
-configuration is accepted independently of generated UUID/default hashes;
-conflicting content models require explicit project-owned configuration changes.
+Choose [Layout Paragraphs](../sous-paragraphs) for component-only Content tabs,
+or [Core Layout Builder](../sous-core-layout-builder) for native layouts with
+Body and matching custom blocks. Neither choice requires both compositions.
+Recipes define fresh-install defaults; existing sites own field/content
+migrations and should not replay a conflicting content model over their data.
 
 ## Installation and application
 
