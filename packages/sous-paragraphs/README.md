@@ -8,10 +8,12 @@ then attaches `field_content` with the Layout Paragraphs widget and formatter.
 Each Content tab contains only that component reference; Body and SEO Title are
 absent, and Title sits above the horizontal tabs with no Info tab.
 
-Text, Text with Media, Video and Image share grouped authoring forms and media
-selectors. The module suite includes Paragraphs Library, its Layout Paragraphs
+The component set includes text/media, Accordion, Tabs, Quote, Embed, Table
+and From the Library. Layout is a field-free container offering only core one-,
+two-, three- and four-column layouts. Accordion Item and Tabs Item are edited
+inside their containers; the top-level picker omits them. The module suite includes Paragraphs Library, its Layout Paragraphs
 integration, Paragraphs Features, per-type permissions and Layout Paragraphs
-Limit. The component chooser uses a searchable list with icons, matching the
+Limit. The component chooser uses a searchable grid with icons and descriptions, matching the
 reference authoring workflow. Layout Discovery is required by Layout Paragraphs.
 Navigation also requires core Layout Builder, but these node displays do not
 enable Layout Builder or its per-node overrides.
@@ -36,7 +38,8 @@ ddev composer require fourkitchens/sous-paragraphs:^2.0
 The component chooser uses the [#3487314 UI patch](https://www.drupal.org/project/layout_paragraphs/issues/3487314),
 tested with Layout Paragraphs 3.0.1. The
 [Style Selector compatibility patch](../sous-paragraph-types/README.md#style-selector-compatibility)
-is also required. Sous Drupal Project registers both persistent copies. Other
+and the [Tablefield patches](../sous-paragraph-types/README.md#tablefield-compatibility)
+are also required. Sous Drupal Project registers their persistent copies. Other
 consumers need Composer Patches 2, with
 `cweagans/composer-patches` allowed in `config.allow-plugins`:
 
@@ -66,7 +69,8 @@ above and add this Layout Paragraphs entry to that manifest:
 }
 ```
 
-Rebuild the patch lock, apply both patches, then apply the recipe:
+Register the Tablefield patches as linked above. Rebuild the patch lock, apply
+the patches, then apply the recipe:
 
 ```sh
 ddev composer patches-relock

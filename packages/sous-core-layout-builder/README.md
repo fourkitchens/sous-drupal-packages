@@ -7,10 +7,16 @@ Frontpage. It applies Content Types, enables Layout Builder on both default
 displays and permits per-node overrides. Existing fields, including Body,
 remain available as field blocks.
 
-Authors can add Text, Text with Media, Video and Image inline custom blocks.
+Authors can add Text, Text with Media, Video, Image, Accordion, Accordion Item,
+Quote, Embed, Table, Tabs and Tabs Item inline custom blocks.
 Their fields, media selectors, Content/Display Options tabs and presentation
 choices match the Paragraph components, using block fields and displays instead
-of Paragraph entities. Text keeps its simpler heading/text form.
+of Paragraph entities. Text keeps its simpler heading/text form. Nested blocks
+use Inline Entity Form to create, edit and reorder child blocks, with revision
+references preserving the content recorded by each parent revision. Accordion
+accepts Accordion Items containing Image, Text or Video; Tabs accepts Tabs Items,
+which can contain every supplied block type. Native one- through four-column
+sections supply layouts. There is no From the Library block.
 
 No Paragraphs recipe, module, type or host-field dependency is introduced.
 The shared Page/Frontpage forms place Title above the horizontal tabs and omit
@@ -34,7 +40,10 @@ The Style Selector widgets require the supplied Drupal 11 compatibility patch.
 Sous Drupal Project registers it automatically; other consumers must register
 this persistent copy with Composer Patches 2 using the manifest entry in
 [Style Selector compatibility](../sous-paragraph-types/README.md#style-selector-compatibility).
-That patch includes the upstream library discovery fix and custom field-default
+The four [Tablefield patches](../sous-paragraph-types/README.md#tablefield-compatibility)
+are also required; copy them from this recipe's `assets/patches/` directory and
+merge its [tablefield.json](assets/patches/tablefield.json) into the patch manifest.
+The Style Selector patch includes the upstream library discovery fix and custom field-default
 schema additions; it does not require the Paragraphs recipe or modules.
 
 ```sh

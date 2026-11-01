@@ -1,0 +1,43 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.tabs_item.field_content
+    - field.field.paragraph.tabs_item.field_label
+    - paragraphs.paragraphs_type.tabs_item
+  module:
+    - layout_paragraphs
+id: paragraph.tabs_item.default
+targetEntityType: paragraph
+bundle: tabs_item
+mode: default
+content:
+  field_content:
+    type: layout_paragraphs
+    weight: 1
+    region: content
+    settings:
+      view_mode: default
+      preview_view_mode: default
+      form_display_mode: default
+      nesting_depth: 0
+      require_layouts: 0
+      empty_message: ''
+      widget_settings_source: default
+      widget_settings:
+        show_search: true
+        show_icons: true
+        show_description: true
+        display_mode: grid
+    third_party_settings: {}
+  field_label:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {}
+hidden:
+  created: true
+  status: true

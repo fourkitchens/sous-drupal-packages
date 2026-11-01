@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs_ee
+third_party_settings:
+  paragraphs_ee:
+    paragraphs_categories:
+      behavioral_components: behavioral_components
+id: accordion
+label: Accordion
+icon_uuid: null
+icon_default: null
+description: 'Toggle between hiding and showing large amounts of content under collapsible headers to enhance usability and manage space efficiently.'
+behavior_plugins: {}

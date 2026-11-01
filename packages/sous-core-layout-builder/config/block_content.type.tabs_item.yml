@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: tabs_item
+label: 'Tab Item'
+revision: true
+description: 'A labeled tab containing nested content.'

@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-paragraph-types",
-  "description": "Image, Text, Text with Media and Video Paragraph types and authoring displays.",
+  "description": "Text, media, accordion, tab, quote, embed and table Paragraph components.",
   "keywords": [
     "recipe",
     "Drupal recipes",
@@ -17,12 +17,16 @@
   "minimum-stability": "stable",
   "require": {
     "drupal/core": "^11.4",
+    "drupal/entity_browser": "^2.15",
     "drupal/entity_usage": "^5.0.1",
     "drupal/field_group": "^4.0",
+    "drupal/layout_paragraphs": "^3.0",
     "drupal/paragraphs": "^1.23.0",
     "drupal/paragraphs_collapsible": "^1.6.0",
     "drupal/paragraphs_ee": "^10.2.0",
+    "drupal/paragraphs_features": "^2.3.0",
     "drupal/style_selector": "^2.0",
+    "drupal/tablefield": "^3.0",
     "fourkitchens/sous-formats": "^2.0",
     "fourkitchens/sous-media": "^2.0"
   },

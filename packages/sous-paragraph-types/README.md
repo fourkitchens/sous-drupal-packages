@@ -2,25 +2,24 @@
 
 `fourkitchens/sous-paragraph-types` · `drupal-recipe` · GPL-2.0-or-later
 
-Provides Image, Text, Text with Media and Video Paragraph types with their
-fields, authoring forms, display defaults and Text/Media component categories.
-It applies Formats and Media and installs Paragraphs, Paragraphs Library,
-Paragraphs EE, Field Group and Style Selector. It does not attach a Paragraph
+Provides Text, Text with Media, Image, Video, Accordion, Accordion Item,
+Quote, Embed, Table, Tabs, Tabs Item and From the Library components with
+their fields, authoring forms and portable display defaults. It applies Formats
+and Media and installs the Paragraphs authoring suite, Entity Browser,
+Field Group, Style Selector and Tablefield. It does not attach a Paragraph
 field to a node type.
 
-Every type has a heading and formatted text. Image and Video include caption
-visibility and layout width choices. Text with Media supports image or video
-media, caption visibility, display style, component focus and media alignment.
-Content and Display Options tabs group the media forms; Text keeps its simpler
-heading/text form. Text and Text with Media can convert into reusable library
-items. The recipe imports Paragraphs Library and Style Selector module defaults.
-Style values remain project data; themes decide how to render them.
+Media components retain caption and presentation choices. Accordion items hold
+Image, Text or Video; Tabs Item can contain every provided component except the
+Layout container supplied by the Layout Paragraphs composition. Nested editors
+use default form modes so required fields remain editable. From the Library
+opens a modal component picker with rendered previews. Themes supply component
+markup and interaction; no reference site's theme libraries are required.
 
 Use this package directly for project-owned hosts, or choose
 [`sous-paragraphs`](https://github.com/fourkitchens/sous-drupal-packages/blob/main/packages/sous-paragraphs/README.md)
 to attach the shared field to Page and Frontpage. Core Layout Builder and the
-common packages do not depend on this package, so those projects never need its
-ZIP or Paragraphs modules. The strict list protects the recipe's own defaults;
+common packages do not depend on this package or its Paragraphs modules. The strict list protects the recipe's own defaults;
 the shared Paragraphs preview mode preserves project customization.
 
 ## Installation and application
@@ -31,6 +30,14 @@ release is published, from a configured consuming site:
 
 ```sh
 ddev composer require fourkitchens/sous-paragraph-types:^2.0
+```
+
+Tabs Item uses Layout Paragraphs. Register its supplied chooser patch using the
+[Layout Paragraphs manifest entry](../sous-paragraphs/README.md#installation-and-application):
+
+```sh
+mkdir -p patches
+cp web/recipes/sous-paragraph-types/assets/patches/layout-paragraphs-component-list-3487314.patch patches/
 ```
 
 ### Style Selector compatibility
@@ -77,6 +84,22 @@ ddev drush cache:rebuild
 Keep the copied patch and lock in the site; recipe unpacking does not register
 its patch metadata. Recipes apply once and then unpack; sites own subsequent
 dependencies and complete configuration exports.
+
+### Tablefield compatibility
+
+Tablefield 3 uses SFASU's output-buffer, rich-text-cell and Add Column fixes,
+plus a [default-value schema adaptation (#3593703)](https://www.drupal.org/project/tablefield/issues/3593703)
+for Drupal 11.4 recipes. Sous Drupal Project registers all four persistent
+patches. Other consumers copy them before applying this recipe:
+
+```sh
+cp web/recipes/sous-paragraph-types/assets/patches/tablefield-*.patch patches/
+```
+
+Merge the entries from [tablefield.json](assets/patches/tablefield.json) into
+the site's patch manifest, then run `ddev composer patches-relock` and
+`ddev composer patches-repatch`. The table starts with two rows and columns,
+Limited HTML cell editors, and row headers; the theme supplies its presentation.
 
 ## Contributing
 

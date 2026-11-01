@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {}
+id: table
+label: Table
+revision: true
+description: 'Displays structured data in rows and columns, allowing users to clearly compare information across categories at a glance.'

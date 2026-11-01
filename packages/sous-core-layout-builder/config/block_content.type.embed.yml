@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {}
+id: embed
+label: Embed
+revision: true
+description: 'Allows authors to embed external content, such as videos or interactive tools, by pasting embed code directly into the page.'

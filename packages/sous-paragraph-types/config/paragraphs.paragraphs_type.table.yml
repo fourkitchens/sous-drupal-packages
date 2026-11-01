@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs_ee
+    - paragraphs_library
+third_party_settings:
+  paragraphs_ee:
+    paragraphs_categories:
+      text_components: text_components
+  paragraphs_library:
+    allow_library_conversion: true
+id: table
+label: Table
+icon_uuid: null
+icon_default: null
+description: 'Displays structured data in rows and columns, allowing users to clearly compare information across categories at a glance.'
+behavior_plugins: {}

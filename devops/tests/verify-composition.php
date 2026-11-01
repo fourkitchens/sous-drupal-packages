@@ -41,6 +41,9 @@ foreach (['linkit' => $content, 'emulsify_tools' => TRUE, 'ckeditor5' => $conten
 foreach (['layout_paragraphs', 'layout_paragraphs_library', 'layout_paragraphs_permissions', 'layout_paragraphs_limit', 'paragraphs_type_permissions'] as $module) {
   $checks[$module] = $modules->moduleExists($module) === $paragraphs;
 }
+foreach (['tablefield' => $paragraphs || $case === 'core-layout-builder', 'entity_browser' => $paragraphs, 'paragraphs_features' => $paragraphs, 'inline_entity_form' => $case === 'core-layout-builder'] as $module => $enabled) {
+  $checks[$module] = $modules->moduleExists($module) === $enabled;
+}
 foreach (['local', 'staging'] as $id) {
   $name = "config_split.config_split.$id";
   $checks[$name] = $storage->exists($name) === ($case === 'config-split') && ($case !== 'config-split' || \Drupal::config($name)->get('status') === FALSE);
@@ -52,7 +55,7 @@ if ($paragraphs) {
   $checks['component modal'] = $modal->get('width') === '80%' && $modal->get('height') === '80%' && $modal->get('autoresize');
   $checks['component menu patch'] = class_exists(\Drupal\layout_paragraphs\Form\LayoutParagraphsWidgetSettingsForm::class);
   foreach (['anonymous', 'authenticated'] as $role_id) {
-    foreach (['text', 'text_with_media', 'video', 'image', 'from_library'] as $bundle) {
+    foreach (['text', 'text_with_media', 'video', 'image', 'accordion', 'accordion_item', 'quote', 'embed', 'table', 'tabs', 'tabs_item', 'from_library', 'layout'] as $bundle) {
       $checks["view.$role_id.$bundle"] = Role::load($role_id)->hasPermission("view paragraph content $bundle");
     }
   }
@@ -104,6 +107,108 @@ foreach (['paragraph' => $paragraphs, 'block_content' => $case === 'core-layout-
     if ($entity_type === 'block_content') {
       $checks["inline.$bundle"] = \Drupal::service('plugin.manager.block')->hasDefinition("inline_block:$bundle");
     }
+  }
+}
+
+// Exercise nested editing and rendering, including the patched rich-text table.
+$extra_components = [
+  'accordion' => $common + ['field_content' => ['nested', 'paragraphs']],
+  'accordion_item' => ['field_heading' => ['string', 'string_textfield'], 'field_label' => ['string', 'string_textfield'], 'field_content' => ['nested', 'paragraphs']],
+  'quote' => ['field_text' => ['text_long', 'text_textarea'], 'field_label' => ['string', 'string_textfield'], 'field_image' => ['entity_reference', 'media_library_widget']],
+  'embed' => $common + ['field_embed_code' => ['string_long', 'string_textarea'], 'field_show_texture' => ['boolean', 'boolean_checkbox'], 'field_style_layout_width' => ['style_selector_css_class', 'style_selector_tile_widget']],
+  'table' => $common + ['field_label' => ['string', 'string_textfield'], 'field_table' => ['tablefield', 'tablefield']],
+  'tabs' => $common + ['field_style_layout_width' => ['style_selector_css_class', 'style_selector_tile_widget'], 'field_content' => ['nested', 'paragraphs']],
+  'tabs_item' => ['field_label' => ['string', 'string_textfield'], 'field_content' => ['nested', 'layout_paragraphs']],
+];
+foreach (['paragraph' => $paragraphs, 'block_content' => $case === 'core-layout-builder'] as $entity_type => $enabled) {
+  foreach ($extra_components as $bundle => $fields) {
+    $name = $entity_type === 'paragraph' ? "paragraphs.paragraphs_type.$bundle" : "block_content.type.$bundle";
+    $checks["$entity_type.$bundle"] = $storage->exists($name) === $enabled;
+    if (!$enabled) {
+      continue;
+    }
+    $form = $entities->getStorage('entity_form_display')->load("$entity_type.$bundle.default");
+    $definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions($entity_type, $bundle);
+    $actual = array_keys(array_filter($definitions, static fn($field) => $field instanceof FieldConfig));
+    $expected = array_keys($fields);
+    sort($actual);
+    sort($expected);
+    $checks["fields.$entity_type.$bundle"] = $actual === $expected;
+    foreach ($fields as $name => [$field_type, $widget]) {
+      if ($field_type === 'nested') {
+        $field_type = 'entity_reference_revisions';
+        $widget = $entity_type === 'paragraph' ? $widget : 'inline_entity_form_complex';
+        $checks["target.$entity_type.$bundle"] = $definitions[$name]->getSetting('target_type') === $entity_type;
+      }
+      $checks["widget.$entity_type.$bundle.$name"] = $definitions[$name]->getType() === $field_type && $form->getRenderer($name)->getPluginId() === $widget;
+    }
+    $groups = $form->getThirdPartySettings('field_group');
+    $expected_groups = match ($bundle) {
+      'accordion_item' => [['field_heading', 'field_content'], ['field_label']],
+      'embed' => [['field_heading', 'field_text', 'field_embed_code'], ['field_show_texture', 'field_style_layout_width']],
+      'tabs' => [['field_heading', 'field_text', 'field_content'], ['field_style_layout_width']],
+      default => [],
+    };
+    $checks["groups.$entity_type.$bundle"] = !$expected_groups ? $groups === [] : $groups['group_tabs']['format_settings']['direction'] === 'horizontal' && $groups['group_content']['children'] === $expected_groups[0] && $groups['group_display_options']['children'] === $expected_groups[1];
+    if ($entity_type === 'block_content') {
+      $checks["inline.$bundle"] = \Drupal::service('plugin.manager.block')->hasDefinition("inline_block:$bundle");
+    }
+  }
+  if (!$enabled) {
+    continue;
+  }
+  foreach (['accordion' => ['accordion_item'], 'accordion_item' => ['image', 'text', 'video'], 'tabs' => ['tabs_item'], 'tabs_item' => array_merge(array_keys($components), array_keys($extra_components), $paragraphs ? ['from_library'] : [])] as $bundle => $allowed) {
+    $actual = array_values(FieldConfig::loadByName($entity_type, $bundle, 'field_content')->getSetting('handler_settings')['target_bundles']);
+    sort($actual);
+    sort($allowed);
+    $checks["children.$entity_type.$bundle"] = $actual === $allowed;
+  }
+  $table = $entities->getStorage($entity_type)->create(['type' => 'table', 'info' => 'Table']);
+  $defaults = $table->get('field_table')->getValue()[0];
+  $checks["table defaults.$entity_type"] = (int) $defaults['rebuild']['rows'] === 2 && (int) $defaults['rebuild']['cols'] === 2 && $defaults['value'][0][0]['format'] === 'limited_html';
+  $table_form = \Drupal::service('entity.form_builder')->getForm($table);
+  $checks["table form.$entity_type"] = isset($table_form['field_table']['widget'][0]);
+  $defaults['value'][0][0]['value'] = "Table cell $entity_type content";
+  $defaults['caption'] = 'Table caption';
+  $table->set('field_table', [$defaults]);
+  $table->save();
+  $table = $entities->getStorage($entity_type)->loadUnchanged($table->id());
+  $build = $entities->getViewBuilder($entity_type)->view($table);
+  $checks["table render.$entity_type"] = str_contains((string) \Drupal::service('renderer')->renderInIsolation($build), "Table cell $entity_type content");
+  foreach (['accordion' => 'accordion_item', 'tabs' => 'tabs_item'] as $parent_bundle => $item_bundle) {
+    $marker = "Nested $entity_type $parent_bundle content";
+    $child = $entities->getStorage($entity_type)->create(['type' => 'text', 'info' => 'Text', 'field_text' => ['value' => $marker, 'format' => 'limited_html']]);
+    $child->save();
+    $item = $entities->getStorage($entity_type)->create(['type' => $item_bundle, 'info' => 'Item', 'field_label' => 'Item', 'field_content' => ['entity' => $child]]);
+    if ($item->hasField('field_heading')) {
+      $item->set('field_heading', 'Item');
+    }
+    $item->save();
+    $parent = $entities->getStorage($entity_type)->create(['type' => $parent_bundle, 'info' => 'Container', 'field_content' => ['entity' => $item]]);
+    $parent->save();
+    $parent_form = \Drupal::service('entity.form_builder')->getForm($parent);
+    $checks["nested form.$entity_type.$parent_bundle"] = isset($parent_form['field_content']['widget']);
+    $child->setNewRevision(TRUE);
+    $child->set('field_text', ['value' => $marker . ' revised', 'format' => 'limited_html']);
+    $child->save();
+    $parent = $entities->getStorage($entity_type)->loadUnchanged($parent->id());
+    $build = $entities->getViewBuilder($entity_type)->view($parent);
+    $html = (string) \Drupal::service('renderer')->renderInIsolation($build);
+    $checks["nested render.$entity_type.$parent_bundle"] = str_contains($html, $marker) && !str_contains($html, $marker . ' revised');
+  }
+}
+if ($paragraphs) {
+  $library_form = $entities->getStorage('entity_form_display')->load('paragraph.from_library.default');
+  $checks['library browser'] = $library_form->getRenderer('field_reusable_paragraph')->getPluginId() === 'entity_browser_entity_reference' && $library_form->getRenderer('field_reusable_paragraph')->getSetting('entity_browser') === 'component_library' && $entities->getStorage('entity_browser')->load('component_library')->getDisplay()->getPluginId() === 'modal';
+  $layout = $entities->getStorage('paragraphs_type')->load('layout');
+  $layouts = array_keys($layout->getBehaviorPlugin('layout_paragraphs')->getConfiguration()['available_layouts']);
+  $checks['layout choices'] = $layouts === ['layout_onecol', 'layout_twocol_section', 'layout_threecol_section', 'layout_fourcol_section'];
+  $checks['layout fields'] = array_filter(\Drupal::service('entity_field.manager')->getFieldDefinitions('paragraph', 'layout'), static fn($field) => $field instanceof FieldConfig) === [];
+  foreach ($layouts as $layout_id) {
+    $checks["layout plugin.$layout_id"] = \Drupal::service('plugin.manager.core.layout')->hasDefinition($layout_id);
+  }
+  foreach (['page', 'frontpage'] as $bundle) {
+    $checks["layout allowed.$bundle"] = in_array('layout', FieldConfig::loadByName('node', $bundle, 'field_content')->getSetting('handler_settings')['target_bundles'], TRUE);
   }
 }
 foreach ($checks as $name => $passed) {

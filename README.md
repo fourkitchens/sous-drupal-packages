@@ -9,18 +9,18 @@ ZIP; sharing a repository and release version does not install the entire collec
 Every package uses the `fourkitchens/` Composer namespace and the collection's
 shared version, beginning with `2.0.0`.
 
-| Package                                                       | Purpose                                                     | Installation choice      |
-| ------------------------------------------------------------- | ----------------------------------------------------------- | ------------------------ |
-| [sous-admin](packages/sous-admin)                             | Gin, Navigation, Superuser and management Views             | Starter base             |
-| [sous-emulsify](packages/sous-emulsify)                       | Emulsify theme and tools                                    | Starter base             |
-| [sous-content-base](packages/sous-content-base)               | Shared Page/Frontpage fields, tabs, teasers and aliases     | Shared dependency        |
-| [sous-content-types](packages/sous-content-types)             | Page and Frontpage with Body                                | Default content          |
-| [sous-formats](packages/sous-formats)                         | Text formats, CKEditor 5 and Linkit defaults                | Shared dependency        |
-| [sous-media](packages/sous-media)                             | File, Image, Video and media authoring                      | Shared dependency        |
-| [sous-paragraph-types](packages/sous-paragraph-types)         | Text, Text with Media, Video and Image Paragraph components | Optional building blocks |
-| [sous-paragraphs](packages/sous-paragraphs)                   | Layout Paragraphs on Page/Frontpage without Body            | Optional composition     |
-| [sous-core-layout-builder](packages/sous-core-layout-builder) | Native layouts with four matching inline block types        | Optional composition     |
-| [sous-config-split](packages/sous-config-split)               | Inactive local and staging Config Split definitions         | Independent opt-in       |
+| Package                                                       | Purpose                                                         | Installation choice      |
+| ------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------ |
+| [sous-admin](packages/sous-admin)                             | Gin, Navigation, Superuser and management Views                 | Starter base             |
+| [sous-emulsify](packages/sous-emulsify)                       | Emulsify theme and tools                                        | Starter base             |
+| [sous-content-base](packages/sous-content-base)               | Shared Page/Frontpage fields, tabs, teasers and aliases         | Shared dependency        |
+| [sous-content-types](packages/sous-content-types)             | Page and Frontpage with Body                                    | Default content          |
+| [sous-formats](packages/sous-formats)                         | Text formats, CKEditor 5 and Linkit defaults                    | Shared dependency        |
+| [sous-media](packages/sous-media)                             | File, Image, Video and media authoring                          | Shared dependency        |
+| [sous-paragraph-types](packages/sous-paragraph-types)         | Text, media, accordion, tabs, quote, embed and table components | Optional building blocks |
+| [sous-paragraphs](packages/sous-paragraphs)                   | Layout Paragraphs on Page/Frontpage without Body                | Optional composition     |
+| [sous-core-layout-builder](packages/sous-core-layout-builder) | Native layouts with matching nested inline block types          | Optional composition     |
+| [sous-config-split](packages/sous-config-split)               | Inactive local and staging Config Split definitions             | Independent opt-in       |
 
 The content compositions share a Body-free base. The default content package
 adds Body; Paragraphs adds its component reference instead. Page and Frontpage

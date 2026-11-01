@@ -5,6 +5,8 @@ recipes:
   - sous-content-base
   - sous-paragraph-types
 install:
+  - layout_discovery
+  - layout_builder
   - layout_paragraphs
   - layout_paragraphs_library
   - layout_paragraphs_permissions
@@ -90,15 +92,58 @@ config:
           region: content
     user.role.anonymous:
       grantPermissions:
+        - 'view paragraph content layout'
         - 'view paragraph content text'
         - 'view paragraph content text_with_media'
         - 'view paragraph content video'
         - 'view paragraph content image'
+        - 'view paragraph content accordion'
+        - 'view paragraph content quote'
+        - 'view paragraph content embed'
+        - 'view paragraph content table'
+        - 'view paragraph content tabs'
         - 'view paragraph content from_library'
+        - 'view paragraph content accordion_item'
+        - 'view paragraph content tabs_item'
     user.role.authenticated:
       grantPermissions:
+        - 'view paragraph content layout'
         - 'view paragraph content text'
         - 'view paragraph content text_with_media'
         - 'view paragraph content video'
         - 'view paragraph content image'
+        - 'view paragraph content accordion'
+        - 'view paragraph content quote'
+        - 'view paragraph content embed'
+        - 'view paragraph content table'
+        - 'view paragraph content tabs'
         - 'view paragraph content from_library'
+        - 'view paragraph content accordion_item'
+        - 'view paragraph content tabs_item'
+    layout_paragraphs.settings:
+      simpleConfigUpdate:
+        show_paragraph_labels: 0
+        show_layout_labels: 0
+        show_layout_plugin_labels: 0
+        paragraph_behaviors_label: Behaviors
+        paragraph_behaviors_position: -99
+        empty_message: 'No components to add.'
+        button_labels:
+          enable_tooltips: true
+          default: 'Add Component'
+          root: 'Add Component'
+          layout: 'Add Component'
+    layout_paragraphs.modal_settings:
+      simpleConfigUpdate:
+        width: 80%
+        height: 80%
+        autoresize: true
+    layout_paragraphs.widget_settings:
+      simpleConfigUpdate:
+        show_search: true
+        show_icons: true
+        show_description: true
+        display_mode: grid
+    paragraphs_features.settings:
+      simpleConfigUpdate:
+        dropdown_to_button: false

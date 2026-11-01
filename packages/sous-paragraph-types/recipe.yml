@@ -1,5 +1,5 @@
 name: 'Sous Paragraph Types'
-description: 'Text, media and presentation fields with grouped Paragraph authoring forms.'
+description: 'Reusable text, media, nested and tabular Paragraph components.'
 type: Site
 recipes:
   - sous-formats
@@ -21,21 +21,69 @@ install:
   - field_group
   - style_selector
   - paragraphs_library
+  - entity_browser
+  - layout_paragraphs
+  - paragraphs_features
+  - tablefield
 config:
   strict:
+    - core.entity_form_display.paragraph.accordion.default
+    - core.entity_form_display.paragraph.accordion_item.default
+    - core.entity_form_display.paragraph.embed.default
+    - core.entity_form_display.paragraph.from_library.default
     - core.entity_form_display.paragraph.image.default
+    - core.entity_form_display.paragraph.quote.default
+    - core.entity_form_display.paragraph.table.default
+    - core.entity_form_display.paragraph.tabs.default
+    - core.entity_form_display.paragraph.tabs_item.default
     - core.entity_form_display.paragraph.text.default
     - core.entity_form_display.paragraph.text_with_media.default
     - core.entity_form_display.paragraph.video.default
+    - core.entity_view_display.paragraph.accordion.default
+    - core.entity_view_display.paragraph.accordion_item.default
+    - core.entity_view_display.paragraph.embed.default
+    - core.entity_view_display.paragraph.from_library.default
     - core.entity_view_display.paragraph.image.default
+    - core.entity_view_display.paragraph.quote.default
+    - core.entity_view_display.paragraph.table.default
+    - core.entity_view_display.paragraph.tabs.default
+    - core.entity_view_display.paragraph.tabs_item.default
     - core.entity_view_display.paragraph.text.default
     - core.entity_view_display.paragraph.text_with_media.default
     - core.entity_view_display.paragraph.video.default
+    - core.entity_view_display.paragraphs_library_item.paragraphs_library_item.preview
+    - core.entity_view_mode.paragraphs_library_item.preview
+    - entity_browser.browser.component_library
+    - field.field.paragraph.accordion.field_content
+    - field.field.paragraph.accordion.field_heading
+    - field.field.paragraph.accordion.field_text
+    - field.field.paragraph.accordion_item.field_content
+    - field.field.paragraph.accordion_item.field_heading
+    - field.field.paragraph.accordion_item.field_label
+    - field.field.paragraph.embed.field_embed_code
+    - field.field.paragraph.embed.field_heading
+    - field.field.paragraph.embed.field_show_texture
+    - field.field.paragraph.embed.field_style_layout_width
+    - field.field.paragraph.embed.field_text
+    - field.field.paragraph.from_library.field_reusable_paragraph
     - field.field.paragraph.image.field_heading
     - field.field.paragraph.image.field_image
     - field.field.paragraph.image.field_show_captions
     - field.field.paragraph.image.field_style_layout_width
     - field.field.paragraph.image.field_text
+    - field.field.paragraph.quote.field_image
+    - field.field.paragraph.quote.field_label
+    - field.field.paragraph.quote.field_text
+    - field.field.paragraph.table.field_heading
+    - field.field.paragraph.table.field_label
+    - field.field.paragraph.table.field_table
+    - field.field.paragraph.table.field_text
+    - field.field.paragraph.tabs.field_content
+    - field.field.paragraph.tabs.field_heading
+    - field.field.paragraph.tabs.field_style_layout_width
+    - field.field.paragraph.tabs.field_text
+    - field.field.paragraph.tabs_item.field_content
+    - field.field.paragraph.tabs_item.field_label
     - field.field.paragraph.text.field_heading
     - field.field.paragraph.text.field_text
     - field.field.paragraph.text_with_media.field_component_focus
@@ -51,31 +99,45 @@ config:
     - field.field.paragraph.video.field_text
     - field.field.paragraph.video.field_video
     - field.storage.paragraph.field_component_focus
+    - field.storage.paragraph.field_content
+    - field.storage.paragraph.field_embed_code
     - field.storage.paragraph.field_heading
     - field.storage.paragraph.field_image
+    - field.storage.paragraph.field_label
     - field.storage.paragraph.field_media
     - field.storage.paragraph.field_show_captions
+    - field.storage.paragraph.field_show_texture
     - field.storage.paragraph.field_style_layout_width
     - field.storage.paragraph.field_style_media_alignment
+    - field.storage.paragraph.field_table
     - field.storage.paragraph.field_text
     - field.storage.paragraph.field_text_with_media_display
     - field.storage.paragraph.field_video
+    - paragraphs.paragraphs_type.accordion
+    - paragraphs.paragraphs_type.accordion_item
+    - paragraphs.paragraphs_type.embed
+    - paragraphs.paragraphs_type.from_library
     - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.quote
+    - paragraphs.paragraphs_type.table
+    - paragraphs.paragraphs_type.tabs
+    - paragraphs.paragraphs_type.tabs_item
     - paragraphs.paragraphs_type.text
     - paragraphs.paragraphs_type.text_with_media
     - paragraphs.paragraphs_type.video
+    - paragraphs_ee.paragraphs_category.behavioral_components
     - paragraphs_ee.paragraphs_category.media_components
     - paragraphs_ee.paragraphs_category.text_components
+    - paragraphs_ee.paragraphs_category.utility
   import:
     paragraphs:
       - core.entity_view_mode.paragraph.preview
     style_selector: '*'
     paragraphs_library:
-      - core.entity_form_display.paragraph.from_library.default
-      - core.entity_view_display.paragraph.from_library.default
       - core.entity_view_display.paragraphs_library_item.paragraphs_library_item.summary
       - core.entity_view_mode.paragraphs_library_item.summary
-      - field.field.paragraph.from_library.field_reusable_paragraph
       - field.storage.paragraph.field_reusable_paragraph
-      - paragraphs.paragraphs_type.from_library
       - views.view.paragraphs_library
+      - views.view.paragraphs_library_browser
+    tablefield: '*'
+    paragraphs_features: '*'

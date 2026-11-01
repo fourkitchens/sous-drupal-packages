@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs_ee
+third_party_settings:
+  paragraphs_ee:
+    paragraphs_categories:
+      utility: utility
+id: tabs_item
+label: 'Tab Item'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {}

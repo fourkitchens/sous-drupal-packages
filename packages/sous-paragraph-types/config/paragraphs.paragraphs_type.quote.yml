@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs_ee
+    - paragraphs_library
+third_party_settings:
+  paragraphs_ee:
+    paragraphs_categories:
+      text_components: text_components
+  paragraphs_library:
+    allow_library_conversion: true
+id: quote
+label: Quote
+icon_uuid: null
+icon_default: null
+description: 'Presents a highlighted excerpt or testimony, offering emphasis and credibility through the words of others.'
+behavior_plugins: {}

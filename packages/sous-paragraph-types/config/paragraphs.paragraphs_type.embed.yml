@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs_ee
+    - paragraphs_library
+third_party_settings:
+  paragraphs_ee:
+    paragraphs_categories:
+      utility: utility
+  paragraphs_library:
+    allow_library_conversion: true
+id: embed
+label: Embed
+icon_uuid: null
+icon_default: null
+description: 'Allows authors to embed external content, such as videos or interactive tools, by pasting embed code directly into the page.'
+behavior_plugins: {}

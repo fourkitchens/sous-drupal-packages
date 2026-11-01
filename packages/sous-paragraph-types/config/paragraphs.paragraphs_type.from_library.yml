@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs_ee
+  enforced:
+    module:
+      - paragraphs_library
+third_party_settings:
+  paragraphs_ee:
+    paragraphs_categories:
+      utility: utility
+id: from_library
+label: 'From the Library'
+icon_uuid: null
+icon_default: null
+description: 'Displays previously created content selected from the component library, allowing authors to reuse and feature existing material without duplicating it.'
+behavior_plugins: {}

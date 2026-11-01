@@ -1,11 +1,12 @@
 name: 'Sous Core Layout Builder'
-description: 'Page and Frontpage layouts with Text, Text with Media, Video and Image inline blocks.'
+description: 'Page and Frontpage layouts with matching text, media and nested inline blocks.'
 type: Site
 recipes:
   - sous-content-types
 install:
   - block
   - block_content
+  - entity_reference_revisions
   - contextual
   - field_ui
   - field_group
@@ -16,6 +17,8 @@ install:
   - options
   - style_selector
   - text
+  - inline_entity_form
+  - tablefield
 config:
   actions:
     core.entity_view_display.node.page.default:
@@ -26,24 +29,70 @@ config:
       allowLayoutOverrides: true
   import:
     style_selector: '*'
+    tablefield: '*'
   strict:
+    - block_content.type.accordion
+    - block_content.type.accordion_item
+    - block_content.type.embed
     - block_content.type.image
+    - block_content.type.quote
+    - block_content.type.table
+    - block_content.type.tabs
+    - block_content.type.tabs_item
     - block_content.type.text
     - block_content.type.text_with_media
     - block_content.type.video
+    - core.entity_form_display.block_content.accordion.default
+    - core.entity_form_display.block_content.accordion_item.default
+    - core.entity_form_display.block_content.embed.default
     - core.entity_form_display.block_content.image.default
+    - core.entity_form_display.block_content.quote.default
+    - core.entity_form_display.block_content.table.default
+    - core.entity_form_display.block_content.tabs.default
+    - core.entity_form_display.block_content.tabs_item.default
     - core.entity_form_display.block_content.text.default
     - core.entity_form_display.block_content.text_with_media.default
     - core.entity_form_display.block_content.video.default
+    - core.entity_view_display.block_content.accordion.default
+    - core.entity_view_display.block_content.accordion_item.default
+    - core.entity_view_display.block_content.embed.default
     - core.entity_view_display.block_content.image.default
+    - core.entity_view_display.block_content.quote.default
+    - core.entity_view_display.block_content.table.default
+    - core.entity_view_display.block_content.tabs.default
+    - core.entity_view_display.block_content.tabs_item.default
     - core.entity_view_display.block_content.text.default
     - core.entity_view_display.block_content.text_with_media.default
     - core.entity_view_display.block_content.video.default
+    - field.field.block_content.accordion.field_content
+    - field.field.block_content.accordion.field_heading
+    - field.field.block_content.accordion.field_text
+    - field.field.block_content.accordion_item.field_content
+    - field.field.block_content.accordion_item.field_heading
+    - field.field.block_content.accordion_item.field_label
+    - field.field.block_content.embed.field_embed_code
+    - field.field.block_content.embed.field_heading
+    - field.field.block_content.embed.field_show_texture
+    - field.field.block_content.embed.field_style_layout_width
+    - field.field.block_content.embed.field_text
     - field.field.block_content.image.field_heading
     - field.field.block_content.image.field_image
     - field.field.block_content.image.field_show_captions
     - field.field.block_content.image.field_style_layout_width
     - field.field.block_content.image.field_text
+    - field.field.block_content.quote.field_image
+    - field.field.block_content.quote.field_label
+    - field.field.block_content.quote.field_text
+    - field.field.block_content.table.field_heading
+    - field.field.block_content.table.field_label
+    - field.field.block_content.table.field_table
+    - field.field.block_content.table.field_text
+    - field.field.block_content.tabs.field_content
+    - field.field.block_content.tabs.field_heading
+    - field.field.block_content.tabs.field_style_layout_width
+    - field.field.block_content.tabs.field_text
+    - field.field.block_content.tabs_item.field_content
+    - field.field.block_content.tabs_item.field_label
     - field.field.block_content.text.field_heading
     - field.field.block_content.text.field_text
     - field.field.block_content.text_with_media.field_component_focus
@@ -59,12 +108,17 @@ config:
     - field.field.block_content.video.field_text
     - field.field.block_content.video.field_video
     - field.storage.block_content.field_component_focus
+    - field.storage.block_content.field_content
+    - field.storage.block_content.field_embed_code
     - field.storage.block_content.field_heading
     - field.storage.block_content.field_image
+    - field.storage.block_content.field_label
     - field.storage.block_content.field_media
     - field.storage.block_content.field_show_captions
+    - field.storage.block_content.field_show_texture
     - field.storage.block_content.field_style_layout_width
     - field.storage.block_content.field_style_media_alignment
+    - field.storage.block_content.field_table
     - field.storage.block_content.field_text
     - field.storage.block_content.field_text_with_media_display
     - field.storage.block_content.field_video

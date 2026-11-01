@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs_ee
+third_party_settings:
+  paragraphs_ee:
+    paragraphs_categories:
+      behavioral_components: behavioral_components
+id: tabs
+label: Tabs
+icon_uuid: null
+icon_default: null
+description: 'Organizes related content into tabbed sections, allowing users to switch between views without leaving the page.'
+behavior_plugins: {}
