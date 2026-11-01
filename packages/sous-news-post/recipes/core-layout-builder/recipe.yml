@@ -1,0 +1,8 @@
+name: 'Sous News Post with Layout Builder'
+description: 'Enable native layouts and per-post overrides for News Posts.'
+type: Site
+config:
+  actions:
+    core.entity_view_display.node.news_post.default:
+      enableLayoutBuilder: {}
+      allowLayoutOverrides: true

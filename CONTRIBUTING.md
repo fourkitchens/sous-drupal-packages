@@ -44,7 +44,7 @@ npm test
 
 Checks live under `devops/tests` and cover JavaScript/PHP syntax, code-sniffing and
 code/JSON/YAML formatting. The formatting command fixes supported files; review
-its changes before committing. After these checks, CI applies Events with four recipe
+its changes before committing. After these checks, CI applies Events and News Post with four recipe
 compositions to fresh SQLite Drupal sites and verifies their bootstrap and
 configuration. Contributors also try changes in the application where they will
 be used.

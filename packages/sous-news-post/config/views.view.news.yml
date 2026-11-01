@@ -1,0 +1,213 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.storage.node.field_news_categories
+    - field.storage.node.field_teaser_text
+    - node.type.news_post
+    - taxonomy.vocabulary.news_categories
+  module:
+    - node
+    - taxonomy
+    - user
+id: news
+label: News
+module: views
+description: 'Recent News Post teasers with category and title/teaser search filters.'
+tag: Content
+base_table: node_field_data
+base_field: nid
+display:
+  default:
+    id: default
+    display_title: Default
+    display_plugin: default
+    position: 0
+    display_options:
+      title: 'Recent News'
+      access:
+        type: perm
+        options:
+          perm: 'access content'
+      cache:
+        type: none
+      query:
+        type: views_query
+        options:
+          query_comment: ''
+          disable_sql_rewrite: false
+          distinct: true
+          replica: false
+          query_tags: {}
+      exposed_form:
+        type: basic
+      pager:
+        type: some
+        options:
+          items_per_page: 10
+          offset: 0
+      style:
+        type: default
+        options:
+          grouping: {}
+          row_class: ''
+          default_row_class: true
+      row:
+        type: fields
+      fields:
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          relationship: none
+          group_type: group
+          entity_type: node
+          entity_field: title
+          plugin_id: field
+          label: ''
+          exclude: true
+          type: string
+          settings:
+            link_to_entity: false
+        field_teaser_text:
+          id: field_teaser_text
+          table: node__field_teaser_text
+          field: field_teaser_text
+          relationship: none
+          group_type: group
+          plugin_id: field
+          label: ''
+          exclude: true
+          click_sort_column: value
+          type: basic_string
+          settings: {}
+          group_column: value
+          group_columns: {}
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        rendered_entity:
+          id: rendered_entity
+          table: node
+          field: rendered_entity
+          relationship: none
+          group_type: group
+          entity_type: node
+          plugin_id: rendered_entity
+          label: ''
+          exclude: false
+          element_default_classes: false
+          view_mode: teaser
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          value:
+            news_post: news_post
+          group: 1
+        combine:
+          id: combine
+          table: views
+          field: combine
+          relationship: none
+          group_type: group
+          plugin_id: combine
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: news_search_op
+            label: Search
+            description: ''
+            use_operator: false
+            operator: news_search_op
+            identifier: news_search
+            required: false
+            remember: false
+            multiple: false
+            placeholder: 'Search title or teaser'
+          is_grouped: false
+          fields:
+            title: title
+            field_teaser_text: field_teaser_text
+        field_news_categories_target_id:
+          id: field_news_categories_target_id
+          table: node__field_news_categories
+          field: field_news_categories_target_id
+          relationship: none
+          group_type: group
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value: {}
+          group: 1
+          exposed: true
+          expose:
+            operator_id: news_categories_op
+            label: Categories
+            description: ''
+            use_operator: false
+            operator: news_categories_op
+            identifier: news_categories
+            required: false
+            remember: false
+            multiple: true
+            reduce: false
+          is_grouped: false
+          reduce_duplicates: true
+          vid: news_categories
+          type: select
+          hierarchy: false
+          limit: true
+          error_message: true
+      sorts:
+        created:
+          id: created
+          table: node_field_data
+          field: created
+          entity_type: node
+          entity_field: created
+          plugin_id: date
+          order: DESC
+          granularity: second
+        nid:
+          id: nid
+          table: node_field_data
+          field: nid
+          entity_type: node
+          entity_field: nid
+          plugin_id: standard
+          order: DESC
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      group_by: false
+  embed_recent:
+    id: embed_recent
+    display_title: 'Recent News'
+    display_plugin: embed
+    position: 1
+    display_options:
+      display_description: 'Newest published news posts.'

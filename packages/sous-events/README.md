@@ -14,7 +14,9 @@ date values; their aliases remain based on the first date.
 The View provides `events:embed_upcoming` (All Upcoming Events) and
 `events:embed_past` (Past Events) displays. Ongoing occurrences count as upcoming. A recurring
 series can appear in both lists when it has both past and future occurrences.
-Each list shows the event once, ordered by its relevant date.
+Each list shows the event once, ordered by its relevant date. Both displays use
+a rendered-entity field in Teaser mode, with Event Type (`event_type`) and
+title/teaser-description Search (`event_search`) exposed filters.
 
 Choose Events from the installer's optional sides. Media and the Event model
 work without Page, Frontpage or Paragraphs. When the Paragraphs main course is

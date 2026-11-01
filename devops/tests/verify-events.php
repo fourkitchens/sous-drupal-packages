@@ -9,6 +9,7 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\node\Entity\Node;
 use Drupal\smart_date_recur\Entity\SmartDateRule;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\user\Entity\User;
 use Drupal\views\Views;
 
@@ -37,6 +38,12 @@ foreach ($checks as $name => $passed) {
 
 $term = Term::create(['vid' => 'event_types', 'name' => 'Conference']);
 $term->save();
+$workshop = Term::create(['vid' => 'event_types', 'name' => 'Workshop']);
+$workshop->save();
+$other_vocabulary = Vocabulary::create(['vid' => 'listing_other', 'name' => 'Other']);
+$other_vocabulary->save();
+$other_term = Term::create(['vid' => 'listing_other', 'name' => 'Other category']);
+$other_term->save();
 $nodes = [];
 $rules = [];
 try {
@@ -58,6 +65,12 @@ try {
     $nodes[$title] = Node::create(['type' => 'event', 'uid' => 1, 'title' => $title, 'status' => !str_starts_with($title, 'Unpublished'), 'field_event_type' => $term->id(), 'field_event_date' => $items, 'field_teaser_text' => "$title teaser"]);
     $nodes[$title]->save();
   }
+  foreach (['Upcoming far', 'Recent past'] as $title) {
+    $nodes[$title]->set('field_event_type', $workshop->id())->save();
+  }
+  $nodes['Upcoming near']->set('field_teaser_text', 'A keynote about archives')->save();
+  $nodes['Upcoming far']->set('field_teaser_text', 'Discover telescopes with local astronomers')->save();
+  $nodes['Old past']->set('field_teaser_text', 'Past telescope discoveries')->save();
   $violations = $nodes['Upcoming near']->validate();
   if (count($violations)) {
     throw new \RuntimeException('A simple Event is invalid: ' . (string) $violations);
@@ -127,8 +140,48 @@ try {
         throw new \RuntimeException("$display_id failed to render $title.");
       }
     }
-    if (!str_contains($html, 'Upcoming near teaser') && $display_id === 'embed_upcoming') {
+    if (!str_contains($html, 'A keynote about archives') && $display_id === 'embed_upcoming') {
       throw new \RuntimeException('Event teasers did not render.');
+    }
+  }
+  $filtered = [
+    'embed_upcoming' => [
+      [['news_search' => 'not an event match'], $expected['embed_upcoming']],
+      [['event_search' => 'coming ne'], ['Upcoming near']],
+      [['event_search' => 'scope'], ['Upcoming far']],
+      [['event_type' => $workshop->id()], ['Upcoming far']],
+      [['event_type' => $term->id(), 'event_search' => 'scope'], []],
+      [['event_type' => $workshop->id(), 'event_search' => 'scope'], ['Upcoming far']],
+      [['event_search' => '%'], []],
+      [['event_search' => 'Unpublished'], []],
+      [['event_type' => 'All', 'event_search' => ''], $expected['embed_upcoming']],
+    ],
+    'embed_past' => [
+      [['event_search' => 'cent pa'], ['Recent past']],
+      [['event_search' => 'scope'], ['Old past']],
+      [['event_type' => $workshop->id()], ['Recent past']],
+      [['event_type' => $term->id(), 'event_search' => 'scope'], ['Old past']],
+      [['event_type' => $workshop->id(), 'event_search' => 'scope'], []],
+      [['event_type' => 'All', 'event_search' => ''], $expected['embed_past']],
+    ],
+  ];
+  foreach ($filtered as $display_id => $samples) {
+    foreach ($samples as [$input, $titles]) {
+      $view = Views::getView('events');
+      $view->setExposedInput($input);
+      $view->execute($display_id);
+      $actual = array_map(static fn($row) => $row->_entity->label(), $view->result);
+      if ($actual !== $titles) {
+        throw new \RuntimeException("$display_id exposed filter failed for " . json_encode($input) . ': ' . json_encode($actual));
+      }
+    }
+    $view = Views::getView('events');
+    $view->setDisplay($display_id);
+    $view->initHandlers();
+    $view->initStyle();
+    $exposed = $view->display_handler->getPlugin('exposed_form')->renderExposedForm();
+    if ($view->rowPlugin->getPluginId() !== 'fields' || $view->field['rendered_entity']->getPluginId() !== 'rendered_entity' || $view->field['rendered_entity']->options['view_mode'] !== 'teaser' || !isset($exposed['event_search'], $exposed['event_type']) || isset($exposed['event_type']['#options'][$other_term->id()])) {
+      throw new \RuntimeException("$display_id did not build its rendered teaser field and vocabulary-limited exposed controls.");
     }
   }
   echo "$case Event recipe verified.\n";
@@ -139,4 +192,7 @@ finally {
     SmartDateRule::load($id)?->delete();
   }
   $term->delete();
+  $workshop->delete();
+  $other_term->delete();
+  $other_vocabulary->delete();
 }
