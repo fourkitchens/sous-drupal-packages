@@ -28,10 +28,5 @@
   "support": {
     "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
     "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-media"
-  },
-  "extra": {
-    "sous": {
-      "menu": true
-    }
   }
 }

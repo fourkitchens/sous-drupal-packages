@@ -1,4 +1,4 @@
-name: 'Sous optional configuration splits'
+name: 'Sous Configuration Splits'
 description: 'Provides inactive local and staging splits for projects that need module or stored-configuration separation.'
 type: 'Site'
 install:

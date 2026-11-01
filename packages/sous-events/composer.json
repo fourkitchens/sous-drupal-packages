@@ -1,0 +1,36 @@
+{
+  "name": "fourkitchens/sous-events",
+  "description": "Events with recurring dates, event types, teasers and upcoming/past lists.",
+  "keywords": [
+    "recipe",
+    "Drupal recipes",
+    "drupal recipe"
+  ],
+  "type": "drupal-recipe",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Four Kitchens",
+      "role": "Maintainer"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "drupal/core": "^11.4",
+    "drupal/field_group": "^4.0",
+    "drupal/pathauto": "^1.15",
+    "drupal/smart_date": "^4.3",
+    "drupal/tagify": "^2.0.5",
+    "fourkitchens/sous-media": "^2.0"
+  },
+  "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
+  "support": {
+    "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
+    "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-events"
+  },
+  "extra": {
+    "sous": {
+      "menu": true
+    }
+  }
+}

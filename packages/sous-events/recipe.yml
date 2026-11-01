@@ -1,0 +1,38 @@
+name: 'Sous Events'
+description: 'Events with recurring dates, taxonomy, teasers and reusable listing embeds.'
+type: Site
+recipes:
+  - sous-media
+install:
+  - node
+  - taxonomy
+  - media
+  - media_library
+  - field_group
+  - path
+  - pathauto
+  - smart_date
+  - smart_date_recur
+  - tagify
+  - views
+config:
+  import:
+    node:
+      - core.entity_view_mode.node.teaser
+    smart_date: '*'
+  strict:
+    - core.entity_form_display.node.event.default
+    - core.entity_view_display.node.event.default
+    - core.entity_view_display.node.event.teaser
+    - field.field.node.event.field_event_date
+    - field.field.node.event.field_event_type
+    - field.field.node.event.field_teaser_image
+    - field.field.node.event.field_teaser_text
+    - field.storage.node.field_event_date
+    - field.storage.node.field_event_type
+    - field.storage.node.field_teaser_image
+    - field.storage.node.field_teaser_text
+    - node.type.event
+    - pathauto.pattern.event
+    - taxonomy.vocabulary.event_types
+    - views.view.events

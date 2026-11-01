@@ -1,0 +1,43 @@
+name: 'Sous Events with Layout Paragraphs'
+description: 'Add the selected Paragraphs composition to Events.'
+type: Site
+config:
+  actions:
+    core.entity_form_display.node.event.default:
+      setComponent:
+        name: field_content
+        options:
+          type: layout_paragraphs
+          weight: 7
+          region: content
+          settings:
+            view_mode: default
+            preview_view_mode: default
+            form_display_mode: default
+            nesting_depth: 0
+            require_layouts: 0
+            empty_message: ''
+            widget_settings_source: default
+            widget_settings:
+              show_search: true
+              show_icons: true
+              show_description: false
+              display_mode: list
+          third_party_settings: {}
+      setProperties:
+        third_party_settings.field_group.group_content.children:
+          - field_event_date
+          - field_event_type
+          - field_content
+    core.entity_view_display.node.event.default:
+      setComponent:
+        name: field_content
+        options:
+          type: layout_paragraphs
+          label: hidden
+          settings:
+            view_mode: default
+            link: ''
+          third_party_settings: {}
+          weight: 1
+          region: content

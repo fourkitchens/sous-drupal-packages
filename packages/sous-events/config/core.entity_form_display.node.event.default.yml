@@ -1,0 +1,141 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.event.field_event_date
+    - field.field.node.event.field_event_type
+    - field.field.node.event.field_teaser_image
+    - field.field.node.event.field_teaser_text
+    - node.type.event
+  module:
+    - field_group
+    - media_library
+    - path
+    - smart_date
+    - smart_date_recur
+    - tagify
+third_party_settings:
+  field_group:
+    group_main:
+      children:
+        - group_content
+        - group_teaser
+      label: Main
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: tabs
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        direction: horizontal
+        width_breakpoint: 640
+    group_content:
+      children:
+        - field_event_date
+        - field_event_type
+      label: Content
+      region: content
+      parent_name: group_main
+      weight: 21
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        formatter: open
+        description: ''
+        required_fields: true
+    group_teaser:
+      children:
+        - field_teaser_image
+        - field_teaser_text
+      label: Teaser
+      region: content
+      parent_name: group_main
+      weight: 22
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        formatter: closed
+        description: ''
+        required_fields: true
+id: node.event.default
+targetEntityType: node
+bundle: event
+mode: default
+content:
+  title:
+    type: string_textfield
+    weight: -1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {}
+  field_event_date:
+    type: smartdate_inline
+    weight: 1
+    region: content
+    settings:
+      modal: false
+      default_duration: 60
+      default_duration_increments: "0|No end time\n30\n60|1 hour\n90\n120|2 hours\ncustom"
+      show_extra: false
+      hide_date: false
+      allday: true
+      remove_seconds: true
+      duration_overlay: true
+      separator: to
+    third_party_settings:
+      smart_date_recur:
+        modal: true
+        show_single: false
+        allowed_recur_freq_values:
+          MINUTELY: '0'
+          HOURLY: '0'
+          DAILY: DAILY
+          WEEKLY: WEEKLY
+          MONTHLY: MONTHLY
+          YEARLY: YEARLY
+  field_event_type:
+    type: tagify_select_widget
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 0
+      placeholder: ''
+      show_entity_id: 0
+      parent_selection: 1
+    third_party_settings: {}
+  field_teaser_image:
+    type: media_library_widget
+    weight: 8
+    region: content
+    settings:
+      media_types: {}
+    third_party_settings: {}
+  field_teaser_text:
+    type: string_textarea
+    weight: 9
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {}
+  path:
+    type: path
+    weight: 30
+    region: content
+    settings: {}
+    third_party_settings: {}
+hidden:
+  created: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

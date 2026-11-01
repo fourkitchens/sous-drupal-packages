@@ -89,17 +89,22 @@ jobs:
       - name: Apply each composition to a fresh SQLite site
         run: |
           cd "$RUNNER_TEMP/sous-recipes"
-          for composition in admin content-types core-layout-builder paragraphs config-split; do
+          for composition in admin content-types core-layout-builder paragraphs; do
             echo "::group::$composition"
             chmod -R u+w web/sites/default
             rm -f web/sites/default/settings.php site.sqlite
             vendor/bin/drush site:install minimal --db-url="sqlite://localhost/$PWD/site.sqlite?module=sqlite" --yes
-            for recipe in sous-admin sous-emulsify; do
+            for recipe in sous-admin sous-emulsify sous-media sous-config-split; do
               vendor/bin/drush recipe "$PWD/recipes/$recipe" --yes
             done
             if [[ "$composition" != admin ]]; then vendor/bin/drush recipe "$PWD/recipes/sous-$composition" --yes; fi
+            vendor/bin/drush recipe "$PWD/recipes/sous-events" --yes
+            if [[ "$composition" == paragraphs || "$composition" == core-layout-builder ]]; then
+              vendor/bin/drush recipe "$PWD/recipes/sous-events/recipes/$composition" --yes
+            fi
             vendor/bin/drush status --field=bootstrap | grep -Fx Successful
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-composition.php"
+            COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-events.php"
             echo '::endgroup::'
           done
 

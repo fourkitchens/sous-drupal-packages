@@ -35,7 +35,7 @@ foreach (['page', 'frontpage'] as $type) {
     $checks["content.$type"] = $groups['group_content']['children'] === ['field_content'] && $display->getRenderer('field_content')->getPluginId() === 'layout_paragraphs';
   }
 }
-foreach (['linkit' => $content, 'emulsify_tools' => TRUE, 'ckeditor5' => $content, 'paragraphs' => $paragraphs, 'config_split' => $case === 'config-split'] as $module => $enabled) {
+foreach (['linkit' => $content, 'emulsify_tools' => TRUE, 'ckeditor5' => $content, 'paragraphs' => $paragraphs, 'config_split' => TRUE] as $module => $enabled) {
   $checks[$module] = $modules->moduleExists($module) === $enabled;
 }
 foreach (['layout_paragraphs', 'layout_paragraphs_library', 'layout_paragraphs_permissions', 'layout_paragraphs_limit', 'paragraphs_type_permissions'] as $module) {
@@ -46,7 +46,7 @@ foreach (['tablefield' => $paragraphs || $case === 'core-layout-builder', 'entit
 }
 foreach (['local', 'staging'] as $id) {
   $name = "config_split.config_split.$id";
-  $checks[$name] = $storage->exists($name) === ($case === 'config-split') && ($case !== 'config-split' || \Drupal::config($name)->get('status') === FALSE);
+  $checks[$name] = $storage->exists($name) && \Drupal::config($name)->get('status') === FALSE;
 }
 if ($paragraphs) {
   $widget_settings = \Drupal::config('layout_paragraphs.widget_settings');

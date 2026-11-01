@@ -1,0 +1,8 @@
+name: 'Sous Events with Layout Builder'
+description: 'Enable native layouts and per-event overrides for Events.'
+type: Site
+config:
+  actions:
+    core.entity_view_display.node.event.default:
+      enableLayoutBuilder: {}
+      allowLayoutOverrides: true
