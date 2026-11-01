@@ -9,6 +9,7 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\user\Entity\User;
 use Drupal\views\Views;
 
 $case = getenv('COMPOSITION');
@@ -41,6 +42,8 @@ $other_vocabulary->save();
 $other_term = Term::create(['vid' => 'listing_other', 'name' => 'Other category']);
 $other_term->save();
 $nodes = [];
+$account_switcher = \Drupal::service('account_switcher');
+$account_switcher->switchTo(User::load(1));
 try {
   $now = time();
   $samples = [
@@ -51,7 +54,7 @@ try {
     'Unpublished story' => [-1, [$campus->id()], 'An unpublished telescope story'],
   ];
   foreach ($samples as $title => [$offset, $categories, $teaser]) {
-    $nodes[$title] = Node::create(['type' => 'news_post', 'uid' => 1, 'title' => $title, 'status' => $title !== 'Unpublished story', 'created' => $now + $offset, 'field_byline' => 'Jane <em>Reporter</em>', 'field_news_categories' => $categories, 'field_teaser_text' => $teaser]);
+    $nodes[$title] = Node::create(['type' => 'news_post', 'uid' => 1, 'title' => $title, 'moderation_state' => $title === 'Unpublished story' ? 'draft' : 'published', 'created' => $now + $offset, 'field_byline' => 'Jane <em>Reporter</em>', 'field_news_categories' => $categories, 'field_teaser_text' => $teaser]);
     $nodes[$title]->save();
   }
   $violations = $nodes['Latest story']->validate();
@@ -114,7 +117,7 @@ try {
   // Filtering must happen before the ten-item Recent News limit.
   for ($index = 0; $index < 12; $index++) {
     $title = "Limit story $index";
-    $nodes[$title] = Node::create(['type' => 'news_post', 'uid' => 1, 'title' => $title, 'status' => 1, 'created' => $now - 50 + $index, 'field_news_categories' => [$campus->id()]]);
+    $nodes[$title] = Node::create(['type' => 'news_post', 'uid' => 1, 'title' => $title, 'moderation_state' => 'published', 'created' => $now - 50 + $index, 'field_news_categories' => [$campus->id()]]);
     $nodes[$title]->save();
   }
   foreach ([[[], array_map(static fn($index) => "Limit story $index", range(11, 2))], [['news_search' => 'Old campus'], ['Old campus']], [['news_categories' => [$research->id()]], ['Latest story', 'Research dispatch']], [['news_search' => 'Limit story 3'], ['Limit story 3']]] as [$input, $expected]) {
@@ -129,6 +132,7 @@ try {
   echo "$case News Post recipe verified.\n";
 }
 finally {
+  $account_switcher->switchBack();
   $entities->getStorage('node')->delete($nodes);
   $campus->delete();
   $research->delete();

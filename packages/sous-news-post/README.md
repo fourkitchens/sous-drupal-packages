@@ -22,6 +22,9 @@ selected, the installer attaches optional `field_content` with the Layout
 Paragraphs editor. With Layout Builder, it enables layouts and per-post
 overrides. Admin only keeps the simple News Post form.
 
+The shared Editorial workflow starts content in Draft and supports Published
+and Archived states, with optional scheduled publishing and unpublishing.
+
 ## Installation and application
 
 Configure the Sous Composer index, repositories and installer paths as shown in

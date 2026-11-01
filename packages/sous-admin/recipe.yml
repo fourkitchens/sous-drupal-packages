@@ -2,6 +2,7 @@ name: 'Sous Admin'
 description: 'A recipe that contains modules, themes, and configuration for the Sous administration experience.'
 type: 'Site'
 recipes:
+  - sous-workflow
   # Install core recipes
   - core/recipes/core_recommended_performance
 install:
@@ -38,8 +39,6 @@ install:
   - publication_date
   # Install Save and Edit
   - save_edit
-  # Install Scheduler
-  - scheduler
   # Install Tagify
   - tagify
   # Install Trash.

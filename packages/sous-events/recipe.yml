@@ -2,6 +2,7 @@ name: 'Sous Events'
 description: 'Events with recurring dates, taxonomy, teasers and reusable listing embeds.'
 type: Site
 recipes:
+  - sous-workflow
   - sous-media
 install:
   - node
@@ -36,3 +37,7 @@ config:
     - pathauto.pattern.event
     - taxonomy.vocabulary.event_types
     - views.view.events
+  actions:
+    workflows.workflow.editorial:
+      addNodeTypes:
+        - event

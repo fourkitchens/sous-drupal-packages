@@ -24,6 +24,9 @@ selected, the installer attaches its existing `field_content` and Layout
 Paragraphs editor. With Layout Builder, the installer enables layouts and
 per-event overrides. Admin only keeps the simple Event form.
 
+The shared Editorial workflow starts content in Draft and supports Published
+and Archived states, with optional scheduled publishing and unpublishing.
+
 ## Installation and application
 
 Configure the Sous Composer index, repositories and installer paths as shown in

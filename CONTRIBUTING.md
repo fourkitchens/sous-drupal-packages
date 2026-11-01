@@ -3,6 +3,8 @@
 Edit `packages/<name>/` for recipe changes. Each package owns its Composer
 manifest, recipe, configuration, license and guide. Keep dependencies explicit;
 common packages should not require either optional content composition.
+Shared moderation lives in `sous-workflow`; content recipes merge their own
+bundles into it with `addNodeTypes`.
 
 Use Node.js `24.22.1` (`nvm use`), npm `11.21.1`, PHP `8.4+`, Composer and `zip`.
 Install repository tooling with `npm ci`.

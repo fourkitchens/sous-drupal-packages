@@ -46,6 +46,8 @@ $other_term = Term::create(['vid' => 'listing_other', 'name' => 'Other category'
 $other_term->save();
 $nodes = [];
 $rules = [];
+$account_switcher = \Drupal::service('account_switcher');
+$account_switcher->switchTo(User::load(1));
 try {
   $now = time();
   $samples = [
@@ -62,7 +64,7 @@ try {
   ];
   foreach ($samples as $title => $dates) {
     $items = array_map(static fn($range) => ['value' => $now + $range[0], 'end_value' => $now + $range[1], 'duration' => (int) (($range[1] - $range[0]) / 60), 'timezone' => 'UTC'], $dates);
-    $nodes[$title] = Node::create(['type' => 'event', 'uid' => 1, 'title' => $title, 'status' => !str_starts_with($title, 'Unpublished'), 'field_event_type' => $term->id(), 'field_event_date' => $items, 'field_teaser_text' => "$title teaser"]);
+    $nodes[$title] = Node::create(['type' => 'event', 'uid' => 1, 'title' => $title, 'moderation_state' => str_starts_with($title, 'Unpublished') ? 'draft' : 'published', 'field_event_type' => $term->id(), 'field_event_date' => $items, 'field_teaser_text' => "$title teaser"]);
     $nodes[$title]->save();
   }
   foreach (['Upcoming far', 'Recent past'] as $title) {
@@ -77,7 +79,7 @@ try {
   }
   $start = strtotime('yesterday UTC');
   $end = strtotime('tomorrow UTC') + 86340;
-  $nodes['All-day event'] = Node::create(['type' => 'event', 'title' => 'All-day event', 'status' => 1, 'field_event_type' => $term->id(), 'field_event_date' => [['value' => $start, 'end_value' => $end, 'duration' => (int) (($end - $start) / 60), 'timezone' => 'UTC']]]);
+  $nodes['All-day event'] = Node::create(['type' => 'event', 'title' => 'All-day event', 'moderation_state' => 'published', 'field_event_type' => $term->id(), 'field_event_date' => [['value' => $start, 'end_value' => $end, 'duration' => (int) (($end - $start) / 60), 'timezone' => 'UTC']]]);
   $nodes['All-day event']->save();
 
   // Generate real rule instances so repeated dates exercise the same Views join.
@@ -91,7 +93,7 @@ try {
   foreach ($instances as $index => $instance) {
     $items[] = $instance + ['duration' => 30, 'timezone' => 'UTC', 'rrule' => $rule->id(), 'rrule_index' => $index];
   }
-  $nodes['Recurring dates'] = Node::create(['type' => 'event', 'title' => 'Recurring dates', 'status' => 1, 'field_event_type' => $term->id(), 'field_event_date' => $items]);
+  $nodes['Recurring dates'] = Node::create(['type' => 'event', 'title' => 'Recurring dates', 'moderation_state' => 'published', 'field_event_type' => $term->id(), 'field_event_date' => $items]);
   $nodes['Recurring dates']->save();
   if (count($instances) !== 3) {
     throw new \RuntimeException('The Event recurrence did not generate three instances.');
@@ -187,6 +189,7 @@ try {
   echo "$case Event recipe verified.\n";
 }
 finally {
+  $account_switcher->switchBack();
   $entities->getStorage('node')->delete($nodes);
   foreach ($rules as $id) {
     SmartDateRule::load($id)?->delete();

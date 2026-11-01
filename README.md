@@ -13,6 +13,7 @@ shared version, beginning with `2.0.0`.
 | ------------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------- |
 | [sous-admin](packages/sous-admin)                             | Gin, Navigation, Superuser and management Views                  | Starter base               |
 | [sous-emulsify](packages/sous-emulsify)                       | Emulsify theme and tools                                         | Starter base               |
+| [sous-workflow](packages/sous-workflow)                       | Shared Editorial moderation and scheduled publishing             | Starter/shared dependency  |
 | [sous-content-base](packages/sous-content-base)               | Shared Page/Frontpage fields, tabs, teasers and aliases          | Shared dependency          |
 | [sous-content-types](packages/sous-content-types)             | Page and Frontpage with Body                                     | Default content            |
 | [sous-formats](packages/sous-formats)                         | Text formats, CKEditor 5 and Linkit defaults                     | Shared dependency          |

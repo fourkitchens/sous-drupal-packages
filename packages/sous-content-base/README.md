@@ -13,6 +13,9 @@ Choose [Content Types](../sous-content-types) for Body,
 matching inline block types. Projects can use the base directly when defining
 their own composition.
 
+The shared Editorial workflow starts content in Draft and supports Published
+and Archived states, with optional scheduled publishing and unpublishing.
+
 Recipes are applied once and then unpacked; sites own the resulting dependencies
 and complete configuration export. Package updates do not migrate existing
 content. See the [collection guide](../../README.md) for repository setup and the

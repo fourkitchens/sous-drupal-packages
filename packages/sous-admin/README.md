@@ -6,7 +6,8 @@ Supplies Gin, core Navigation and its Content menu, the Superuser administrator
 role, native management Views, and editorial/administration conveniences. It
 installs the Node, Media, Media Library, Block Content, Taxonomy and Views
 providers used by those management screens. It does not create Page/Frontpage
-or apply Sous Media bundle defaults.
+or apply Sous Media bundle defaults. It applies [Sous Workflow](../sous-workflow)
+without assigning content types to it.
 
 Admin does not install Linkit or CKEditor/text-format defaults. Projects that
 need text editing can apply Sous Formats independently.
@@ -22,7 +23,7 @@ including future module permissions. Admin preserves an existing role and its
 account assignments. Keep project-owned role changes in the complete site export.
 
 Autosave Form, Config Log, Entity Usage, Login History/Destination, Save and Edit,
-Scheduler, Tagify, Trash, Views AJAX History and Views Bulk Operations remain
+Tagify, Trash, Views AJAX History and Views Bulk Operations remain
 installed conveniences. A project can replace them through a project-owned
 recipe or reviewed module uninstall/configuration change. Removing a Composer
 requirement or recipe entry alone does not uninstall a module or preserve its data.

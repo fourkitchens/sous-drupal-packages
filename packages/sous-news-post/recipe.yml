@@ -2,6 +2,7 @@ name: 'Sous News Post'
 description: 'News Posts with bylines, categories, teasers and a Recent News embed.'
 type: Site
 recipes:
+  - sous-workflow
   - sous-media
 install:
   - node
@@ -33,3 +34,7 @@ config:
     - pathauto.pattern.news_post
     - taxonomy.vocabulary.news_categories
     - views.view.news
+  actions:
+    workflows.workflow.editorial:
+      addNodeTypes:
+        - news_post

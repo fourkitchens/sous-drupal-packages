@@ -2,6 +2,7 @@ name: 'Sous Content Base'
 description: 'Shared Page and Frontpage authoring fields without composition-specific content.'
 type: Site
 recipes:
+  - sous-workflow
   - sous-formats
   - sous-media
 install:
@@ -16,12 +17,15 @@ install:
   - field_group
   - metatag
   - publication_date
-  - scheduler
   - tagify
 config:
   import:
     metatag: '*'
   actions:
+    workflows.workflow.editorial:
+      addNodeTypes:
+        - page
+        - frontpage
     core.entity_form_display.node.page.default:
       setComponent:
         name: path

@@ -1,0 +1,16 @@
+name: 'Sous Workflow'
+description: 'Editorial moderation and scheduled publishing shared by content recipes.'
+type: Site
+install:
+  - workflows
+  - content_moderation
+  - node
+  - scheduler
+  - scheduler_content_moderation_integration
+  - views
+config:
+  # Keep project changes and the content types added by earlier recipes.
+  strict: []
+  import:
+    content_moderation:
+      - views.view.moderated_content

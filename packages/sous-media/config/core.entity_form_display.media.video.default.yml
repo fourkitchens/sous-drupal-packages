@@ -136,5 +136,7 @@ hidden:
   created: true
   path: true
   publish_on: true
+  publish_state: true
   uid: true
   unpublish_on: true
+  unpublish_state: true
