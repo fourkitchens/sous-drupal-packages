@@ -26,36 +26,26 @@ core module itself.
 
 ## Installation and application
 
-Configure the Sous Composer index, Drupal repositories and installer paths as
-shown in the [collection guide](../../README.md). Once the first collection
-release is published, from a configured consuming site:
+Before requiring this recipe, follow the [shared patch setup](../../README.md#shared-patches).
+Copy the complete [2.0.0 patch directory](https://github.com/fourkitchens/sous-drupal-packages/tree/2.0.0/patches) into the site root;
+its [manifest](https://github.com/fourkitchens/sous-drupal-packages/blob/2.0.0/patches/patches.json) is read by root Composer.
+Sous Drupal Project already provides this setup.
+
+The shared manifest includes the required
+[Style Selector](../sous-paragraph-types/README.md#style-selector-compatibility)
+and [Tablefield fixes](../sous-paragraph-types/README.md#tablefield-compatibility).
+These support the block fields without installing Paragraphs.
 
 ```sh
 ddev composer require fourkitchens/sous-core-layout-builder:^2.0
-mkdir -p patches
-cp web/recipes/sous-core-layout-builder/assets/patches/style-selector-drupal11-compatibility.patch patches/
-```
-
-The Style Selector widgets require the supplied Drupal 11 compatibility patch.
-Sous Drupal Project registers it automatically; other consumers must register
-this persistent copy with Composer Patches 2 using the manifest entry in
-[Style Selector compatibility](../sous-paragraph-types/README.md#style-selector-compatibility).
-The four [Tablefield patches](../sous-paragraph-types/README.md#tablefield-compatibility)
-are also required; copy them from this recipe's `assets/patches/` directory and
-merge its [tablefield.json](assets/patches/tablefield.json) into the patch manifest.
-The Style Selector patch includes the upstream library discovery fix and custom field-default
-schema additions; it does not require the Paragraphs recipe or modules.
-
-```sh
 ddev composer patches-relock
 ddev composer patches-repatch
 ddev drush recipe /var/www/html/web/recipes/sous-core-layout-builder
 ddev drush cache:rebuild
 ```
 
-Keep the copied patch and lock in the site; recipe unpacking does not register
-its patch metadata. Recipes apply once and then unpack; sites own subsequent
-dependencies and complete configuration exports.
+Recipes apply once and then unpack; sites keep the root patches, patch lock,
+dependencies and complete configuration export.
 
 ## Contributing
 

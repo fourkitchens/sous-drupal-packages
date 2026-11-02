@@ -28,61 +28,26 @@ copyright and permission notice is retained in [NOTICE](NOTICE).
 
 ## Installation and application
 
-Configure the Sous index, Drupal repositories and recipe installer paths as
-shown in the [collection guide](../../README.md), then require this recipe:
+Before requiring this recipe, follow the [shared patch setup](../../README.md#shared-patches).
+Copy the complete [2.0.0 patch directory](https://github.com/fourkitchens/sous-drupal-packages/tree/2.0.0/patches) into the site root;
+its [manifest](https://github.com/fourkitchens/sous-drupal-packages/blob/2.0.0/patches/patches.json) is read by root Composer.
+Sous Drupal Project already provides this setup.
+
+The shared manifest includes the [Layout Paragraphs chooser fix (#3487314)](https://www.drupal.org/project/layout_paragraphs/issues/3487314),
+tested with 3.0.1, plus the required
+[Style Selector](../sous-paragraph-types/README.md#style-selector-compatibility)
+and [Tablefield fixes](../sous-paragraph-types/README.md#tablefield-compatibility).
 
 ```sh
 ddev composer require fourkitchens/sous-paragraphs:^2.0
-```
-
-The component chooser uses the [#3487314 UI patch](https://www.drupal.org/project/layout_paragraphs/issues/3487314),
-tested with Layout Paragraphs 3.0.1. The
-[Style Selector compatibility patch](../sous-paragraph-types/README.md#style-selector-compatibility)
-and the [Tablefield patches](../sous-paragraph-types/README.md#tablefield-compatibility)
-are also required. Sous Drupal Project registers their persistent copies. Other
-consumers need Composer Patches 2, with
-`cweagans/composer-patches` allowed in `config.allow-plugins`:
-
-```sh
-ddev composer require cweagans/composer-patches:^2.0
-mkdir -p patches
-cp web/recipes/sous-paragraphs/assets/patches/layout-paragraphs-component-list-3487314.patch patches/
-cp web/recipes/sous-paragraph-types/assets/patches/style-selector-drupal11-compatibility.patch patches/
-```
-
-Configure `extra.composer-patches.patches-file` to use the site's patch manifest
-(for example `patches/patches.json`). Register the Style Selector entry linked
-above and add this Layout Paragraphs entry to that manifest:
-
-```json
-{
-  "patches": {
-    "drupal/layout_paragraphs": [
-      {
-        "description": "Improve Layout Paragraphs component selection (#3487314)",
-        "url": "patches/layout-paragraphs-component-list-3487314.patch",
-        "sha256": "1f41f7ef7024f9c4c88b98f8250539581357c62f2306b5b89b3368ac19d7ffaa",
-        "depth": 1
-      }
-    ]
-  }
-}
-```
-
-Register the Tablefield patches as linked above. Rebuild the patch lock, apply
-the patches, then apply the recipe:
-
-```sh
 ddev composer patches-relock
 ddev composer patches-repatch
 ddev drush recipe /var/www/html/web/recipes/sous-paragraphs
 ddev drush cache:rebuild
 ```
 
-Keep the copied patch and patch lock in the site. Recipe unpacking moves
-requirements into the project; it does not register recipe patch definitions.
-Recipes apply once and then unpack, and sites own the resulting dependencies
-and configuration export.
+Recipes apply once and then unpack; sites keep the root patches, patch lock,
+dependencies and complete configuration export.
 
 ## Contributing
 

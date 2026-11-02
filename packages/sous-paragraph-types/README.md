@@ -24,82 +24,38 @@ the shared Paragraphs preview mode preserves project customization.
 
 ## Installation and application
 
-Configure the Sous Composer index, Drupal repositories and installer paths as
-shown in the [collection guide](../../README.md). Once the first collection
-release is published, from a configured consuming site:
+Before requiring this recipe, follow the [shared patch setup](../../README.md#shared-patches).
+Copy the complete [2.0.0 patch directory](https://github.com/fourkitchens/sous-drupal-packages/tree/2.0.0/patches) into the site root;
+its [manifest](https://github.com/fourkitchens/sous-drupal-packages/blob/2.0.0/patches/patches.json) is read by root Composer.
+Sous Drupal Project already provides this setup.
+
+Tabs Item uses Layout Paragraphs; the shared manifest includes its
+[chooser fix (#3487314)](https://www.drupal.org/project/layout_paragraphs/issues/3487314).
 
 ```sh
 ddev composer require fourkitchens/sous-paragraph-types:^2.0
-```
-
-Tabs Item uses Layout Paragraphs. Register its supplied chooser patch using the
-[Layout Paragraphs manifest entry](../sous-paragraphs/README.md#installation-and-application):
-
-```sh
-mkdir -p patches
-cp web/recipes/sous-paragraph-types/assets/patches/layout-paragraphs-component-list-3487314.patch patches/
-```
-
-### Style Selector compatibility
-
-Apply the supplied Drupal 11 compatibility patch before the recipe. Sous Drupal
-Project already registers its persistent copy. Other consumers need Composer
-Patches 2 allowed in `config.allow-plugins`, and a root patch manifest configured
-through `extra.composer-patches.patches-file`:
-
-```sh
-ddev composer require cweagans/composer-patches:^2.0
-mkdir -p patches
-cp web/recipes/sous-paragraph-types/assets/patches/style-selector-drupal11-compatibility.patch patches/
-```
-
-Add this entry to the site's patch manifest:
-
-```json
-{
-  "patches": {
-    "drupal/style_selector": [
-      {
-        "description": "Custom Drupal 11 field-default schema and library discovery compatibility",
-        "url": "patches/style-selector-drupal11-compatibility.patch",
-        "sha256": "39c6d214990c04690c5dd425e080a7410be8a248dedb81da9d63b3bd66d1809c",
-        "depth": 1
-      }
-    ]
-  }
-}
-```
-
-The library discovery change is tracked in [#3589133](https://www.drupal.org/project/style_selector/issues/3589133).
-The field-default schema additions are custom and await separate upstream tracking.
-Rebuild and apply the patch lock before installing the recipe:
-
-```sh
 ddev composer patches-relock
 ddev composer patches-repatch
 ddev drush recipe /var/www/html/web/recipes/sous-paragraph-types
 ddev drush cache:rebuild
 ```
 
-Keep the copied patch and lock in the site; recipe unpacking does not register
-its patch metadata. Recipes apply once and then unpack; sites own subsequent
-dependencies and complete configuration exports.
+Recipes apply once and then unpack; sites keep the root patches, patch lock,
+dependencies and complete configuration export.
+
+### Style Selector compatibility
+
+The shared compatibility patch includes the
+[library discovery fix (#3589133)](https://www.drupal.org/project/style_selector/issues/3589133)
+and custom field-default schema additions for Drupal 11. The custom patch is
+retained; upstream schema tracking is deferred to the maintainer.
 
 ### Tablefield compatibility
 
-Tablefield 3 uses SFASU's output-buffer, rich-text-cell and Add Column fixes,
-plus a [default-value schema adaptation (#3593703)](https://www.drupal.org/project/tablefield/issues/3593703)
-for Drupal 11.4 recipes. Sous Drupal Project registers all four persistent
-patches. Other consumers copy them before applying this recipe:
-
-```sh
-cp web/recipes/sous-paragraph-types/assets/patches/tablefield-*.patch patches/
-```
-
-Merge the entries from [tablefield.json](assets/patches/tablefield.json) into
-the site's patch manifest, then run `ddev composer patches-relock` and
-`ddev composer patches-repatch`. The table starts with two rows and columns,
-Limited HTML cell editors, and row headers; the theme supplies its presentation.
+The shared manifest includes the output-buffer, rich-text-cell and Add Column
+fixes, plus the [default-value schema adaptation (#3593703)](https://www.drupal.org/project/tablefield/issues/3593703)
+for Drupal 11.4 recipes. The table starts with two rows and columns, Limited HTML
+cell editors and row headers; the theme supplies its presentation.
 
 ## Contributing
 

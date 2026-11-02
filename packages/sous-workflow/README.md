@@ -18,36 +18,24 @@ are automatic hidden values; Scheduler cron processes those transitions.
 
 ## Installation and application
 
-This is a shared dependency of Sous Admin and the node content recipes.
-To use it independently, configure the repository and installer paths in the
-[collection guide](../../README.md), then run:
+Before requiring this recipe, follow the [shared patch setup](../../README.md#shared-patches).
+Copy the complete [2.0.0 patch directory](https://github.com/fourkitchens/sous-drupal-packages/tree/2.0.0/patches) into the site root;
+its [manifest](https://github.com/fourkitchens/sous-drupal-packages/blob/2.0.0/patches/patches.json) is read by root Composer.
+Sous Drupal Project already provides this setup.
+
+The shared manifest includes the single-state patch for
+[SCMI #3270462](https://www.drupal.org/project/scheduler_content_moderation_integration/issues/3270462).
+Remove this adaptation when a released SCMI version includes automatic hidden
+single-state choices.
 
 ```sh
 ddev composer require fourkitchens/sous-workflow:^2.0
-```
-
-Sous Drupal Project already registers the persistent single-state patch for
-[SCMI #3270462](https://www.drupal.org/project/scheduler_content_moderation_integration/issues/3270462).
-Other consumers need Composer Patches 2 allowed in `config.allow-plugins` and a
-root manifest configured through `extra.composer-patches.patches-file`:
-
-```sh
-ddev composer require cweagans/composer-patches:^2.0
-mkdir -p patches
-cp web/recipes/sous-workflow/assets/patches/*.patch patches/
-```
-
-Merge [scheduler.json](assets/patches/scheduler.json)'s entries into that manifest,
-then apply the patch before the recipe:
-
-```sh
 ddev composer patches-relock
 ddev composer patches-repatch
 ddev drush recipe /var/www/html/web/recipes/sous-workflow
 ```
 
-Keep the patch and lock after recipe unpacking. Remove this adaptation when a
-released SCMI version includes automatic hidden single-state choices.
+Keep the root patches and patch lock after recipe unpacking.
 
 Attach project content types with `addNodeTypes` in a project-owned recipe or
 through Drupal's workflow administration. Applying this recipe alone moderates

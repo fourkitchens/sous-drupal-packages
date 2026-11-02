@@ -49,10 +49,29 @@ Add this scoped Composer repository to the site's `composer.json`:
 }
 ```
 
+### Shared patches
+
+Before requiring recipes, copy the complete [2.0.0 patch directory](https://github.com/fourkitchens/sous-drupal-packages/tree/2.0.0/patches)
+into the site root, including its [manifest](https://github.com/fourkitchens/sous-drupal-packages/blob/2.0.0/patches/patches.json).
+Sous Drupal Project already provides these files. Allow and install Composer
+Patches 2, then configure the root manifest:
+
+```sh
+ddev composer config allow-plugins.cweagans/composer-patches true
+ddev composer config extra.composer-patches.patches-file patches/patches.json
+ddev composer require cweagans/composer-patches:^2.0
+```
+
+Composer reads this manifest from the project root; the complete manifest only
+applies patches for installed packages. Commit `patches/` and `patches.lock.json`
+with the site's Composer files.
+
 Require and apply a recipe:
 
 ```sh
 ddev composer require fourkitchens/sous-admin:^2.0 drupal/login_destination:^2.0.0-beta10@beta
+ddev composer patches-relock
+ddev composer patches-repatch
 ddev drush recipe /var/www/html/web/recipes/sous-admin
 ```
 
@@ -75,7 +94,7 @@ Sous dependencies before using it. Packages are discovered automatically by the
 archive builder; no central package registry needs editing.
 
 `npm test` checks syntax, code standards and formatting. The CI `recipes` job
-applies recipes to fresh SQLite Drupal sites in five compositions. See
+applies recipes to fresh SQLite Drupal sites in four compositions. See
 [CONTRIBUTING.md](CONTRIBUTING.md) for contribution and local build instructions.
 
 Merges to `main` automatically create a semantic release, publish every package's
