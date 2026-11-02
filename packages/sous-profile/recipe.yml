@@ -1,5 +1,5 @@
 name: 'Sous Profile'
-description: 'Profiles with automatic full-name titles, images, biographies and teasers.'
+description: 'Profiles with automatic names, images, biographies and searchable teasers.'
 type: Site
 recipes:
   - sous-workflow
@@ -16,6 +16,7 @@ install:
   - path
   - token
   - auto_entitylabel
+  - views
 config:
   import:
     metatag: '*'
@@ -41,6 +42,7 @@ config:
     - field.storage.node.field_teaser_image
     - field.storage.node.field_teaser_text
     - node.type.profile
+    - views.view.profiles
   actions:
     workflows.workflow.editorial:
       addNodeTypes:

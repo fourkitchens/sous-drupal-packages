@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-profile",
-  "description": "Profiles with automatic full-name titles, images, bios and teasers.",
+  "description": "Profiles with automatic names, images, bios and a searchable teaser list.",
   "keywords": [
     "recipe",
     "Drupal recipes",
