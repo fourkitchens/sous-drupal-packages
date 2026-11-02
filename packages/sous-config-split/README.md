@@ -23,6 +23,7 @@ Enable staging in the staging host's settings:
 $config['config_split.config_split.staging']['status'] = TRUE;
 ```
 
-After adding an override, import that split with
-`ddev drush -y config-split:import local` (or `staging`), then export configuration.
+For a new site, enable the five modules normally and export with each split
+active so their default settings reach both folders; the starter handles this.
+Afterward, normal configuration imports select the environment’s tools and settings.
 Leave both overrides unset in production and commit the complete site export.

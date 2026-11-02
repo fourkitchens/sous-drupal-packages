@@ -11,6 +11,7 @@ cp -p "$settings_file" "$work_dir/settings.php"
 finish() {
   exit_code=$?
   trap - EXIT
+  vendor/bin/drush config-split:status-override staging default >/dev/null
   chmod u+w "$settings_file"
   cp -p "$work_dir/settings.php" "$settings_file"
   rm -rf "$work_dir"
@@ -50,40 +51,75 @@ foreach (['local', 'staging'] as $id) {
     throw new \RuntimeException("$id has the wrong effective status in $environment.");
   }
 }
-echo "$environment imports, exports and module states verified.\n";
+foreach (['devel', 'field_ui', 'stage_file_proxy', 'syslog'] as $module) {
+  $name = "$module.settings";
+  if ($sync->exists($name) || $active->exists($name) !== ($environment !== 'production')) {
+    throw new \RuntimeException("$name has the wrong production or active storage.");
+  }
+  if ($environment === 'production') {
+    continue;
+  }
+  $defaults = (new \Drupal\Core\Config\FileStorage($available[$module]->getPath() . '/config/install'))->read($name);
+  if ($module === 'devel') {
+    $defaults['devel_dumper'] = \Drupal::config($name)->get('devel_dumper');
+    if (!is_string($defaults['devel_dumper']) || !\Drupal::service('plugin.manager.devel_dumper')->isPluginSupported($defaults['devel_dumper'])) {
+      throw new \RuntimeException('Devel has no supported default dumper.');
+    }
+  }
+  if ($module === 'syslog') {
+    $defaults['facility'] = defined('LOG_LOCAL0') ? LOG_LOCAL0 : LOG_USER;
+  }
+  $storages = [$active];
+  foreach (['local', 'staging'] as $id) {
+    $folder = $active->read("config_split.config_split.$id")['folder'];
+    if (realpath($folder) !== dirname(\Drupal::root()) . "/config/$id") {
+      throw new \RuntimeException("$id resolves outside the expected project config folder.");
+    }
+    $storages[] = new \Drupal\Core\Config\FileStorage($folder);
+  }
+  foreach ($storages as $storage) {
+    $data = $storage->read($name);
+    foreach ($defaults as $key => $value) {
+      if (($data[$key] ?? NULL) !== $value) {
+        throw new \RuntimeException("$name is missing usable $key defaults in active or split storage.");
+      }
+    }
+  }
+}
+if ($environment !== 'production') {
+  $dumper = \Drupal::service('plugin.manager.devel_dumper')->createInstance(\Drupal::config('devel.settings')->get('devel_dumper'));
+  if (!str_contains((string) $dumper->export('environment-check'), 'environment-check')) {
+    throw new \RuntimeException('The configured Devel dumper could not render a value.');
+  }
+}
+echo "$environment imports, exports, module defaults and Devel output verified.\n";
 PHP
 )
 
 # Use the same settings overrides as hosts while leaving saved split statuses false.
 set_environment() {
   environment=$1
-  local_status=FALSE
-  staging_status=FALSE
-  if [ "$environment" = local ]; then
-    local_status=TRUE
-  fi
-  if [ "$environment" = staging ]; then
-    staging_status=TRUE
-  fi
-  cat > "$work_dir/environment.php" <<PHP
+  cat > "$work_dir/environment.php" <<'PHP'
 <?php
-\$config['config_split.config_split.local']['status'] = $local_status;
-\$config['config_split.config_split.staging']['status'] = $staging_status;
+unset($config['config_split.config_split.local']['status'], $config['config_split.config_split.staging']['status']);
 PHP
+  if [ "$environment" != production ]; then
+    printf "\$config['config_split.config_split.%s']['status'] = TRUE;\n" "$environment" >> "$work_dir/environment.php"
+  fi
   vendor/bin/drush cache:rebuild
 }
 
-set_environment production
+# Enable normally once so the first export saves defaults into both splits.
+set_environment local
+vendor/bin/drush pm:enable devel field_ui stage_file_proxy syslog views_ui --yes
+vendor/bin/drush config-split:status-override staging active
 vendor/bin/drush config:export --yes
-SOUS_TEST_SPLIT=production vendor/bin/drush php:eval "$environment_checks"
+vendor/bin/drush config-split:status-override staging default
+SOUS_TEST_SPLIT=local vendor/bin/drush php:eval "$environment_checks"
 
-for environment in local production staging production; do
+for environment in production staging production; do
   set_environment "$environment"
-  if [ "$environment" = local ]; then
-    vendor/bin/drush config-split:import local --yes
-  else
-    vendor/bin/drush config:import --yes
-  fi
+  vendor/bin/drush config:import --yes
   vendor/bin/drush config:export --yes
   SOUS_TEST_SPLIT="$environment" vendor/bin/drush php:eval "$environment_checks"
 done
