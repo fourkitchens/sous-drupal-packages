@@ -23,7 +23,7 @@ shared version, beginning with `2.0.0`.
 | [sous-paragraph-types](packages/sous-paragraph-types)         | Text, media, accordion, tabs, quote, embed and table components  | Paragraphs building blocks |
 | [sous-paragraphs](packages/sous-paragraphs)                   | Layout Paragraphs on Page/Frontpage without Body                 | Optional composition       |
 | [sous-core-layout-builder](packages/sous-core-layout-builder) | Native layouts with matching nested inline block types           | Optional composition       |
-| [sous-config-split](packages/sous-config-split)               | Inactive local and staging Config Split definitions              | Starter base               |
+| [sous-config-split](packages/sous-config-split)               | Local/staging development tools excluded from production         | Starter base               |
 
 The content compositions share a Body-free base. The default content package
 adds Body; Paragraphs adds its component reference instead. Page and Frontpage

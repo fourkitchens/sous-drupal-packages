@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.field.node.event.field_event_date
     - field.field.node.event.field_event_type
+    - field.field.node.event.field_metadata
     - field.field.node.event.field_teaser_image
     - field.field.node.event.field_teaser_text
     - node.type.event
@@ -60,4 +61,5 @@ content:
     weight: 2
     region: content
 hidden:
+  field_metadata: true
   links: true

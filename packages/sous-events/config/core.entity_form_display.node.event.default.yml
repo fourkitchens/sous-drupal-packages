@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.field.node.event.field_event_date
     - field.field.node.event.field_event_type
+    - field.field.node.event.field_metadata
     - field.field.node.event.field_teaser_image
     - field.field.node.event.field_teaser_text
     - node.type.event
@@ -11,6 +12,7 @@ dependencies:
     - content_moderation
     - field_group
     - media_library
+    - metatag
     - path
     - scheduler
     - scheduler_content_moderation_integration
@@ -23,6 +25,7 @@ third_party_settings:
       children:
         - group_content
         - group_teaser
+        - group_organization
       label: Main
       region: content
       parent_name: ''
@@ -37,7 +40,6 @@ third_party_settings:
     group_content:
       children:
         - field_event_date
-        - field_event_type
       label: Content
       region: content
       parent_name: group_main
@@ -58,6 +60,21 @@ third_party_settings:
       region: content
       parent_name: group_main
       weight: 22
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_organization:
+      children:
+        - field_event_type
+      label: Organization
+      region: content
+      parent_name: group_main
+      weight: 23
       format_type: tab
       format_settings:
         classes: ''
@@ -114,6 +131,14 @@ content:
       placeholder: ''
       show_entity_id: 0
       parent_selection: 1
+    third_party_settings: {}
+  field_metadata:
+    type: metatag_firehose
+    weight: 1
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {}
   field_teaser_image:
     type: media_library_widget

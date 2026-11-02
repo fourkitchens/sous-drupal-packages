@@ -17,7 +17,8 @@
   "minimum-stability": "stable",
   "require": {
     "drupal/core": "^11.4",
-    "drupal/linkit": "^7.0.17"
+    "drupal/linkit": "^7.0.17",
+    "drupal/no_nbsp": "^1.7"
   },
   "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
   "support": {

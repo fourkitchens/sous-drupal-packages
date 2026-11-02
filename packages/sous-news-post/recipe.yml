@@ -11,12 +11,14 @@ install:
   - media
   - media_library
   - field_group
+  - metatag
   - path
   - pathauto
   - tagify
   - views
 config:
   import:
+    metatag: '*'
     node:
       - core.entity_view_mode.node.teaser
   strict:
@@ -25,10 +27,12 @@ config:
     - core.entity_view_display.node.news_post.teaser
     - field.field.node.news_post.field_byline
     - field.field.node.news_post.field_news_categories
+    - field.field.node.news_post.field_metadata
     - field.field.node.news_post.field_teaser_image
     - field.field.node.news_post.field_teaser_text
     - field.storage.node.field_byline
     - field.storage.node.field_news_categories
+    - field.storage.node.field_metadata
     - field.storage.node.field_teaser_image
     - field.storage.node.field_teaser_text
     - node.type.news_post

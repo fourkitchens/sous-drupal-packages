@@ -3,10 +3,13 @@
 `fourkitchens/sous-formats` · `drupal-recipe` · GPL-2.0-or-later
 
 Provides Basic, Full, Limited and Restricted HTML formats, their editor defaults,
-and the default Linkit profile. Linkit is a direct Composer dependency.
+and the default Linkit profile. Linkit and No Non-breaking Space Filter are direct
+Composer dependencies.
 No content composition or media bundle recipe is required.
 
-The recipe enables CKEditor 5, Linkit, Node and Media. Its Linkit profile provides
+All four HTML formats enable the Linkit URL converter and normalize non-breaking
+spaces; core Plain text remains unchanged. The recipe enables CKEditor 5, Linkit,
+No Non-breaking Space Filter, Node and Media. Its Linkit profile provides
 node, media and external matchers. The media matcher uses Linkit's built-in media
 substitution to link to the source file; media bundles are supplied independently.
 An existing project-owned Linkit profile is retained with its UUID and matcher

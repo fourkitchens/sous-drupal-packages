@@ -24,17 +24,19 @@ install:
   - entity_usage
   # Install Field Group and dependencies
   - field_group
-  # Install Field UI
-  - field_ui
   # Install Login Destination
   - login_destination
   # Install Login History
   - login_history
+  # Install Masquerade; the Superuser administrative role already grants its permissions.
+  - masquerade
   # Install Media Library Edit
   - media_library_edit
   # Install Navigation
   - navigation
   - navigation_extra_tools
+  # Make the non-breaking-space filter available without adding content formats.
+  - no_nbsp
   # Install Publication Date
   - publication_date
   # Install Save and Edit

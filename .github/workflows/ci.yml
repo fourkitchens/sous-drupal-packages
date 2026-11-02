@@ -111,8 +111,10 @@ jobs:
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-events.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-news.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-workflow.php"
+            COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-authoring.php"
             echo '::endgroup::'
           done
+          bash "$GITHUB_WORKSPACE/devops/tests/verify-environments.sh"
 
   release:
     needs: [lint, recipes]

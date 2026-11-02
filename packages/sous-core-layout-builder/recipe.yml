@@ -8,7 +8,6 @@ install:
   - block_content
   - entity_reference_revisions
   - contextual
-  - field_ui
   - field_group
   - layout_discovery
   - layout_builder

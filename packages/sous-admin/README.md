@@ -9,8 +9,9 @@ providers used by those management screens. It does not create Page/Frontpage
 or apply Sous Media bundle defaults. It applies [Sous Workflow](../sous-workflow)
 without assigning content types to it.
 
-Admin does not install Linkit or CKEditor/text-format defaults. Projects that
-need text editing can apply Sous Formats independently.
+Admin makes the No Non-breaking Space filter available without adding text
+formats. Projects that need CKEditor, Linkit and HTML filter defaults can apply
+Sous Formats independently. Login Destination redirects every role to Content.
 
 Apply Admin once to a supported Minimal baseline. The strict Gin/login import
 list intentionally validates that initial baseline. Native Views stay outside
@@ -19,8 +20,9 @@ its own Gin actions or site customization can fail the strict check; package
 updates are not a reason to reapply it.
 
 The `superuser` role uses `is_admin: true` and receives every permission,
-including future module permissions. Admin preserves an existing role and its
-account assignments. Keep project-owned role changes in the complete site export.
+including Masquerade and future module permissions. No other role is granted
+Masquerade access. Admin preserves existing roles and account assignments;
+keep project-owned role changes in the complete site export.
 
 Autosave Form, Config Log, Entity Usage, Login History/Destination, Save and Edit,
 Tagify, Trash, Views AJAX History and Views Bulk Operations remain

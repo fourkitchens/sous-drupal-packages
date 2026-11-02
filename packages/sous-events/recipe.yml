@@ -11,6 +11,7 @@ install:
   - media
   - media_library
   - field_group
+  - metatag
   - path
   - pathauto
   - smart_date
@@ -19,6 +20,7 @@ install:
   - views
 config:
   import:
+    metatag: '*'
     node:
       - core.entity_view_mode.node.teaser
     smart_date: '*'
@@ -28,10 +30,12 @@ config:
     - core.entity_view_display.node.event.teaser
     - field.field.node.event.field_event_date
     - field.field.node.event.field_event_type
+    - field.field.node.event.field_metadata
     - field.field.node.event.field_teaser_image
     - field.field.node.event.field_teaser_text
     - field.storage.node.field_event_date
     - field.storage.node.field_event_type
+    - field.storage.node.field_metadata
     - field.storage.node.field_teaser_image
     - field.storage.node.field_teaser_text
     - node.type.event

@@ -4,7 +4,8 @@
 
 Adds an Event content type with recurring/all-day Smart Date values, an Event
 Type vocabulary and Tagify Select widget, and the same teaser image/text fields
-used by Page and Frontpage. Title sits above Content and Teaser authoring tabs.
+used by Page and Frontpage. Title sits above horizontal Content, Teaser and
+Organization tabs; Event Type belongs to Organization. Metadata is in the sidebar.
 Create Event Type terms before adding events; each Event has one required type.
 
 Aliases use the first event date, type and title:

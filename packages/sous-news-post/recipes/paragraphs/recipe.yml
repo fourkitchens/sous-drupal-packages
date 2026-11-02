@@ -27,7 +27,6 @@ config:
       setProperties:
         third_party_settings.field_group.group_content.children:
           - field_byline
-          - field_news_categories
           - field_content
     core.entity_view_display.node.news_post.default:
       setComponent:

@@ -8,6 +8,7 @@ install:
   - linkit
   - media
   - node
+  - no_nbsp
 config:
   # Validate editor and format defaults while preserving project-owned
   # Linkit profiles.

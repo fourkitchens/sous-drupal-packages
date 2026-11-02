@@ -9,7 +9,12 @@ stackable: false
 no_patching: false
 storage: folder
 folder: ../config/local
-module: {}
+module:
+  devel: 0
+  field_ui: 0
+  stage_file_proxy: 0
+  syslog: 0
+  views_ui: 0
 theme: {}
 complete_list: {}
 partial_list: {}

@@ -44,6 +44,9 @@ foreach (['layout_paragraphs', 'layout_paragraphs_library', 'layout_paragraphs_p
 foreach (['tablefield' => $paragraphs || $case === 'core-layout-builder', 'entity_browser' => $paragraphs, 'paragraphs_features' => $paragraphs, 'inline_entity_form' => $case === 'core-layout-builder'] as $module => $enabled) {
   $checks[$module] = $modules->moduleExists($module) === $enabled;
 }
+foreach (['devel', 'field_ui', 'stage_file_proxy', 'syslog', 'views_ui'] as $module) {
+  $checks["production.$module"] = !$modules->moduleExists($module);
+}
 foreach (['local', 'staging'] as $id) {
   $name = "config_split.config_split.$id";
   $checks[$name] = $storage->exists($name) && \Drupal::config($name)->get('status') === FALSE;

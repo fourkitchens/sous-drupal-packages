@@ -18,6 +18,7 @@
   "require": {
     "drupal/core": "^11.4",
     "drupal/field_group": "^4.0",
+    "drupal/metatag": "^2.2.3",
     "drupal/pathauto": "^1.15",
     "drupal/tagify": "^2.0.5",
     "fourkitchens/sous-media": "^2.0",

@@ -1,5 +1,5 @@
 name: 'Sous Configuration Splits'
-description: 'Provides inactive local and staging splits for projects that need module or stored-configuration separation.'
+description: 'Separates local and staging development tools from production configuration.'
 type: 'Site'
 install:
   - config_split

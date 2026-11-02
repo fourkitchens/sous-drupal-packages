@@ -4,7 +4,8 @@
 
 Adds a News Post content type with a title, plain-text byline, News Categories
 and the same teaser image/text fields used by Page and Frontpage. Title sits
-above Content and Teaser authoring tabs. Create News Categories terms before
+above horizontal Content, Teaser and Organization tabs; Categories belongs to
+Organization. Metadata is in the sidebar. Create News Categories terms before
 adding posts; Tagify Select supports assigning multiple categories.
 
 Aliases use the first assigned category and title:
