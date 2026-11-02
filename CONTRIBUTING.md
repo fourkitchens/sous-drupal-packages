@@ -31,6 +31,20 @@ The archive builder discovers package directories automatically. The generator
 creates a scaffold; it does not export configuration from a site or infer dependencies.
 Do not add another content composition as an incidental dependency of a shared recipe.
 
+## Composition integrations
+
+Optional content and component recipes may bundle `recipes/<composition>/recipe.yml`.
+After applying an optional side, the starter checks
+`web/recipes/$recipe/recipes/${content#sous-}` and applies it when the directory exists.
+Use `paragraphs` or `core-layout-builder` as the composition folder name.
+Admin only leaves `content` empty and skips these integrations.
+
+Content recipes use integrations to attach fields or enable layouts; component
+recipes may adapt the selected host. The selected base composition supplies the
+extension code, so an integration must not install the other composition.
+See the [Events](packages/sous-events/recipes) and
+[News Post](packages/sous-news-post/recipes) integrations for examples.
+
 ## Drupal compatibility
 
 All packages and the recipe template require Drupal `^11.4`, the floor tested
