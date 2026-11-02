@@ -1,0 +1,36 @@
+{
+  "name": "fourkitchens/sous-seo",
+  "description": "Automatic redirects, XML sitemaps, title breadcrumbs and SEO integrations.",
+  "keywords": [
+    "recipe",
+    "Drupal recipes",
+    "drupal recipe"
+  ],
+  "type": "drupal-recipe",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Four Kitchens",
+      "role": "Maintainer"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "drupal/core": "^11.4",
+    "drupal/easy_breadcrumb": "^2.0.11",
+    "drupal/google_tag": "^2.0.9",
+    "drupal/redirect": "^1.13",
+    "drupal/schema_metatag": "^3.1",
+    "drupal/simple_sitemap": "^4.2.3"
+  },
+  "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
+  "support": {
+    "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
+    "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-seo"
+  },
+  "extra": {
+    "sous": {
+      "menu": true
+    }
+  }
+}

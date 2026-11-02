@@ -1,0 +1,20 @@
+name: 'Sous SEO'
+description: 'Redirects, XML sitemaps, page-title breadcrumbs and SEO integrations.'
+type: Site
+install:
+  - redirect
+  - simple_sitemap
+  - easy_breadcrumb
+  - google_tag
+  - schema_metatag
+config:
+  strict: false
+  import:
+    simple_sitemap: '*'
+  actions:
+    redirect.settings:
+      simpleConfigUpdate:
+        auto_redirect: true
+    easy_breadcrumb.settings:
+      simpleConfigUpdate:
+        title_from_page_when_available: true
