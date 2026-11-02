@@ -1,0 +1,38 @@
+{
+  "name": "fourkitchens/sous-profile",
+  "description": "Profiles with automatic full-name titles, images, bios and teasers.",
+  "keywords": [
+    "recipe",
+    "Drupal recipes",
+    "drupal recipe"
+  ],
+  "type": "drupal-recipe",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Four Kitchens",
+      "role": "Maintainer"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "drupal/auto_entitylabel": "^3.4",
+    "drupal/core": "^11.4",
+    "drupal/field_group": "^4.0",
+    "drupal/metatag": "^2.2.3",
+    "drupal/token": "^1.18",
+    "fourkitchens/sous-formats": "^2.0",
+    "fourkitchens/sous-media": "^2.0",
+    "fourkitchens/sous-workflow": "^2.0"
+  },
+  "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
+  "support": {
+    "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
+    "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-profile"
+  },
+  "extra": {
+    "sous": {
+      "menu": true
+    }
+  }
+}

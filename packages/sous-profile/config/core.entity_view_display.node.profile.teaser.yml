@@ -1,0 +1,43 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.profile.field_description
+    - field.field.node.profile.field_first_name
+    - field.field.node.profile.field_image
+    - field.field.node.profile.field_last_name
+    - field.field.node.profile.field_metadata
+    - field.field.node.profile.field_teaser_image
+    - field.field.node.profile.field_teaser_text
+    - node.type.profile
+    - core.entity_view_mode.node.teaser
+  module:
+    - user
+id: node.profile.teaser
+targetEntityType: node
+bundle: profile
+mode: teaser
+content:
+  field_teaser_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {}
+    weight: 1
+    region: content
+  field_teaser_text:
+    type: basic_string
+    label: hidden
+    settings: {}
+    third_party_settings: {}
+    weight: 2
+    region: content
+hidden:
+  field_first_name: true
+  field_last_name: true
+  field_image: true
+  field_description: true
+  field_metadata: true
+  links: true

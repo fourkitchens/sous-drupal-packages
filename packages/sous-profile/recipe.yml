@@ -1,0 +1,47 @@
+name: 'Sous Profile'
+description: 'Profiles with automatic full-name titles, images, biographies and teasers.'
+type: Site
+recipes:
+  - sous-workflow
+  - sous-media
+  - sous-formats
+install:
+  - node
+  - menu_ui
+  - media
+  - media_library
+  - field_group
+  - metatag
+  - text
+  - path
+  - token
+  - auto_entitylabel
+config:
+  import:
+    metatag: '*'
+    node:
+      - core.entity_view_mode.node.teaser
+  strict:
+    - auto_entitylabel.settings.node.profile
+    - core.entity_form_display.node.profile.default
+    - core.entity_view_display.node.profile.default
+    - core.entity_view_display.node.profile.teaser
+    - field.field.node.profile.field_description
+    - field.field.node.profile.field_first_name
+    - field.field.node.profile.field_image
+    - field.field.node.profile.field_last_name
+    - field.field.node.profile.field_metadata
+    - field.field.node.profile.field_teaser_image
+    - field.field.node.profile.field_teaser_text
+    - field.storage.node.field_description
+    - field.storage.node.field_first_name
+    - field.storage.node.field_image
+    - field.storage.node.field_last_name
+    - field.storage.node.field_metadata
+    - field.storage.node.field_teaser_image
+    - field.storage.node.field_teaser_text
+    - node.type.profile
+  actions:
+    workflows.workflow.editorial:
+      addNodeTypes:
+        - profile

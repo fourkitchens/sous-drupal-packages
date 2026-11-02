@@ -36,6 +36,9 @@ try {
       $terms[$bundle]->save();
       $node->set($bundle === 'event' ? 'field_event_type' : 'field_news_categories', $terms[$bundle]->id());
     }
+    if ($bundle === 'profile') {
+      $node->set('field_first_name', 'Workflow')->set('field_last_name', $bundle);
+    }
     if ($bundle === 'event') {
       $node->set('field_event_date', [['value' => $now + 3600, 'end_value' => $now + 7200, 'duration' => 60, 'timezone' => 'UTC']]);
     }
@@ -94,6 +97,9 @@ try {
     }
     $live_title = $node->label();
     $node->setTitle("Revised $bundle");
+    if ($bundle === 'profile') {
+      $node->set('field_first_name', 'Revised')->set('field_last_name', $bundle);
+    }
     $node->set('moderation_state', 'draft')->set('publish_on', $now + 3600)->save();
     $pending_revision = $node->getRevisionId();
     $live = $storage->loadUnchanged($node->id());

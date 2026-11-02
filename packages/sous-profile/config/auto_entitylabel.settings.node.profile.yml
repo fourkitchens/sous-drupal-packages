@@ -1,0 +1,10 @@
+dependencies:
+  config:
+    - node.type.profile
+status: 1
+pattern: '[node:field_first_name] [node:field_last_name]'
+escape: false
+preserve_titles: false
+save: false
+chunk: 50
+new_content_behavior: 0
