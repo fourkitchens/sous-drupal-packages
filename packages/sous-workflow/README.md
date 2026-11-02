@@ -12,9 +12,9 @@ Events and News Post add only their own node types with Drupal's `addNodeTypes`
 recipe action. Existing workflow settings and type associations are preserved;
 Media is not moderated by this recipe.
 
-The content recipes supply optional publish/unpublish dates, new revisions,
-and moderation-state selectors in the Scheduling sidebar. Scheduler cron
-processes those scheduled transitions.
+The content recipes provide optional publish/unpublish dates in the Scheduling
+sidebar and create new revisions. Their single Published/Archived target states
+are automatic hidden values; Scheduler cron processes those transitions.
 
 ## Installation and application
 
@@ -24,8 +24,30 @@ To use it independently, configure the repository and installer paths in the
 
 ```sh
 ddev composer require fourkitchens/sous-workflow:^2.0
+```
+
+Sous Drupal Project already registers the persistent single-state patch for
+[SCMI #3270462](https://www.drupal.org/project/scheduler_content_moderation_integration/issues/3270462).
+Other consumers need Composer Patches 2 allowed in `config.allow-plugins` and a
+root manifest configured through `extra.composer-patches.patches-file`:
+
+```sh
+ddev composer require cweagans/composer-patches:^2.0
+mkdir -p patches
+cp web/recipes/sous-workflow/assets/patches/*.patch patches/
+```
+
+Merge [scheduler.json](assets/patches/scheduler.json)'s entries into that manifest,
+then apply the patch before the recipe:
+
+```sh
+ddev composer patches-relock
+ddev composer patches-repatch
 ddev drush recipe /var/www/html/web/recipes/sous-workflow
 ```
+
+Keep the patch and lock after recipe unpacking. Remove this adaptation when a
+released SCMI version includes automatic hidden single-state choices.
 
 Attach project content types with `addNodeTypes` in a project-owned recipe or
 through Drupal's workflow administration. Applying this recipe alone moderates

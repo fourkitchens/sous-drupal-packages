@@ -5,6 +5,7 @@
  * Verify real moderation revisions and scheduled transitions in a fresh fixture.
  */
 
+use Drupal\Core\Form\FormState;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\user\Entity\User;
@@ -45,6 +46,10 @@ try {
     if ($node->moderation_state->value !== 'draft') {
       throw new \RuntimeException("$bundle did not begin in Draft.");
     }
+    $new_form = \Drupal::service('entity.form_builder')->getForm($node);
+    if ((string) $new_form['moderation_state']['widget'][0]['state']['#title'] !== 'Save as' || $new_form['moderation_state']['widget'][0]['state']['#default_value'] !== 'draft') {
+      throw new \RuntimeException("$bundle new form did not default to Save as Draft.");
+    }
     $violations = $node->validate();
     if (count($violations)) {
       throw new \RuntimeException("$bundle workflow fixture is invalid: " . (string) $violations);
@@ -61,16 +66,24 @@ try {
         throw new \RuntimeException("$bundle has no native $field widget.");
       }
     }
-    $form = \Drupal::service('entity.form_builder')->getForm($node);
+    $form_state = new FormState();
+    $form_object = $entities->getFormObject('node', 'default')->setEntity($node);
+    $form = \Drupal::formBuilder()->buildForm($form_object, $form_state);
     $group = $form['publish_on']['#group'];
-    if (($form[$group]['#group'] ?? NULL) !== 'advanced' || $form['unpublish_on']['#group'] !== $group || !isset($form['moderation_state']['widget'][0]['state'])) {
+    if (($form[$group]['#group'] ?? NULL) !== 'advanced' || $form['unpublish_on']['#group'] !== $group || !isset($form['moderation_state']['widget'][0]['state']) || ($form['publish_on']['#access'] ?? TRUE) === FALSE || ($form['unpublish_on']['#access'] ?? TRUE) === FALSE || isset($form['published_at']) || (in_array($bundle, ['event', 'news_post'], TRUE) && isset($form['menu']))) {
       throw new \RuntimeException("$bundle scheduling controls are missing from the sidebar.");
     }
     foreach (['publish_state' => 'published', 'unpublish_state' => 'archived'] as $field => $state) {
       $widget = $form[$field]['widget'][0];
-      $options = array_values(array_diff(array_keys($widget['#options']), ['_none', '']));
-      if ($options !== [$state] || ($widget['#access'] ?? TRUE) === FALSE || ($form[$field]['#access'] ?? TRUE) === FALSE) {
-        throw new \RuntimeException("$bundle $field did not offer $state.");
+      $build = $form[$field];
+      $html = (string) \Drupal::service('renderer')->renderInIsolation($build);
+      if ($widget['#type'] !== 'hidden' || $widget['#value'] !== $state || str_contains($html, '<select') || str_contains($html, '<label') || !str_contains($html, 'type="hidden"')) {
+        throw new \RuntimeException("$bundle $field did not render only the fixed hidden $state.");
+      }
+      $display->getRenderer($field)::validateElement($widget, $form_state);
+      $display->getRenderer($field)->extractFormValues($node->get($field), $form, $form_state);
+      if ($node->get($field)->value !== $state) {
+        throw new \RuntimeException("$bundle $field hidden value did not bind through its native widget.");
       }
     }
     $draft_revision = $node->getRevisionId();
@@ -81,7 +94,7 @@ try {
     }
     $live_title = $node->label();
     $node->setTitle("Revised $bundle");
-    $node->set('moderation_state', 'draft')->set('publish_on', $now + 3600)->set('publish_state', 'published')->save();
+    $node->set('moderation_state', 'draft')->set('publish_on', $now + 3600)->save();
     $pending_revision = $node->getRevisionId();
     $live = $storage->loadUnchanged($node->id());
     $pending = $storage->loadRevision($pending_revision);
@@ -98,7 +111,15 @@ try {
     if (!$node->isPublished() || !$node->isDefaultRevision() || $node->moderation_state->value !== 'published' || $node->label() !== "Revised $bundle" || $node->getRevisionId() <= $pending_revision || !$node->publish_on->isEmpty() || !$node->publish_state->isEmpty()) {
       throw new \RuntimeException("$bundle scheduled Publish did not promote and clear the pending revision.");
     }
-    $node->set('unpublish_on', $now - 60)->set('unpublish_state', 'archived')->save();
+    $form_state = new FormState();
+    $form_object = $entities->getFormObject('node', 'default')->setEntity($node);
+    $form = \Drupal::formBuilder()->buildForm($form_object, $form_state);
+    $display->getRenderer('publish_state')::validateElement($form['publish_state']['widget'][0], $form_state);
+    $display->getRenderer('publish_state')->extractFormValues($node->get('publish_state'), $form, $form_state);
+    if ($node->publish_state->value !== 'published') {
+      throw new \RuntimeException("$bundle editing form did not restore the cleared Publish state.");
+    }
+    $node->set('unpublish_on', $now - 60)->save();
     $scheduled_revision = $node->getRevisionId();
     if (!$node->isPublished()) {
       throw new \RuntimeException("$bundle unpublished before cron.");
@@ -108,7 +129,25 @@ try {
     if ($node->isPublished() || !$node->isDefaultRevision() || $node->moderation_state->value !== 'archived' || $node->getRevisionId() <= $scheduled_revision || !$node->unpublish_on->isEmpty() || !$node->unpublish_state->isEmpty()) {
       throw new \RuntimeException("$bundle scheduled Archive did not create and clear an unpublished revision.");
     }
-    echo "$bundle Draft, Publish, scheduled Publish and scheduled Archive verified.\n";
+    $form_state = new FormState();
+    $form_object = $entities->getFormObject('node', 'default')->setEntity($node);
+    $form = \Drupal::formBuilder()->buildForm($form_object, $form_state);
+    $display->getRenderer('unpublish_state')::validateElement($form['unpublish_state']['widget'][0], $form_state);
+    $display->getRenderer('unpublish_state')->extractFormValues($node->get('unpublish_state'), $form, $form_state);
+    if ($node->unpublish_state->value !== 'archived') {
+      throw new \RuntimeException("$bundle editing form did not restore the cleared Archive state.");
+    }
+    $node->set('publish_on', $now + 3600)->save();
+    foreach (['node_field_data', 'node_field_revision'] as $table) {
+      \Drupal::database()->update($table)->fields(['publish_on' => $now - 60])->condition('vid', $node->getRevisionId())->execute();
+    }
+    $storage->resetCache([$node->id()]);
+    $scheduler->runLightweightCron(['nolog' => TRUE]);
+    $node = $storage->loadUnchanged($node->id());
+    if (!$node->isPublished() || $node->moderation_state->value !== 'published' || !$node->publish_on->isEmpty() || !$node->publish_state->isEmpty()) {
+      throw new \RuntimeException("$bundle could not schedule Publish again after cron cleared its state.");
+    }
+    echo "$bundle Draft, hidden scheduling controls, Publish, Archive and re-scheduling verified.\n";
   }
 }
 finally {

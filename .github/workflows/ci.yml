@@ -58,9 +58,11 @@ jobs:
           cp packages/sous-paragraphs/assets/patches/layout-paragraphs-component-list-3487314.patch "$site/patches/"
           cp packages/sous-paragraph-types/assets/patches/style-selector-drupal11-compatibility.patch "$site/patches/"
           cp packages/sous-paragraph-types/assets/patches/tablefield-*.patch "$site/patches/"
+          cp packages/sous-workflow/assets/patches/*.patch "$site/patches/"
           versions=$(jq -s 'map({key:.name,value:"2.0.0"})|from_entries' packages/*/composer.json)
           jq --arg path "$GITHUB_WORKSPACE/packages/*" --argjson versions "$versions" \
-            --slurpfile tablefield packages/sous-paragraph-types/assets/patches/tablefield.json '
+            --slurpfile tablefield packages/sous-paragraph-types/assets/patches/tablefield.json \
+            --slurpfile workflow packages/sous-workflow/assets/patches/scheduler.json '
             .repositories += [
               {type:"path",url:$path,options:{symlink:false,versions:$versions}},
               {type:"package",package:{name:"dropzone/dropzone",version:"6.3.5",type:"drupal-library",
@@ -79,7 +81,7 @@ jobs:
               description: "Custom Drupal 11 field-default schema and library discovery compatibility",
               url: "patches/style-selector-drupal11-compatibility.patch",
               depth: 1
-            }]} + $tablefield[0].patches
+            }]} + $tablefield[0].patches + $workflow[0].patches
           ' "$site/composer.json" > "$site/composer.tmp"
           mv "$site/composer.tmp" "$site/composer.json"
           mapfile -t recipes < <(jq -r '.name' packages/*/composer.json)
