@@ -18,6 +18,7 @@ $formats = $content || $storage->exists('node.type.profile');
 $checks = [
   'admin theme' => \Drupal::config('system.theme')->get('admin') === 'gin',
   'default theme' => \Drupal::config('system.theme')->get('default') === 'emulsify',
+  'DropzoneJS disabled' => !$modules->moduleExists('dropzonejs'),
 ];
 foreach (['page', 'frontpage'] as $type) {
   $checks[$type] = $storage->exists("node.type.$type") === $content;
@@ -45,7 +46,7 @@ foreach (['layout_paragraphs', 'layout_paragraphs_library', 'layout_paragraphs_p
 foreach (['tablefield' => $paragraphs || $case === 'core-layout-builder', 'entity_browser' => $paragraphs, 'paragraphs_features' => $paragraphs, 'inline_entity_form' => $case === 'core-layout-builder'] as $module => $enabled) {
   $checks[$module] = $modules->moduleExists($module) === $enabled;
 }
-foreach (['devel', 'field_ui', 'stage_file_proxy', 'syslog', 'views_ui'] as $module) {
+foreach (['devel', 'field_ui', 'masquerade', 'stage_file_proxy', 'syslog', 'views_ui'] as $module) {
   $checks["production.$module"] = !$modules->moduleExists($module);
 }
 foreach (['local', 'staging'] as $id) {

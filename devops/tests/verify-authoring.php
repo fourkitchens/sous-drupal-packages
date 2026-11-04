@@ -15,7 +15,7 @@ use Drupal\user\Entity\User;
 $case = getenv('COMPOSITION');
 $entities = \Drupal::entityTypeManager();
 $modules = \Drupal::moduleHandler();
-foreach (['no_nbsp', 'masquerade', 'login_destination', 'metatag'] as $module) {
+foreach (['no_nbsp', 'login_destination', 'metatag'] as $module) {
   if (!$modules->moduleExists($module)) {
     throw new \RuntimeException("$module is missing from the authoring baseline.");
   }
@@ -37,24 +37,6 @@ try {
       throw new \RuntimeException("Login Destination does not cover $name users.");
     }
   }
-  $permissions = \Drupal::service('masquerade')->getPermissions();
-  foreach (Role::loadMultiple() as $installed_role) {
-    if ($installed_role->id() !== 'superuser' && ($installed_role->isAdmin() || array_intersect($permissions, $installed_role->getPermissions()))) {
-      throw new \RuntimeException($installed_role->id() . ' can masquerade without the Superuser role.');
-    }
-  }
-  foreach ($users as $name => $user) {
-    $allowed = $name === 'superuser';
-    foreach ($permissions as $permission) {
-      if ($user->hasPermission($permission) !== $allowed) {
-        throw new \RuntimeException("$name has incorrect $permission access.");
-      }
-    }
-    if (\Drupal::service('access_check.masquerade.switch')->access($user)->isAllowed() !== $allowed) {
-      throw new \RuntimeException("Native Masquerade switch access is incorrect for $name.");
-    }
-  }
-
   $bundles = array_keys($entities->getStorage('node_type')->loadMultiple());
   foreach ($bundles as $bundle) {
     $display = $entities->getStorage('entity_form_display')->load("node.$bundle.default");

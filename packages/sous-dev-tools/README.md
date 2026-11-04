@@ -2,24 +2,26 @@
 
 `fourkitchens/sous-dev-tools` · `drupal-recipe` · GPL-2.0-or-later
 
-Adds Devel, Stage File Proxy and Masquerade to the local Config Split.
+Adds Devel, Stage File Proxy and Masquerade to the local Config Split only.
 The recipe applies `sous-config-split` and merges the three modules into its
-local module list without replacing other split settings.
+local module list. The saved split stays inactive so local settings control activation.
 
 ## Installation and application
 
-Choose Dev Tools from the installer's optional recipes after its post-2.0.0
-release, or configure the [collection guide](../../README.md)'s repositories, then run:
+Once published, choose Dev Tools from the installer's optional recipes or
+configure the repositories in the [collection guide](../../README.md) and run the following.
 
 ```sh
-ddev composer require fourkitchens/sous-dev-tools:^2.1
+ddev composer require fourkitchens/sous-dev-tools:^2.0
 ddev drush recipe /var/www/html/web/recipes/sous-dev-tools
 ```
 
 Recipes apply once and then unpack; sites own the resulting dependencies and
 complete configuration export. Package updates do not replay configuration.
-Enable the local split before exporting so these modules stay out of production
-configuration; Sous enables it in DDEV's local settings.
+Enable the local split before exporting. Sous enables it in DDEV's local settings.
+Staging and production imports leave these modules disabled. On a new Sous site,
+the administrative Superuser role inherits Masquerade access. The recipe adds
+no role grants.
 
 ## Local files and dependencies
 

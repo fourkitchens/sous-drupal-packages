@@ -1,5 +1,5 @@
 name: 'Sous Configuration Splits'
-description: 'Separates local and staging development tools from production configuration.'
+description: 'Defines local and staging splits for core development tools.'
 type: 'Site'
 install:
   - config_split

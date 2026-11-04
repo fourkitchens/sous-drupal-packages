@@ -12,6 +12,8 @@ config:
   actions:
     config_split.config_split.local:
       setProperties:
+        # Keep activation in local settings when applying with the split active.
+        status: false
         module.devel: 0
         module.stage_file_proxy: 0
         module.masquerade: 0

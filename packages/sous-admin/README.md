@@ -19,10 +19,9 @@ that list so existing project-owned Views are preserved. Reapplying Admin after
 its own Gin actions or site customization can fail the strict check; package
 updates are not a reason to reapply it.
 
-The `superuser` role uses `is_admin: true` and receives every permission,
-including Masquerade and future module permissions. No other role is granted
-Masquerade access. Admin preserves existing roles and account assignments;
-keep project-owned role changes in the complete site export.
+The `superuser` role uses `is_admin: true` and receives every permission from
+enabled modules. Admin preserves existing roles and account assignments.
+Keep project-owned role changes in the complete site export.
 
 Autosave Form, Config Log, Entity Usage, Login History/Destination, Save and Edit,
 Tagify, Trash, Views AJAX History and Views Bulk Operations remain

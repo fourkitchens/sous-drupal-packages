@@ -19,29 +19,11 @@ providers, preserving matching configuration without copying core defaults.
 Scheduler fields stay hidden on the three media forms. The consuming project
 owns its complete export, including imported core modes and project overrides.
 
-DropzoneJS requires `dropzone/dropzone:^6.3.5`, a browser library distributed from
-an upstream release ZIP. Composer ignores repositories declared by dependencies,
-so the **consuming root** must provide this package repository in addition to the
-Sous index and Drupal repository:
-
-```json
-{
-  "type": "package",
-  "package": {
-    "name": "dropzone/dropzone",
-    "version": "6.3.5",
-    "type": "drupal-library",
-    "extra": { "installer-name": "dropzone" },
-    "dist": {
-      "url": "https://github.com/enyo/dropzone/releases/download/dropzone%406.3.5/dist.zip",
-      "type": "zip"
-    }
-  }
-}
-```
-
-Retain the root installer path for Drupal libraries (`web/libraries/{$name}`).
-Dependencies retain their own licenses; this recipe does not vendor Dropzone.
+File and Image uploads use Drupal's Media Library upload form. Image editing
+retains Focal Point. When the starter adopts this recipe, it can remove the named
+`dropzone` Composer repository while retaining the general Drupal library
+installer path. Existing sites should check their custom widgets and assets
+before uninstalling DropzoneJS and removing its Composer dependencies.
 
 ## Installation and application
 
