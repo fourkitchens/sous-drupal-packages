@@ -89,6 +89,7 @@ jobs:
             done
             vendor/bin/drush recipe "$PWD/recipes/sous-seo" --yes
             vendor/bin/drush recipe "$PWD/recipes/sous-alerts" --yes
+            vendor/bin/drush recipe "$PWD/recipes/sous-search" --yes
             vendor/bin/drush status --field=bootstrap | grep -Fx Successful
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-composition.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-events.php"
@@ -98,6 +99,7 @@ jobs:
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-authoring.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-seo.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-alerts.php"
+            COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-search.php"
             echo '::endgroup::'
           done
           bash "$GITHUB_WORKSPACE/devops/tests/verify-environments.sh"
