@@ -99,6 +99,34 @@ jobs:
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-workflow.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-authoring.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-seo.php"
+            if [[ "$composition" == admin ]]; then
+              local_modules=$(vendor/bin/drush php:eval 'echo json_encode(\Drupal::config("config_split.config_split.local")->get("module"));')
+              vendor/bin/drush recipe "$PWD/recipes/sous-dev-tools" --yes
+              # shellcheck disable=SC2016
+              SOUS_TEST_LOCAL_MODULES="$local_modules" vendor/bin/drush php:eval '
+                $tools = ["devel", "stage_file_proxy", "masquerade"];
+                $expected = array_replace(json_decode(getenv("SOUS_TEST_LOCAL_MODULES"), TRUE), array_fill_keys($tools, 0));
+                $actual = \Drupal::config("config_split.config_split.local")->get("module");
+                ksort($expected);
+                ksort($actual);
+                if ($actual !== $expected) { throw new \RuntimeException("Development tools changed unrelated local split entries."); }
+                foreach ($tools as $module) {
+                  if (!\Drupal::moduleHandler()->moduleExists($module)) { throw new \RuntimeException("$module was not enabled."); }
+                }
+              '
+              # Exporting an active local split must keep its tools out of production.
+              vendor/bin/drush config-split:status-override local active
+              vendor/bin/drush config:export --yes
+              # shellcheck disable=SC2016
+              vendor/bin/drush php:eval '
+                $modules = \Drupal::service("config.storage.sync")->read("core.extension")["module"];
+                foreach (["devel", "stage_file_proxy", "masquerade"] as $module) {
+                  if (isset($modules[$module])) { throw new \RuntimeException("$module leaked into the production export."); }
+                }
+                echo "Development tools, local split preservation and production export verified.\n";
+              '
+              vendor/bin/drush config-split:status-override local default
+            fi
             echo '::endgroup::'
           done
           bash "$GITHUB_WORKSPACE/devops/tests/verify-environments.sh"

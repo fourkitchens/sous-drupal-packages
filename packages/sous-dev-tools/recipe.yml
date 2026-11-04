@@ -1,0 +1,17 @@
+name: 'Sous Dev Tools'
+description: 'Local-only Devel, Stage File Proxy and Masquerade through Config Split.'
+type: Site
+recipes:
+  - sous-config-split
+install:
+  - devel
+  - stage_file_proxy
+  - masquerade
+config:
+  strict: false
+  actions:
+    config_split.config_split.local:
+      setProperties:
+        module.devel: 0
+        module.stage_file_proxy: 0
+        module.masquerade: 0
