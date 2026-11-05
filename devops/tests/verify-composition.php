@@ -5,8 +5,10 @@
  * Verify recipe compositions through Drupal's installed entities and plugins.
  */
 
+use Drupal\Core\Session\UserSession;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\user\Entity\Role;
+use Drupal\views\Views;
 
 $case = getenv('COMPOSITION');
 $content = in_array($case, ['content-types', 'core-layout-builder', 'paragraphs'], TRUE);
@@ -20,6 +22,36 @@ $checks = [
   'default theme' => \Drupal::config('system.theme')->get('default') === 'emulsify',
   'DropzoneJS disabled' => !$modules->moduleExists('dropzonejs'),
 ];
+
+foreach (['editoria11y', 'gin_login', 'twig_tweak', 'role_delegation'] as $module) {
+  $checks["baseline.$module"] = $modules->moduleExists($module);
+}
+
+$editor = Role::load('site_editor');
+$account = new UserSession(['uid' => 1234, 'roles' => ['authenticated', 'site_editor']]);
+$checks['Site Editor role'] = $editor?->label() === 'Site Editor' && !$editor->isAdmin();
+foreach (['administer modules', 'administer site configuration', 'administer users', 'administer permissions', 'administer content types', 'administer workflows', 'assign all roles', 'assign superuser role'] as $permission) {
+  $checks["editor denied $permission"] = !$account->hasPermission($permission);
+}
+$delegation = \Drupal::service('delegatable_roles');
+$superuser = new UserSession(['uid' => 1235, 'roles' => ['authenticated', 'superuser']]);
+$checks['editor can only delegate Site Editor'] = array_keys($delegation->getAssignableRoles($account)) === ['site_editor'];
+$checks['superuser can delegate all custom roles'] = array_keys($delegation->getAssignableRoles($superuser)) === array_keys($delegation->getAllRoles());
+$checks['editor can use the Roles tab'] = \Drupal::service('access_check.role_delegation')->access($account)->isAllowed();
+foreach (['archive_unpublish', 'create_new_draft', 'publish'] as $transition) {
+  $checks["editor transition.$transition"] = $account->hasPermission("use editorial transition $transition");
+}
+foreach (['node', 'media', 'taxonomy_term', 'block_content'] as $entity_type) {
+  $access = $entities->getAccessControlHandler($entity_type);
+  $entity_storage = $entities->getStorage($entity_type);
+  foreach (array_keys(\Drupal::service('entity_type.bundle.info')->getBundleInfo($entity_type)) as $bundle) {
+    $entity = $entity_storage->create([$entities->getDefinition($entity_type)->getKey('bundle') => $bundle]);
+    $checks["editor create.$entity_type.$bundle"] = $access->createAccess($bundle, $account);
+    foreach (['update', 'delete'] as $operation) {
+      $checks["editor $operation.$entity_type.$bundle"] = $entity->access($operation, $account);
+    }
+  }
+}
 foreach (['page', 'frontpage'] as $type) {
   $checks[$type] = $storage->exists("node.type.$type") === $content;
   $display = $entities->getStorage('entity_view_display')->load("node.$type.default");
@@ -43,8 +75,38 @@ foreach (['linkit' => $formats, 'emulsify_tools' => TRUE, 'ckeditor5' => $format
 foreach (['layout_paragraphs', 'layout_paragraphs_library', 'layout_paragraphs_permissions', 'layout_paragraphs_limit', 'paragraphs_type_permissions'] as $module) {
   $checks[$module] = $modules->moduleExists($module) === $paragraphs;
 }
-foreach (['tablefield' => $paragraphs || $case === 'core-layout-builder', 'entity_browser' => $paragraphs, 'paragraphs_features' => $paragraphs, 'inline_entity_form' => $case === 'core-layout-builder'] as $module => $enabled) {
+foreach (['tablefield' => $paragraphs || $case === 'core-layout-builder', 'paragraphs_features' => $paragraphs, 'inline_entity_form' => $case === 'core-layout-builder'] as $module => $enabled) {
   $checks[$module] = $modules->moduleExists($module) === $enabled;
+}
+$browsers = [
+  'event' => ['event_content_browser', 'events', 'entity_browser'],
+  'news_post' => ['news_content_browser', 'news', 'entity_browser'],
+  'profile' => ['profile_content_browser', 'profiles', 'entity_browser'],
+];
+if ($content) {
+  $browsers['page'] = ['page_content_browser', 'page_browsers', 'entity_browser_page'];
+  $browsers['frontpage'] = ['frontpage_content_browser', 'page_browsers', 'entity_browser_frontpage'];
+}
+$browsers = array_intersect_key($browsers, $entities->getStorage('node_type')->loadMultiple());
+$checks['entity_browser'] = $modules->moduleExists('entity_browser') === ($browsers !== [] || $paragraphs);
+foreach ($browsers as $bundle => [$browser_id, $view_id, $display_id]) {
+  $browser = $entities->getStorage('entity_browser')->load($browser_id);
+  $widgets = $browser?->getWidgets()->getConfiguration() ?? [];
+  $widget = reset($widgets);
+  $checks["browser.$bundle"] = $browser?->getDisplay()->getPluginId() === 'modal'
+    && ($widget['settings']['view'] ?? NULL) === $view_id
+    && ($widget['settings']['view_display'] ?? NULL) === $display_id;
+  $view = Views::getView($view_id);
+  $checks["browser display.$bundle"] = $view?->setDisplay($display_id) && $view->display_handler->getPluginId() === 'entity_browser';
+  if (!$checks["browser display.$bundle"]) {
+    continue;
+  }
+  $view->initHandlers();
+  $checks["browser selection.$bundle"] = ($view->field['entity_browser_select'] ?? NULL)?->getPluginId() === 'entity_browser_select'
+    && ($view->filter['type']->options['value'] ?? NULL) === [$bundle => $bundle]
+    && ($view->filter['status']->options['value'] ?? NULL) === '1'
+    && ($view->filter['title'] ?? NULL)?->isExposed();
+  $checks["browser access.$bundle"] = $view->access($display_id, $account) && !$view->access($display_id, new UserSession());
 }
 foreach (['devel', 'field_ui', 'masquerade', 'stage_file_proxy', 'syslog', 'views_ui'] as $module) {
   $checks["production.$module"] = !$modules->moduleExists($module);
@@ -203,6 +265,14 @@ foreach (['paragraph' => $paragraphs, 'block_content' => $case === 'core-layout-
   }
 }
 if ($paragraphs) {
+  $access_manager = \Drupal::service('access_manager');
+  $library_items = $entities->getStorage('paragraphs_library_item');
+  $library_item = $library_items->create(['label' => 'Site Editor access check']);
+  $checks['editor library item create'] = $entities->getAccessControlHandler('paragraphs_library_item')->createAccess(NULL, $account);
+  $checks['editor library item update'] = $library_item->access('update', $account);
+  $checks['editor library item delete'] = $library_item->access('delete', $account);
+  $checks['editor library settings denied'] = !$access_manager->checkNamedRoute('paragraphs_library_item.settings', [], $account);
+  $checks['superuser library settings allowed'] = $access_manager->checkNamedRoute('paragraphs_library_item.settings', [], $superuser);
   $library_form = $entities->getStorage('entity_form_display')->load('paragraph.from_library.default');
   $checks['library browser'] = $library_form->getRenderer('field_reusable_paragraph')->getPluginId() === 'entity_browser_entity_reference' && $library_form->getRenderer('field_reusable_paragraph')->getSetting('entity_browser') === 'component_library' && $entities->getStorage('entity_browser')->load('component_library')->getDisplay()->getPluginId() === 'modal';
   $layout = $entities->getStorage('paragraphs_type')->load('layout');

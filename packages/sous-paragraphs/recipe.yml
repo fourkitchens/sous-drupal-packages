@@ -90,6 +90,14 @@ config:
           third_party_settings: {}
           weight: 1
           region: content
+    '?user.role.site_editor':
+      grantPermissions:
+        - 'access component_library entity browser pages'
+        - 'administer paragraphs library'
+        - 'bypass paragraphs type content access'
+        - 'duplicate layout paragraphs components'
+        - 'edit layout paragraphs plugin config'
+        - 'reorder layout paragraphs components'
     user.role.anonymous:
       grantPermissions:
         - 'view paragraph content layout'

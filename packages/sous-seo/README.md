@@ -9,8 +9,9 @@ settings are preserved. No tracking container ID or structured-data values are s
 
 ## Installation and application
 
-Choose SEO from the installer's optional recipes, or configure the
-[collection guide](../../README.md)'s repositories and run the following.
+The Sous installer includes SEO in every build. To add it to another site,
+configure the repositories in the [collection guide](../../README.md) and run
+the following.
 
 ```sh
 ddev composer require fourkitchens/sous-seo:^2.0

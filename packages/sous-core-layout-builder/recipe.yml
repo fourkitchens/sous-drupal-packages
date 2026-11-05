@@ -26,6 +26,12 @@ config:
     core.entity_view_display.node.frontpage.default:
       enableLayoutBuilder: {}
       allowLayoutOverrides: true
+    '?user.role.site_editor':
+      grantPermissions:
+        - 'administer block content'
+        - 'create and edit custom blocks'
+        - 'configure editable page node layout overrides'
+        - 'configure editable frontpage node layout overrides'
   import:
     style_selector: '*'
     tablefield: '*'

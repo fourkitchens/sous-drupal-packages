@@ -8,8 +8,9 @@ local module list. The saved split stays inactive so local settings control acti
 
 ## Installation and application
 
-Once published, choose Dev Tools from the installer's optional recipes or
-configure the repositories in the [collection guide](../../README.md) and run the following.
+The Sous installer includes Dev Tools in every build. To add it to another
+site, configure the repositories in the [collection guide](../../README.md)
+and run the following.
 
 ```sh
 ddev composer require fourkitchens/sous-dev-tools:^2.0

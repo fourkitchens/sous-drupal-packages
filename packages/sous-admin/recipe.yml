@@ -1,5 +1,5 @@
 name: 'Sous Admin'
-description: 'Provides Gin administration, editorial tools, navigation and a Superuser role.'
+description: 'Provides Gin administration, editorial tools, navigation, and roles for Superusers and Site Editors.'
 type: 'Site'
 recipes:
   - sous-workflow
@@ -18,8 +18,10 @@ install:
   - autosave_form
   # Install Config log.
   - config_log
+  - editoria11y
   # Install Gin theme and base modules that extend it.
   - gin
+  - gin_login
   # Install Entity Usuage
   - entity_usage
   # Install Field Group and dependencies
@@ -37,12 +39,14 @@ install:
   - no_nbsp
   # Install Publication Date
   - publication_date
+  - role_delegation
   # Install Save and Edit
   - save_edit
   # Install Tagify
   - tagify
   # Install Trash.
   - trash
+  - twig_tweak
   # Install Views AJAX History
   - views_ajax_history
   # Install Views Bulk Operations
@@ -93,6 +97,33 @@ config:
     login_history:
       - views.view.login_history
   actions:
+    user.role.site_editor:
+      grantPermissions:
+        - 'access administration pages'
+        - 'access block library'
+        - 'access content'
+        - 'access content overview'
+        - 'access files overview'
+        - 'access media overview'
+        - 'access navigation'
+        - 'access taxonomy overview'
+        - 'access trash'
+        - 'access user profiles'
+        - 'assign site_editor role'
+        - 'delete any file'
+        - 'mark as hidden in editoria11y'
+        - 'schedule publishing of nodes'
+        - 'use editorial transition archive_unpublish'
+        - 'use editorial transition create_new_draft'
+        - 'use editorial transition publish'
+        - 'view any unpublished content'
+        - 'view editoria11y checker'
+        - 'view latest version'
+        - 'view media'
+        - 'view own unpublished media'
+        - 'view scheduled content'
+        - 'view the administration theme'
+        - 'view unpublished block content'
     # Disable legacy Gin blocks only when that Gin version provides them.
     '?block.block.gin_admin':
       setProperties:

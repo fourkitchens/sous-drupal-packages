@@ -84,3 +84,18 @@ config:
     media_library: '*'
     # Contrib.
     focal_point: '*'
+  actions:
+    '?user.role.site_editor':
+      grantPermissions:
+        - 'schedule publishing of media'
+        - 'view scheduled media'
+        - 'create terms in media_tags'
+        - 'edit terms in media_tags'
+        - 'delete terms in media_tags'
+      grantPermissionsForEachMediaType:
+        - 'create %bundle media'
+        - 'edit any %bundle media'
+        - 'delete any %bundle media'
+        - 'view any %bundle media revisions'
+        - 'revert any %bundle media revisions'
+        - 'delete any %bundle media revisions'

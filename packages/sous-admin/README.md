@@ -3,7 +3,7 @@
 `fourkitchens/sous-admin` · `drupal-recipe` · GPL-2.0-or-later
 
 Supplies Gin, core Navigation and its Content menu, the Superuser administrator
-role, native management Views, and editorial/administration conveniences. It
+and Site Editor roles, native management Views, and editorial tools. It
 installs the Node, Media, Media Library, Block Content, Taxonomy and Views
 providers used by those management screens. It does not create Page/Frontpage
 or apply Sous Media bundle defaults. It applies [Sous Workflow](../sous-workflow)
@@ -21,12 +21,20 @@ updates are not a reason to reapply it.
 
 The `superuser` role uses `is_admin: true` and receives every permission from
 enabled modules. Admin preserves existing roles and account assignments.
-Keep project-owned role changes in the complete site export.
+Site Editor can create, edit, publish and delete content supplied by the recipes
+applied to the site. It can use the configured content browsers and does not
+grant module, configuration, role or permission administration. Keep project-owned
+role changes in the complete site export.
 
-Autosave Form, Config Log, Entity Usage, Login History/Destination, Save and Edit,
-Tagify, Trash, Views AJAX History and Views Bulk Operations remain
-installed conveniences. A project can replace them through a project-owned
-recipe or reviewed module uninstall/configuration change. Removing a Composer
+Superusers can assign every custom role from the account edit form. Site Editors
+can assign or remove only Site Editor on the Roles tab at `/user/{uid}/roles`.
+Drupal gives every signed-in user the Authenticated role automatically.
+
+Autosave Form, Config Log, Editoria11y, Entity Usage, Gin Login, Login
+History/Destination, Role Delegation, Save and Edit, Tagify, Trash, Twig Tweak,
+Views AJAX History and Views Bulk Operations are enabled by default. A project
+can replace them through a project-owned recipe or reviewed module uninstall or
+configuration change. Removing a Composer
 requirement or recipe entry alone does not uninstall a module or preserve its data.
 
 ## Installation and application

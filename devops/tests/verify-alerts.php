@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Session\AnonymousUserSession;
+use Drupal\Core\Session\UserSession;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -36,6 +37,15 @@ foreach ($blocks->loadByProperties(['theme' => $theme, 'region' => 'content_top'
 }
 
 $storage = $entities->getStorage('sitewide_alert');
+
+$editor = new UserSession(['uid' => 1234, 'roles' => ['authenticated', 'site_editor']]);
+$alert_access = $entities->getAccessControlHandler('sitewide_alert');
+$alert = $storage->create(['status' => FALSE, 'user_id' => 1]);
+if (!$alert_access->createAccess(NULL, $editor) || !$alert->access('update', $editor)
+    || !$alert->access('delete', $editor) || !$alert->access('view', $editor)
+    || $editor->hasPermission('administer sitewide alert')) {
+  throw new \RuntimeException('Site Editor must be able to manage alerts without access to global alert settings.');
+}
 $tomorrow = new \DateTimeImmutable('+1 day', new \DateTimeZone('UTC'));
 $fixtures = [];
 $switcher = \Drupal::service('account_switcher');

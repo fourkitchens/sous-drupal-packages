@@ -6,3 +6,5 @@ config:
     core.entity_view_display.node.event.default:
       enableLayoutBuilder: {}
       allowLayoutOverrides: true
+    '?user.role.site_editor':
+      grantPermission: 'configure editable event node layout overrides'

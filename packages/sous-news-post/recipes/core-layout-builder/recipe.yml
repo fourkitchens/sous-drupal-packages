@@ -6,3 +6,5 @@ config:
     core.entity_view_display.node.news_post.default:
       enableLayoutBuilder: {}
       allowLayoutOverrides: true
+    '?user.role.site_editor':
+      grantPermission: 'configure editable news_post node layout overrides'

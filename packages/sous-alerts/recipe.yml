@@ -11,6 +11,13 @@ config:
       simpleConfigUpdate:
         display_order: descending
         automatic_refresh: false
+    '?user.role.site_editor':
+      grantPermissions:
+        - 'add sitewide alert entities'
+        - 'administer sitewide alert entities'
+        - 'delete sitewide alert entities'
+        - 'edit sitewide alert entities'
+        - 'view unpublished sitewide alert entities'
     user.role.anonymous:
       grantPermissions:
         - 'view published sitewide alert entities'

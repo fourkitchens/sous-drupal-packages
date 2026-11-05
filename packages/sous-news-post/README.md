@@ -16,6 +16,8 @@ The `news` View's `embed_recent` (Recent News) display lists published posts
 newest first through a rendered-entity field in Teaser mode, limited to ten
 posts. Its exposed category selector (`news_categories`) and combined
 title/teaser-description Search (`news_search`) narrow the listing.
+The same View's `entity_browser` display lets editors filter and select
+published news posts by title.
 
 Choose News Post from the installer's optional sides. The News model works
 without Page, Frontpage or Paragraphs. When the Paragraphs main course is

@@ -18,6 +18,8 @@ series can appear in both lists when it has both past and future occurrences.
 Each list shows the event once, ordered by its relevant date. Both displays use
 a rendered-entity field in Teaser mode, with Event Type (`event_type`) and
 title/teaser-description Search (`event_search`) exposed filters.
+The same View's `entity_browser` display lets editors filter and select
+published events by title, including past events.
 
 Choose Events from the installer's optional sides. Media and the Event model
 work without Page, Frontpage or Paragraphs. When the Paragraphs main course is

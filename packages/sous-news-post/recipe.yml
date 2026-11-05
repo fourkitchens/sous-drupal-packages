@@ -10,6 +10,7 @@ install:
   - taxonomy
   - media
   - media_library
+  - entity_browser
   - field_group
   - metatag
   - path
@@ -25,6 +26,7 @@ config:
     - core.entity_form_display.node.news_post.default
     - core.entity_view_display.node.news_post.default
     - core.entity_view_display.node.news_post.teaser
+    - entity_browser.browser.news_content_browser
     - field.field.node.news_post.field_byline
     - field.field.node.news_post.field_news_categories
     - field.field.node.news_post.field_metadata
@@ -40,6 +42,20 @@ config:
     - taxonomy.vocabulary.news_categories
     - views.view.news
   actions:
+    '?user.role.site_editor':
+      grantPermissions:
+        - 'create url aliases'
+        - 'access news_content_browser entity browser pages'
+        - 'create terms in news_categories'
+        - 'edit terms in news_categories'
+        - 'delete terms in news_categories'
+      grantPermissionsForEachNodeType:
+        - 'create %bundle content'
+        - 'edit any %bundle content'
+        - 'delete any %bundle content'
+        - 'view %bundle revisions'
+        - 'revert %bundle revisions'
+        - 'delete %bundle revisions'
     workflows.workflow.editorial:
       addNodeTypes:
         - news_post

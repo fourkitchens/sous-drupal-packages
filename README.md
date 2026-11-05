@@ -21,16 +21,16 @@ shared version, beginning with `2.0.0`.
 | [sous-events](packages/sous-events)                           | Recurring events, event types, teasers and upcoming/past embeds  | Optional recipe            |
 | [sous-news-post](packages/sous-news-post)                     | News Posts, bylines, categories, teasers and a Recent News embed | Optional recipe            |
 | [sous-profile](packages/sous-profile)                         | Profiles, automatic names, images, bios and searchable teasers   | Optional recipe            |
-| [sous-seo](packages/sous-seo)                                 | Redirects, sitemaps, breadcrumbs and SEO integrations            | Optional recipe            |
+| [sous-seo](packages/sous-seo)                                 | Redirects, sitemaps, breadcrumbs and SEO integrations            | Starter base               |
 | [sous-alerts](packages/sous-alerts)                           | Site-wide alert banners with scheduling and dismissal            | Optional recipe            |
 | [sous-search](packages/sous-search)                           | Database search, content type filter and header search box       | Optional recipe            |
-| [sous-dev-tools](packages/sous-dev-tools)                     | Local debugging, file proxying and user impersonation            | Optional recipe            |
+| [sous-dev-tools](packages/sous-dev-tools)                     | Local debugging, file proxying and user impersonation            | Starter base               |
 | [sous-paragraph-types](packages/sous-paragraph-types)         | Text, media, accordion, tabs, quote, embed and table components  | Paragraphs building blocks |
 | [sous-paragraphs](packages/sous-paragraphs)                   | Layout Paragraphs on Page/Frontpage without Body                 | Optional composition       |
 | [sous-core-layout-builder](packages/sous-core-layout-builder) | Native layouts with matching nested inline block types           | Optional composition       |
 | [sous-config-split](packages/sous-config-split)               | Local/staging development tools excluded from production         | Starter base               |
 
-Events, News Post, Profile, SEO, Alerts, Search and Dev Tools are offered in the starter's optional recipe menu.
+Events, News Post, Profile, Alerts and Search are offered in the starter's optional recipe menu.
 
 The content compositions share a Body-free base. The default content package
 adds Body; Paragraphs adds its component reference instead. Page and Frontpage

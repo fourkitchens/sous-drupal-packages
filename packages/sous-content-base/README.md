@@ -7,6 +7,9 @@ Pathauto aliases. It applies Formats and Media; Page also has tags. Title sits
 above the horizontal Content/Teaser tabs, with no SEO Title field or Info tab.
 The base attaches neither Body nor a Paragraph reference.
 
+Page and Frontpage each have a modal Entity Browser with a title filter and a
+grid of published content. Both displays belong to the `page_browsers` View.
+
 Choose [Content Types](../sous-content-types) for Body,
 [Layout Paragraphs](../sous-paragraphs) for component-only Content tabs, or
 [Core Layout Builder](../sous-core-layout-builder) for native layouts and four

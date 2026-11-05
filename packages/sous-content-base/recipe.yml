@@ -11,9 +11,11 @@ install:
   - node
   - text
   - user
+  - views
   - menu_ui
   - path
   - pathauto
+  - entity_browser
   - field_group
   - metatag
   - publication_date
@@ -22,6 +24,21 @@ config:
   import:
     metatag: '*'
   actions:
+    '?user.role.site_editor':
+      grantPermissions:
+        - 'create url aliases'
+        - 'access page_content_browser entity browser pages'
+        - 'access frontpage_content_browser entity browser pages'
+        - 'create terms in tags'
+        - 'edit terms in tags'
+        - 'delete terms in tags'
+      grantPermissionsForEachNodeType:
+        - 'create %bundle content'
+        - 'edit any %bundle content'
+        - 'delete any %bundle content'
+        - 'view %bundle revisions'
+        - 'revert %bundle revisions'
+        - 'delete %bundle revisions'
     workflows.workflow.editorial:
       addNodeTypes:
         - page

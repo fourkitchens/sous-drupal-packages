@@ -17,6 +17,7 @@
   "minimum-stability": "stable",
   "require": {
     "drupal/core": "^11.4",
+    "drupal/entity_browser": "^2.15",
     "drupal/field_group": "^4.0.0",
     "drupal/metatag": "^2.2.3",
     "drupal/pathauto": "^1.15.0",

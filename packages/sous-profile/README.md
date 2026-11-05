@@ -4,6 +4,7 @@
 
 Adds a Profile content type with required First Name and Last Name fields.
 The title stays hidden and is generated again from the name on every save.
+Pathauto uses the generated title for URLs such as `/profile/ada-lovelace`.
 Optional Profile Image accepts one Image media item; Bio uses Basic HTML.
 Content and Teaser tabs organize the form, with Metadata in the sidebar.
 
@@ -15,6 +16,8 @@ They cannot be placed in menus. The model works without a content composition.
 The `profiles` View's `embed_profiles` (Profiles) display lists all published
 profiles as rendered Teaser entities, ordered by Last Name, First Name and ID.
 Its Search field (`profile_search`) finds terms in First Name, Last Name or Bio.
+The same View's `entity_browser` display lets editors filter and select
+published profiles by title.
 
 ## Installation and application
 

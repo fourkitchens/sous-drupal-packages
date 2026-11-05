@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.page_browsers
+  module:
+    - views
+name: frontpage_content_browser
+label: Frontpage Content Browser
+display: modal
+display_configuration:
+  width: '950'
+  height: ''
+  link_text: Select Frontpages
+  auto_open: false
+  use_admin_theme: true
+selection_display: no_display
+selection_display_configuration: {}
+widget_selector: tabs
+widget_selector_configuration: {}
+widgets:
+  dcb94cf4-b5f6-4d5f-af4e-59b63ce6ce2d:
+    id: view
+    uuid: dcb94cf4-b5f6-4d5f-af4e-59b63ce6ce2d
+    label: Frontpage Library
+    weight: 1
+    settings:
+      submit_text: Select Frontpages
+      auto_select: false
+      view: page_browsers
+      view_display: entity_browser_frontpage

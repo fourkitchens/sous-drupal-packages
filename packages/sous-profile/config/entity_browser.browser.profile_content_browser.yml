@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.profiles
+  module:
+    - views
+name: profile_content_browser
+label: Profile Content Browser
+display: modal
+display_configuration:
+  width: '950'
+  height: ''
+  link_text: Select Profiles
+  auto_open: false
+  use_admin_theme: true
+selection_display: no_display
+selection_display_configuration: {}
+widget_selector: tabs
+widget_selector_configuration: {}
+widgets:
+  e4f1195d-e21d-4cb8-b5ec-dcb2de6be8cc:
+    id: view
+    uuid: e4f1195d-e21d-4cb8-b5ec-dcb2de6be8cc
+    label: Profile Library
+    weight: 1
+    settings:
+      submit_text: Select Profiles
+      auto_select: false
+      view: profiles
+      view_display: entity_browser

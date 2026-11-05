@@ -10,6 +10,12 @@ install:
   - node
   - no_nbsp
 config:
+  actions:
+    '?user.role.site_editor':
+      grantPermissions:
+        - 'use text format basic_html'
+        - 'use text format limited_html'
+        - 'use text format restricted_html'
   # Validate editor and format defaults while preserving project-owned
   # Linkit profiles.
   strict:

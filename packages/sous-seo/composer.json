@@ -27,10 +27,5 @@
   "support": {
     "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
     "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-seo"
-  },
-  "extra": {
-    "sous": {
-      "menu": true
-    }
   }
 }

@@ -94,6 +94,10 @@ try {
     $listing_nodes[$key] = Node::create(['type' => 'profile', 'uid' => 1, 'moderation_state' => 'published', 'field_first_name' => $first, 'field_last_name' => $last, 'field_description' => ['value' => $description, 'format' => 'basic_html'], 'field_teaser_text' => $teaser_text]);
     $listing_nodes[$key]->save();
   }
+  $alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $listing_nodes['zoe']->id());
+  if ($alias !== '/profile/zoe-adams') {
+    throw new \RuntimeException("Profile alias did not use the generated name: $alias");
+  }
   $listing_nodes['other'] = Node::create(['type' => 'news_post', 'uid' => 1, 'moderation_state' => 'published', 'title' => 'Unrelated listing content', 'field_teaser_text' => 'Not a Profile teaser']);
   $listing_nodes['other']->save();
   $all = ['zoe', 'ada', 'ada_second', 'bea', 'mira'];
@@ -154,4 +158,4 @@ finally {
   $switcher->switchBack();
 }
 
-print getenv('COMPOSITION') . " Profile fields, automatic names, Basic HTML Bio and searchable Profiles teasers verified.\n";
+print getenv('COMPOSITION') . " Profile fields, automatic names and aliases, Basic HTML Bio and searchable Profiles teasers verified.\n";
