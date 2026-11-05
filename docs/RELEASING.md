@@ -50,6 +50,9 @@ For each release, the workflow:
    same version in its Composer metadata and coordinated sibling dependencies.
 3. Publishes those ZIPs and `release-manifest.json` as GitHub release assets.
 4. Deploys the static Composer index and catalog through GitHub Pages.
+5. Waits up to five minutes for the public `packages.json` to list every package
+   at the run's published version, then verifies that every ZIP URL returns
+   HTTP 200 after redirects.
 
 The index includes earlier releases using their saved manifests, preserving each
 version's dependency metadata and download checksums. A new package becomes
@@ -66,8 +69,11 @@ Inspect a failed workflow before merging another release. If an upload fails aft
 semantic-release creates its tag, a rerun cannot finish that release automatically.
 A maintainer must inspect and repair the unpublished draft/tag before retrying;
 the index refuses to deploy while a reachable release tag has no published collection.
-Never delete or move an already published release tag. Rerun a failed Pages
-deployment to restore the public index from the published release manifests.
+If Pages deployment or verification fails, check the log for the index URL,
+missing package versions, or failing ZIP URLs. In the workflow run's job list,
+rerun `deploy-index` to redeploy the index and repeat the public check. If the
+Pages artifact has expired, rerun the workflow to rebuild it from the published
+release manifests. Never move or delete a published release tag.
 If package source needs a correction, merge a new Conventional Commit and let
 semantic-release create the next version. Preserve already published asset URLs
 and checksums so existing project locks remain usable.

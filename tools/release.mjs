@@ -2,7 +2,7 @@
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { realpathSync } from 'node:fs';
-import { mkdir, rm, writeFile } from 'node:fs/promises';
+import { appendFile, mkdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build, makeIndex, catalog, validateRelease } from './build.mjs';
@@ -143,6 +143,10 @@ async function index() {
     throw new Error(
       `Tags have no published collection; inspect the failed release before retrying: ${missing.join(', ')}`
     );
+  // A rerun checks the release reachable from its checkout, even after a newer release.
+  const released = manifests.findLast(({ version }) => tags.includes(version));
+  if (!released)
+    throw new Error('No published collection is reachable from this commit.');
   const latest = manifests.at(-1);
   for (const entry of Object.values(latest.packages)) {
     const bytes = await download(entry.metadata.dist.url);
@@ -157,6 +161,11 @@ async function index() {
     `${JSON.stringify(makeIndex(manifests), null, 2)}\n`
   );
   await writeFile(join(output, 'site', 'index.html'), catalog(latest));
+  if (process.env.GITHUB_OUTPUT)
+    await appendFile(
+      process.env.GITHUB_OUTPUT,
+      `version=${released.version}\n`
+    );
   console.log(
     `Composer index contains ${manifests.length} published collection versions.`
   );
