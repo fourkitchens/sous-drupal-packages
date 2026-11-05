@@ -27,7 +27,9 @@ config:
     smart_date: '*'
   strict:
     - core.entity_form_display.node.event.default
+    - core.entity_view_display.node.event.admin_preview
     - core.entity_view_display.node.event.default
+    - core.entity_view_display.node.event.full
     - core.entity_view_display.node.event.teaser
     - entity_browser.browser.event_content_browser
     - field.field.node.event.field_event_date

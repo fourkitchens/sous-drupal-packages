@@ -2,6 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.media.content_teaser_landscape
     - field.field.node.news_post.field_byline
     - field.field.node.news_post.field_news_categories
     - field.field.node.news_post.field_metadata
@@ -36,7 +37,7 @@ content:
     type: entity_reference_entity_view
     label: hidden
     settings:
-      view_mode: default
+      view_mode: content_teaser_landscape
       link: true
     third_party_settings: {}
     weight: 1

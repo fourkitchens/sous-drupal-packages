@@ -8,7 +8,8 @@ above the horizontal Content/Teaser tabs, with no SEO Title field or Info tab.
 The base attaches neither Body nor a Paragraph reference.
 
 Page and Frontpage each have a modal Entity Browser with a title filter and a
-grid of published content. Both displays belong to the `page_browsers` View.
+grid of published content rendered in Admin Preview. Both displays belong to the
+Pages/Frontpage View (`pages`).
 
 Choose [Content Types](../sous-content-types) for Body,
 [Layout Paragraphs](../sous-paragraphs) for component-only Content tabs, or

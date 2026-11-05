@@ -2,8 +2,8 @@
 
 `fourkitchens/sous-media` · `drupal-recipe` · GPL-2.0-or-later
 
-Provides File, Image and Video media bundles with shared fields, form/view
-displays, Media Library defaults, media tags and authoring dependencies. It is
+Provides File, Image, Video and Uploaded Video media bundles with shared fields,
+form/view displays, Media Library defaults, media tags and authoring dependencies. It is
 shared by Content Types and Paragraph Types and has no dependency on either
 optional content composition.
 
@@ -16,11 +16,17 @@ replacing project Views.
 
 Core's `media.full` and `media.media_library` modes are imported from their
 providers, preserving matching configuration without copying core defaults.
-Scheduler fields stay hidden on the three media forms. The consuming project
+Scheduler fields stay hidden on the media forms. The consuming project
 owns its complete export, including imported core modes and project overrides.
 
-File and Image uploads use Drupal's Media Library upload form. Image editing
-retains Focal Point. When the starter adopts this recipe, it can remove the named
+File, Image and Uploaded Video use Drupal's Media Library upload form. Uploaded
+Video accepts MP4 and WebM files. Use remote Video for ordinary embeds.
+
+The landscape, portrait and square teaser displays use Focal Point crops and
+WebP derivatives at the xSmall, Small and Medium Emulsify breakpoints. The
+recipe installs Emulsify as the breakpoint provider when applied on its own.
+
+When the starter adopts this recipe, it can remove the named
 `dropzone` Composer repository while retaining the general Drupal library
 installer path. Existing sites should check their custom widgets and assets
 before uninstalling DropzoneJS and removing its Composer dependencies.

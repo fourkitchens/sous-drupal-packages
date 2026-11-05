@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: content_teaser_portrait_xsmall
+label: Content | Teaser (portrait) | xSmall
+effects:
+  ebb487d7-66c7-4b2d-875f-0dcc5f327a34:
+    uuid: ebb487d7-66c7-4b2d-875f-0dcc5f327a34
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 275
+      height: 375
+      crop_type: focal_point
+  7a19d8e5-9ee1-4a9b-8e44-9730762dfac8:
+    uuid: 7a19d8e5-9ee1-4a9b-8e44-9730762dfac8
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

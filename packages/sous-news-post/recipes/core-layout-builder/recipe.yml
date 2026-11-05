@@ -3,8 +3,9 @@ description: 'Enable native layouts and per-post overrides for News Posts.'
 type: Site
 config:
   actions:
-    core.entity_view_display.node.news_post.default:
+    core.entity_view_display.node.news_post.default: &news_post_display
       enableLayoutBuilder: {}
       allowLayoutOverrides: true
+    core.entity_view_display.node.news_post.full: *news_post_display
     '?user.role.site_editor':
       grantPermission: 'configure editable news_post node layout overrides'

@@ -24,7 +24,9 @@ config:
       - core.entity_view_mode.node.teaser
   strict:
     - core.entity_form_display.node.news_post.default
+    - core.entity_view_display.node.news_post.admin_preview
     - core.entity_view_display.node.news_post.default
+    - core.entity_view_display.node.news_post.full
     - core.entity_view_display.node.news_post.teaser
     - entity_browser.browser.news_content_browser
     - field.field.node.news_post.field_byline

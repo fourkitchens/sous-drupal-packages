@@ -27,7 +27,9 @@ config:
   strict:
     - auto_entitylabel.settings.node.profile
     - core.entity_form_display.node.profile.default
+    - core.entity_view_display.node.profile.admin_preview
     - core.entity_view_display.node.profile.default
+    - core.entity_view_display.node.profile.full
     - core.entity_view_display.node.profile.teaser
     - entity_browser.browser.profile_content_browser
     - field.field.node.profile.field_description

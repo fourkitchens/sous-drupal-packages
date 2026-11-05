@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - views.view.page_browsers
+    - views.view.pages
   module:
     - views
 name: frontpage_content_browser
@@ -27,5 +27,5 @@ widgets:
     settings:
       submit_text: Select Frontpages
       auto_select: false
-      view: page_browsers
+      view: pages
       view_display: entity_browser_frontpage

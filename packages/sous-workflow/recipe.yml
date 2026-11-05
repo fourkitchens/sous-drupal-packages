@@ -14,3 +14,7 @@ config:
   import:
     content_moderation:
       - views.view.moderated_content
+  actions:
+    core.entity_view_mode.node.full:
+      setProperties:
+        label: Full

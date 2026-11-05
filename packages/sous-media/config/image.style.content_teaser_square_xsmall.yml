@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: content_teaser_square_xsmall
+label: Content | Teaser (square) | xSmall
+effects:
+  4942e431-fb78-437e-8ab6-b4bbc6269205:
+    uuid: 4942e431-fb78-437e-8ab6-b4bbc6269205
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 200
+      height: 200
+      crop_type: focal_point
+  9f73d817-457e-48d1-9677-e29a5961ae61:
+    uuid: 9f73d817-457e-48d1-9677-e29a5961ae61
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

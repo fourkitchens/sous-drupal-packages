@@ -5,6 +5,7 @@
  * Verify recipe compositions through Drupal's installed entities and plugins.
  */
 
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Session\UserSession;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\user\Entity\Role;
@@ -22,6 +23,29 @@ $checks = [
   'default theme' => \Drupal::config('system.theme')->get('default') === 'emulsify',
   'DropzoneJS disabled' => !$modules->moduleExists('dropzonejs'),
 ];
+$uploaded_video = $entities->getStorage('media_type')->load('uploaded_video');
+$video_source = $uploaded_video?->getSource();
+$video_field = $video_source?->getSourceFieldDefinition($uploaded_video);
+$video_form = $entities->getStorage('entity_form_display')->load('media.uploaded_video.default');
+$video_display = $entities->getStorage('entity_view_display')->load('media.uploaded_video.default');
+$checks['uploaded video source'] = $video_source?->getPluginId() === 'video_file' && $video_field?->getName() === 'field_media_file' && $video_field->getSetting('file_extensions') === 'mp4 webm';
+$checks['uploaded video widgets'] = $video_form?->getRenderer('field_media_file')?->getPluginId() === 'file_generic' && $video_display?->getRenderer('field_media_file')?->getPluginId() === 'file_video';
+
+$breakpoints = \Drupal::service('breakpoint.manager')->getBreakpointsByGroup('emulsify');
+foreach (['landscape', 'portrait', 'square'] as $aspect) {
+  $id = "content_teaser_$aspect";
+  $responsive = $entities->getStorage('responsive_image_style')->load($id);
+  $media_display = $entities->getStorage('entity_view_display')->load("media.image.$id");
+  $formatter = $media_display?->getRenderer('field_media_image');
+  $checks["responsive formatter.$aspect"] = $formatter?->getPluginId() === 'responsive_image' && $formatter->getSetting('responsive_image_style') === $id && $responsive?->getFallbackImageStyle() === "{$id}_medium";
+  foreach (['xsmall', 'small', 'medium'] as $size) {
+    $style_id = "{$id}_$size";
+    $style = $entities->getStorage('image_style')->load($style_id);
+    $effects = $style ? array_values(iterator_to_array($style->getEffects())) : [];
+    $checks["responsive style.$aspect.$size"] = isset($breakpoints["emulsify.$size"]) && ($responsive?->getImageStyleMapping("emulsify.$size", '1x')['image_mapping'] ?? NULL) === $style_id;
+    $checks["image effects.$aspect.$size"] = count($effects) === 2 && $effects[0]->getPluginId() === 'focal_point_scale_and_crop' && $effects[1]->getPluginId() === 'image_convert' && $effects[1]->getConfiguration()['data']['extension'] === 'webp';
+  }
+}
 
 foreach (['editoria11y', 'gin_login', 'twig_tweak', 'role_delegation'] as $module) {
   $checks["baseline.$module"] = $modules->moduleExists($module);
@@ -84,12 +108,27 @@ $browsers = [
   'profile' => ['profile_content_browser', 'profiles', 'entity_browser'],
 ];
 if ($content) {
-  $browsers['page'] = ['page_content_browser', 'page_browsers', 'entity_browser_page'];
-  $browsers['frontpage'] = ['frontpage_content_browser', 'page_browsers', 'entity_browser_frontpage'];
+  $browsers['page'] = ['page_content_browser', 'pages', 'entity_browser_page'];
+  $browsers['frontpage'] = ['frontpage_content_browser', 'pages', 'entity_browser_frontpage'];
+  $checks['Pages/Frontpage view'] = $entities->getStorage('view')->load('pages')?->label() === 'Pages/Frontpage'
+    && !$storage->exists('views.view.page_browsers');
 }
 $browsers = array_intersect_key($browsers, $entities->getStorage('node_type')->loadMultiple());
 $checks['entity_browser'] = $modules->moduleExists('entity_browser') === ($browsers !== [] || $paragraphs);
 foreach ($browsers as $bundle => [$browser_id, $view_id, $display_id]) {
+  $modes = \Drupal::service('entity_display.repository')->getViewModeOptionsByBundle('node', $bundle);
+  $checks["view modes.$bundle"] = ($modes['full'] ?? NULL) === 'Full'
+    && ($modes['teaser'] ?? NULL) === 'Teaser'
+    && ($modes['admin_preview'] ?? NULL) === 'Admin Preview';
+  $displays = $entities->getStorage('entity_view_display');
+  $node = $entities->getStorage('node')->create(['type' => $bundle]);
+  $full = EntityViewDisplay::collectRenderDisplay($node, 'full');
+  $default = $displays->load("node.$bundle.default");
+  $checks["full display.$bundle"] = $full->getMode() === 'full'
+    && $full->getComponents() === $default->getComponents()
+    && $full->getThirdPartySetting('layout_builder', 'allow_custom') === $default->getThirdPartySetting('layout_builder', 'allow_custom');
+  $teaser = $displays->load("node.$bundle.teaser");
+  $checks["teaser image.$bundle"] = $teaser?->getRenderer('field_teaser_image')?->getSetting('view_mode') === 'content_teaser_landscape';
   $browser = $entities->getStorage('entity_browser')->load($browser_id);
   $widgets = $browser?->getWidgets()->getConfiguration() ?? [];
   $widget = reset($widgets);
@@ -102,6 +141,9 @@ foreach ($browsers as $bundle => [$browser_id, $view_id, $display_id]) {
     continue;
   }
   $view->initHandlers();
+  $checks["browser preview.$bundle"] = array_keys($view->field) === ['entity_browser_select', 'rendered_entity']
+    && $view->field['rendered_entity']->getPluginId() === 'rendered_entity'
+    && $view->field['rendered_entity']->options['view_mode'] === 'admin_preview';
   $checks["browser selection.$bundle"] = ($view->field['entity_browser_select'] ?? NULL)?->getPluginId() === 'entity_browser_select'
     && ($view->filter['type']->options['value'] ?? NULL) === [$bundle => $bundle]
     && ($view->filter['status']->options['value'] ?? NULL) === '1'

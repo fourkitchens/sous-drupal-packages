@@ -42,7 +42,7 @@ config:
       setProperties:
         third_party_settings.field_group.group_content.children:
           - field_content
-    core.entity_view_display.node.page.default:
+    core.entity_view_display.node.page.default: &page_display
       setComponent:
         name: field_content
         options:
@@ -54,6 +54,7 @@ config:
           third_party_settings: {}
           weight: 1
           region: content
+    core.entity_view_display.node.page.full: *page_display
     core.entity_form_display.node.frontpage.default:
       setComponent:
         name: field_content
@@ -78,7 +79,7 @@ config:
       setProperties:
         third_party_settings.field_group.group_content.children:
           - field_content
-    core.entity_view_display.node.frontpage.default:
+    core.entity_view_display.node.frontpage.default: &frontpage_display
       setComponent:
         name: field_content
         options:
@@ -90,6 +91,7 @@ config:
           third_party_settings: {}
           weight: 1
           region: content
+    core.entity_view_display.node.frontpage.full: *frontpage_display
     '?user.role.site_editor':
       grantPermissions:
         - 'access component_library entity browser pages'

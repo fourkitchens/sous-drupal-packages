@@ -28,7 +28,7 @@ config:
         third_party_settings.field_group.group_content.children:
           - field_event_date
           - field_content
-    core.entity_view_display.node.event.default:
+    core.entity_view_display.node.event.default: &event_display
       setComponent:
         name: field_content
         options:
@@ -40,3 +40,4 @@ config:
           third_party_settings: {}
           weight: 1
           region: content
+    core.entity_view_display.node.event.full: *event_display

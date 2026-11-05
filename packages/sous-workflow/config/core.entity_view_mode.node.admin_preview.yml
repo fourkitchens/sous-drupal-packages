@@ -1,0 +1,10 @@
+langcode: en
+status: false
+dependencies:
+  module:
+    - node
+id: node.admin_preview
+label: Admin Preview
+description: 'Compact content display for entity browsers.'
+targetEntityType: node
+cache: true

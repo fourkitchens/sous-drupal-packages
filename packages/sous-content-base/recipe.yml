@@ -23,6 +23,8 @@ install:
 config:
   import:
     metatag: '*'
+    node:
+      - core.entity_view_mode.node.teaser
   actions:
     '?user.role.site_editor':
       grantPermissions:
