@@ -1,5 +1,5 @@
 name: 'Sous Content Base'
-description: 'Shared Page and Frontpage authoring fields without composition-specific content.'
+description: 'Provides shared Page and Frontpage fields, authoring tabs, teasers and URL aliases.'
 type: Site
 recipes:
   - sous-workflow

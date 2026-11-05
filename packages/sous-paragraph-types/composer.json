@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-paragraph-types",
-  "description": "Text, media, accordion, tab, quote, embed and table Paragraph components.",
+  "description": "Provides text, media, accordion, tab, quote, embed and table Paragraph components.",
   "keywords": [
     "recipe",
     "Drupal recipes",

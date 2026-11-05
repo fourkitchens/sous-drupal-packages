@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-media",
-  "description": "Image, file and video media with focal-point cropping and native uploads.",
+  "description": "Provides image, file and video media with focal-point cropping and native uploads.",
   "keywords": [
     "recipe",
     "Drupal recipes",

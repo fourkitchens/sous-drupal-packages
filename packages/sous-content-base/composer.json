@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-content-base",
-  "description": "Shared Page and Frontpage fields, authoring tabs, teasers and URL aliases.",
+  "description": "Provides shared Page and Frontpage fields, authoring tabs, teasers and URL aliases.",
   "keywords": [
     "recipe",
     "Drupal recipes",

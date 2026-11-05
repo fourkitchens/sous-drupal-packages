@@ -201,6 +201,27 @@ export async function validatePackages(root) {
       /^name:\s*\S/m.test(recipe) && /^type:\s*\S/m.test(recipe),
       `${name} needs recipe name/type metadata.`
     );
+    // YAML can continue a plain scalar on the next indented line.
+    const [, descriptionLine, continuation] =
+      recipe.match(
+        /^description:([^\r\n]*)(?:\r?\n[ \t]*(?:#[^\r\n]*)?$)*(?:\r?\n([ \t]+[^ \t\r\n#]))?/m
+      ) ?? [];
+    const [, singleQuoted, doubleQuoted, plain] =
+      descriptionLine?.match(
+        /^[ \t]+(?:'((?:[^']|'')*)'|"((?:[^"\\]|\\["\\])*)"|((?![-?:](?:[ \t]|$))[^ \t"'[\]{}&*!|>,%@`#](?:(?!:[ \t]|:$).)*?))(?:[ \t]+#.*)?[ \t]*$/
+      ) ?? [];
+    const description =
+      singleQuoted?.replaceAll("''", "'") ??
+      doubleQuoted?.replace(/\\(["\\])/g, '$1') ??
+      plain;
+    check(
+      description?.trim() && !continuation,
+      `${name} needs a nonempty, single-line recipe.yml description.`
+    );
+    check(
+      description === manifest.description,
+      `${name} has different descriptions in recipe.yml and composer.json.`
+    );
     for (const file of [
       ...(typeof manifest.bin === 'string'
         ? [manifest.bin]

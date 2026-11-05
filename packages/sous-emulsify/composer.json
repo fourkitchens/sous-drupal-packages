@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-emulsify",
-  "description": "The Emulsify default theme and tools for theme development.",
+  "description": "Sets Emulsify as the default theme and adds tools for theme development.",
   "keywords": [
     "recipe",
     "Drupal recipes",

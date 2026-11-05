@@ -1,5 +1,5 @@
 name: 'Sous Paragraph Types'
-description: 'Reusable text, media, nested and tabular Paragraph components.'
+description: 'Provides text, media, accordion, tab, quote, embed and table Paragraph components.'
 type: Site
 recipes:
   - sous-formats

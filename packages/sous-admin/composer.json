@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-admin",
-  "description": "Gin administration, editorial tools, navigation and a Superuser role.",
+  "description": "Provides Gin administration, editorial tools, navigation and a Superuser role.",
   "keywords": [
     "recipe",
     "Drupal recipes",

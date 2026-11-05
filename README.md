@@ -95,8 +95,8 @@ and fills in its name. Add the recipe's configuration, module requirements and
 Sous dependencies before using it. Packages are discovered automatically by the
 archive builder; no central package registry needs editing.
 
-`npm test` checks syntax, code standards and formatting. The CI `recipes` job
-applies recipes to fresh SQLite Drupal sites in four compositions. See
+`npm test` checks package manifests, syntax, code standards and formatting. The CI
+`recipes` job applies recipes to fresh SQLite Drupal sites in four compositions. See
 [CONTRIBUTING.md](CONTRIBUTING.md) for contribution and local build instructions.
 
 Merges to `main` automatically create a semantic release, publish every package's

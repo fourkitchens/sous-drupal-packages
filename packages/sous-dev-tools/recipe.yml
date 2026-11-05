@@ -1,5 +1,5 @@
 name: 'Sous Dev Tools'
-description: 'Local-only Devel, Stage File Proxy and Masquerade through Config Split.'
+description: 'Provides local-only debugging, production file proxying and user impersonation.'
 type: Site
 recipes:
   - sous-config-split

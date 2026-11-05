@@ -1,5 +1,5 @@
 name: 'Sous News Post'
-description: 'News Posts with bylines, categories, teasers and a Recent News embed.'
+description: 'Adds news posts with bylines, categories, teasers and a Recent News listing.'
 type: Site
 recipes:
   - sous-workflow

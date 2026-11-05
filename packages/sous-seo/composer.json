@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-seo",
-  "description": "Automatic redirects, XML sitemaps, title breadcrumbs and SEO integrations.",
+  "description": "Adds automatic redirects, XML sitemaps, page-title breadcrumbs and SEO integrations.",
   "keywords": [
     "recipe",
     "Drupal recipes",

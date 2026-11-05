@@ -1,5 +1,5 @@
 name: 'Sous Formats'
-description: 'A recipe that provides text and editor formats and shared Linkit defaults.'
+description: 'Provides HTML text formats and CKEditor 5 editors with Linkit link suggestions.'
 type: 'Site'
 install:
   - ckeditor5

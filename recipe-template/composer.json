@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/__PACKAGE_NAME__",
-  "description": "__PACKAGE_TITLE__ content types with fields and authoring displays.",
+  "description": "Adds configuration for __PACKAGE_TITLE__.",
   "keywords": [
     "recipe",
     "Drupal recipes",

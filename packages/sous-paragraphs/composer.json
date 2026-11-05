@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-paragraphs",
-  "description": "Page and Frontpage content types with Layout Paragraphs components.",
+  "description": "Adds Layout Paragraphs authoring to Page and Frontpage with reusable components.",
   "keywords": [
     "recipe",
     "Drupal recipes",

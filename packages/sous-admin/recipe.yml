@@ -1,5 +1,5 @@
 name: 'Sous Admin'
-description: 'A recipe that contains modules, themes, and configuration for the Sous administration experience.'
+description: 'Provides Gin administration, editorial tools, navigation and a Superuser role.'
 type: 'Site'
 recipes:
   - sous-workflow

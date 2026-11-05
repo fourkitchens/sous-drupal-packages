@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-workflow",
-  "description": "Draft, Published and Archived moderation with scheduled state changes.",
+  "description": "Provides Draft, Published and Archived moderation states with scheduled state changes.",
   "keywords": [
     "recipe",
     "Drupal recipes",

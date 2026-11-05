@@ -1,5 +1,5 @@
 name: 'Sous SEO'
-description: 'Redirects, XML sitemaps, page-title breadcrumbs and SEO integrations.'
+description: 'Adds automatic redirects, XML sitemaps, page-title breadcrumbs and SEO integrations.'
 type: Site
 install:
   - redirect

@@ -1,5 +1,5 @@
 name: '__PACKAGE_TITLE__'
-description: 'Configuration for __PACKAGE_TITLE__.'
+description: 'Adds configuration for __PACKAGE_TITLE__.'
 type: 'Site'
 install: []
 config:

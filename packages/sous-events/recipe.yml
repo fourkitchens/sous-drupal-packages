@@ -1,5 +1,5 @@
 name: 'Sous Events'
-description: 'Events with recurring dates, taxonomy, teasers and reusable listing embeds.'
+description: 'Adds events with recurring dates, event types, teasers and lists of upcoming and past events.'
 type: Site
 recipes:
   - sous-workflow

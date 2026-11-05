@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-events",
-  "description": "Events with recurring dates, event types, teasers and upcoming/past lists.",
+  "description": "Adds events with recurring dates, event types, teasers and lists of upcoming and past events.",
   "keywords": [
     "recipe",
     "Drupal recipes",

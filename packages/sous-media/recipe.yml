@@ -1,5 +1,5 @@
 name: 'Sous Media'
-description: 'A recipe that contains modules and configuration for Sous media.'
+description: 'Provides image, file and video media with focal-point cropping and native uploads.'
 type: 'Site'
 install:
   # Core modules

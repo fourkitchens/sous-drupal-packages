@@ -1,5 +1,5 @@
 name: 'Sous Profile'
-description: 'Profiles with automatic names, images, biographies and searchable teasers.'
+description: 'Adds profiles with automatic names, images, biographies and a searchable teaser list.'
 type: Site
 recipes:
   - sous-workflow

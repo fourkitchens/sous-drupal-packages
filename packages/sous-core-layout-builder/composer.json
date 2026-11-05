@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-core-layout-builder",
-  "description": "Page layouts with text, media, accordion, tabs, quote, embed and table blocks.",
+  "description": "Enables Layout Builder for Page and Frontpage with text, media, accordion, tab, quote, embed and table blocks.",
   "keywords": [
     "recipe",
     "Drupal recipes",

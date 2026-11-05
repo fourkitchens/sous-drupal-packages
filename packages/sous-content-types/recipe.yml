@@ -1,5 +1,5 @@
 name: 'Sous Content Types'
-description: 'Page and Frontpage content types with Body fields and shared authoring defaults.'
+description: 'Provides Page and Frontpage content types with Body fields, teasers and URL aliases.'
 type: Site
 recipes:
   - sous-content-base

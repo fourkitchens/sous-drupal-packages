@@ -9,11 +9,11 @@ settings are preserved. No tracking container ID or structured-data values are s
 
 ## Installation and application
 
-Choose SEO from the installer's optional recipes after its post-2.0.0 release,
-or configure the [collection guide](../../README.md)'s repositories, then run:
+Choose SEO from the installer's optional recipes, or configure the
+[collection guide](../../README.md)'s repositories and run the following.
 
 ```sh
-ddev composer require fourkitchens/sous-seo:^2.1
+ddev composer require fourkitchens/sous-seo:^2.0
 ddev drush recipe /var/www/html/web/recipes/sous-seo
 ```
 

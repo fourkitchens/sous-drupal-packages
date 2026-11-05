@@ -1,5 +1,5 @@
 name: 'Sous Core Layout Builder'
-description: 'Page and Frontpage layouts with matching text, media and nested inline blocks.'
+description: 'Enables Layout Builder for Page and Frontpage with text, media, accordion, tab, quote, embed and table blocks.'
 type: Site
 recipes:
   - sous-content-types

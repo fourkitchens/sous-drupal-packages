@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-dev-tools",
-  "description": "Local-only debugging, production file proxying and user impersonation.",
+  "description": "Provides local-only debugging, production file proxying and user impersonation.",
   "keywords": [
     "recipe",
     "Drupal recipes",

@@ -1,5 +1,5 @@
 name: 'Sous Paragraphs'
-description: 'Page and Frontpage authoring with Layout Paragraphs and reusable components.'
+description: 'Adds Layout Paragraphs authoring to Page and Frontpage with reusable components.'
 type: Site
 recipes:
   - sous-content-base

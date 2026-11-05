@@ -1,5 +1,5 @@
 name: 'Sous Workflow'
-description: 'Editorial moderation and scheduled publishing shared by content recipes.'
+description: 'Provides Draft, Published and Archived moderation states with scheduled state changes.'
 type: Site
 install:
   - workflows

@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-formats",
-  "description": "HTML text formats and CKEditor 5 editors with Linkit link suggestions.",
+  "description": "Provides HTML text formats and CKEditor 5 editors with Linkit link suggestions.",
   "keywords": [
     "recipe",
     "Drupal recipes",
