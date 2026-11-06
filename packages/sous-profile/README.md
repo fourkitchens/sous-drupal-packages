@@ -13,9 +13,13 @@ the name. Teaser mode uses the common teaser image and text fields. Profiles
 start in Draft and use the shared Editorial workflow and scheduling controls.
 They cannot be placed in menus. The model works without a content composition.
 
-The `profiles` View's `embed_profiles` (Profiles) display lists all published
-profiles as rendered Teaser entities, ordered by Last Name, First Name and ID.
-Its Search field (`profile_search`) finds terms in First Name, Last Name or Bio.
+Use `profiles:embed_profiles` as a Content List source. It shows 12 published
+profile teasers by default, ordered by Last Name, First Name and ID, with no
+exposed filters and a **See all** link to `/profiles`.
+
+The `page_profiles` display at `/profiles` shows 24 teasers per page. Its exposed
+Search field (`profile_search`) finds terms in First Name, Last Name or Bio.
+
 The same View's `entity_browser` display lets editors filter and select
 published profiles by title.
 
