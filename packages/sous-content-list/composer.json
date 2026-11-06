@@ -1,0 +1,39 @@
+{
+  "name": "fourkitchens/sous-content-list",
+  "description": "Adds a Content List component with hand-picked teasers, cards and a listing narrowed by terms.",
+  "keywords": [
+    "recipe",
+    "Drupal recipes",
+    "drupal recipe"
+  ],
+  "type": "drupal-recipe",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Four Kitchens",
+      "role": "Maintainer"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "drupal/core": "^11.4",
+    "drupal/entity_browser": "^2.15",
+    "drupal/field_group": "^4.0",
+    "drupal/style_selector": "^2.0",
+    "drupal/viewsreference": "^2.0",
+    "fourkitchens/sous-formats": "^2.0",
+    "fourkitchens/sous-media": "^2.0",
+    "fourkitchens/viewsreference_sift": "^1.0"
+  },
+  "extra": {
+    "sous": {
+      "menu": true,
+      "component": true
+    }
+  },
+  "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
+  "support": {
+    "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
+    "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-content-list"
+  }
+}

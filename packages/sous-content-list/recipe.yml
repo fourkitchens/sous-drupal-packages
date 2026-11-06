@@ -1,0 +1,6 @@
+name: 'Sous Content List'
+description: 'Adds a Content List component with hand-picked teasers, cards and a listing narrowed by terms.'
+type: 'Site'
+install: []
+config:
+  strict: false
