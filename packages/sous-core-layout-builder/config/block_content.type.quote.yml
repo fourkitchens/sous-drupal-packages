@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {}
+id: quote
+label: Quote
+revision: true
+description: 'Presents a highlighted excerpt or testimony, offering emphasis and credibility through the words of others.'

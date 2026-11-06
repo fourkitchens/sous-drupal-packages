@@ -1,5 +1,5 @@
 name: 'Sous Media'
-description: 'A recipe that contains modules and configuration for Sous media.'
+description: 'Provides image, file and video media with focal-point cropping and native uploads.'
 type: 'Site'
 install:
   # Core modules
@@ -8,32 +8,45 @@ install:
   - link
   - media
   - media_library
+  - responsive_image
   - taxonomy
   - views
   # Contrib modules
-  - dropzonejs
   - field_group
   - focal_point
   - media_library_edit
   - scheduler
+  # Supplies the same breakpoint widths as the generated theme.
+  - emulsify
 config:
   # Protect bundle/field/display and provider defaults. Native management Views
   # may already belong to Admin or the project; import missing Views only.
   strict:
     - core.entity_form_display.media.file.default
     - core.entity_form_display.media.image.default
+    - core.entity_form_display.media.uploaded_video.default
+    - core.entity_form_display.media.uploaded_video.media_library
     - core.entity_form_display.media.video.default
     - core.entity_form_mode.media.media_library
     - core.entity_view_display.media.file.default
     - core.entity_view_display.media.file.media_library
     - core.entity_view_display.media.file.preview
+    - core.entity_view_display.media.image.content_teaser_landscape
+    - core.entity_view_display.media.image.content_teaser_portrait
+    - core.entity_view_display.media.image.content_teaser_square
     - core.entity_view_display.media.image.default
     - core.entity_view_display.media.image.media_library
     - core.entity_view_display.media.image.preview
+    - core.entity_view_display.media.uploaded_video.default
+    - core.entity_view_display.media.uploaded_video.media_library
+    - core.entity_view_display.media.uploaded_video.preview
     - core.entity_view_display.media.video.default
     - core.entity_view_display.media.video.media_library
     - core.entity_view_display.media.video.preview
     - core.entity_view_mode.file.token
+    - core.entity_view_mode.media.content_teaser_landscape
+    - core.entity_view_mode.media.content_teaser_portrait
+    - core.entity_view_mode.media.content_teaser_square
     - core.entity_view_mode.media.full
     - core.entity_view_mode.media.media_library
     - core.entity_view_mode.media.preview
@@ -47,6 +60,12 @@ config:
     - field.field.media.image.field_description
     - field.field.media.image.field_media_image
     - field.field.media.image.field_tags
+    - field.field.media.uploaded_video.field_caption
+    - field.field.media.uploaded_video.field_copyright
+    - field.field.media.uploaded_video.field_description
+    - field.field.media.uploaded_video.field_media_file
+    - field.field.media.uploaded_video.field_tags
+    - field.field.media.uploaded_video.field_transcript
     - field.field.media.video.field_caption
     - field.field.media.video.field_copyright
     - field.field.media.video.field_description
@@ -63,6 +82,15 @@ config:
     - field.storage.media.field_transcript
     - focal_point.settings
     - image.settings
+    - image.style.content_teaser_landscape_medium
+    - image.style.content_teaser_landscape_small
+    - image.style.content_teaser_landscape_xsmall
+    - image.style.content_teaser_portrait_medium
+    - image.style.content_teaser_portrait_small
+    - image.style.content_teaser_portrait_xsmall
+    - image.style.content_teaser_square_medium
+    - image.style.content_teaser_square_small
+    - image.style.content_teaser_square_xsmall
     - image.style.large
     - image.style.media_library
     - image.style.medium
@@ -71,8 +99,12 @@ config:
     - media.settings
     - media.type.file
     - media.type.image
+    - media.type.uploaded_video
     - media.type.video
     - media_library.settings
+    - responsive_image.styles.content_teaser_landscape
+    - responsive_image.styles.content_teaser_portrait
+    - responsive_image.styles.content_teaser_square
     - system.action.media_delete_action
     - system.action.media_publish_action
     - system.action.media_save_action
@@ -85,3 +117,18 @@ config:
     media_library: '*'
     # Contrib.
     focal_point: '*'
+  actions:
+    '?user.role.site_editor':
+      grantPermissions:
+        - 'schedule publishing of media'
+        - 'view scheduled media'
+        - 'create terms in media_tags'
+        - 'edit terms in media_tags'
+        - 'delete terms in media_tags'
+      grantPermissionsForEachMediaType:
+        - 'create %bundle media'
+        - 'edit any %bundle media'
+        - 'delete any %bundle media'
+        - 'view any %bundle media revisions'
+        - 'revert any %bundle media revisions'
+        - 'delete any %bundle media revisions'

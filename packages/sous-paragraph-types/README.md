@@ -2,52 +2,65 @@
 
 `fourkitchens/sous-paragraph-types` · `drupal-recipe` · GPL-2.0-or-later
 
-Provides Image, Text, Text with Media and Video Paragraph types, their fields and
-authoring displays, plus the Text and Media component categories. It applies
-Formats and Media and requires Paragraphs, Paragraphs Collapsible and Paragraphs
-EE. It does not attach a Paragraph field to a node type.
+Provides Text, Text with Media, Image, Video, Accordion, Accordion Item,
+Quote, Embed, Table, Tabs, Tabs Item and From the Library components with
+their fields, authoring forms and portable display defaults. It applies Formats
+and Media and installs the Paragraphs authoring suite, Entity Browser,
+Field Group, Style Selector and Tablefield. It does not attach a Paragraph
+field to a node type.
 
-The selected Paragraphs EE 10.2 line requires Drupal 11.4; this collection's
-minimum is core 11.4.11. Paragraphs Collapsible 1.6 remains for compatibility.
-The imported source records its maintainer's recommendation to use the native
-Paragraphs widget and the [project's maintenance/security-coverage limitation](https://www.drupal.org/project/paragraphs_collapsible).
-A replacement belongs in a separately reviewed dependency/widget change.
-Text with Media stores a left/right alignment value for themes; its default
-formatter renders both fields without imposing a layout.
+Media components retain caption and presentation choices. Accordion items hold
+Image, Text or Video; Tabs Item can contain every provided component except the
+Layout container supplied by the Layout Paragraphs composition. Nested editors
+use default form modes so required fields remain editable. From the Library
+opens a modal component picker with rendered previews. Themes supply component
+markup and interaction; no reference site's theme libraries are required.
 
 Use this package directly for project-owned hosts, or choose
-[`sous-paragraphs`](https://github.com/fourkitchens/sous-drupal-packages/blob/main/packages/sous-paragraphs/README.md) to attach the shared field to
-Page and Frontpage. Core Layout Builder and the common packages do not depend
-on this package, so those projects never need its ZIP or contrib modules.
-The strict list protects this recipe's type/field/display defaults while the
-shared Paragraphs preview mode preserves an existing project's customization.
+[`sous-paragraphs`](https://github.com/fourkitchens/sous-drupal-packages/blob/main/packages/sous-paragraphs/README.md)
+to attach the shared field to Page and Frontpage. Core Layout Builder and the
+common packages do not depend on this package or its Paragraphs modules. The strict list protects the recipe's own defaults;
+the shared Paragraphs preview mode preserves project customization.
 
 ## Installation and application
 
-This source is a **candidate for the coordinated 2.0 release**; it has not been
-published by this migration. After publication, configure the scoped Sous
-Composer index, Drupal repositories and installer paths as described in the
-[collection guide](https://github.com/fourkitchens/sous-drupal-packages/blob/main/README.md). Retain this package in Composer using the
-root native recipe-unpack exclusion setting. From a configured consuming site:
+Before requiring this recipe, follow the [shared patch setup](../../README.md#shared-patches).
+Copy the complete [2.0.0 patch directory](https://github.com/fourkitchens/sous-drupal-packages/tree/2.0.0/patches) into the site root;
+its [manifest](https://github.com/fourkitchens/sous-drupal-packages/blob/2.0.0/patches/patches.json) is read by root Composer.
+Sous Drupal Project already provides this setup.
+
+Tabs Item uses Layout Paragraphs; the shared manifest includes its
+[chooser fix (#3487314)](https://www.drupal.org/project/layout_paragraphs/issues/3487314).
 
 ```sh
 ddev composer require fourkitchens/sous-paragraph-types:^2.0
+ddev composer patches-relock
+ddev composer patches-repatch
 ddev drush recipe /var/www/html/web/recipes/sous-paragraph-types
 ddev drush cache:rebuild
 ```
 
-Recipe application is explicit. Requiring or updating the package does not
-apply configuration again. Existing sites keep their database and complete
-configuration export and adopt changes through reviewed native migrations.
+Recipes apply once and then unpack; sites keep the root patches, patch lock,
+dependencies and complete configuration export.
 
-## Contributing and checks
+### Style Selector compatibility
 
-Source, issues and releases live in
-[fourkitchens/sous-drupal-packages](https://github.com/fourkitchens/sous-drupal-packages).
-See the [contributor guide](https://github.com/fourkitchens/sous-drupal-packages/blob/main/CONTRIBUTING.md). Maintainer probes live in
-[`tests/recipes/sous-paragraph-types`](https://github.com/fourkitchens/sous-drupal-packages/tree/main/tests/recipes/sous-paragraph-types) when this package has
-runtime checks; they are mounted into disposable fixtures and excluded from
-consumer ZIPs. A package source checkout is not a runnable Drupal application.
+The shared compatibility patch includes the
+[library discovery fix (#3589133)](https://www.drupal.org/project/style_selector/issues/3589133)
+and custom field-default schema additions for Drupal 11. The custom patch is
+retained; upstream schema tracking is deferred to the maintainer.
 
-[GPL-2.0-or-later](LICENSE); dependency and original source notices remain
-applicable. Source commit provenance is recorded in the collection.
+### Tablefield compatibility
+
+The shared manifest includes the output-buffer, rich-text-cell and Add Column
+fixes, plus the [default-value schema adaptation (#3593703)](https://www.drupal.org/project/tablefield/issues/3593703)
+for Drupal 11.4 recipes. The table starts with two rows and columns, Limited HTML
+cell editors and row headers; the theme supplies its presentation.
+
+## Contributing
+
+Edit this package here in Sous Drupal Packages. See the
+[contributor guide](../../CONTRIBUTING.md) for scaffolding and syntax/style checks.
+A package source checkout is not a runnable Drupal application.
+
+[GPL-2.0-or-later](LICENSE); dependency and package notices remain applicable.

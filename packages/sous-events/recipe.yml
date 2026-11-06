@@ -1,0 +1,66 @@
+name: 'Sous Events'
+description: 'Adds events with recurring dates, event types, teasers and lists of upcoming and past events.'
+type: Site
+recipes:
+  - sous-workflow
+  - sous-media
+install:
+  - node
+  - menu_ui
+  - taxonomy
+  - media
+  - media_library
+  - entity_browser
+  - field_group
+  - metatag
+  - path
+  - pathauto
+  - smart_date
+  - smart_date_recur
+  - tagify
+  - views
+config:
+  import:
+    metatag: '*'
+    node:
+      - core.entity_view_mode.node.teaser
+    smart_date: '*'
+  strict:
+    - core.entity_form_display.node.event.default
+    - core.entity_view_display.node.event.admin_preview
+    - core.entity_view_display.node.event.default
+    - core.entity_view_display.node.event.full
+    - core.entity_view_display.node.event.teaser
+    - entity_browser.browser.event_content_browser
+    - field.field.node.event.field_event_date
+    - field.field.node.event.field_event_type
+    - field.field.node.event.field_metadata
+    - field.field.node.event.field_teaser_image
+    - field.field.node.event.field_teaser_text
+    - field.storage.node.field_event_date
+    - field.storage.node.field_event_type
+    - field.storage.node.field_metadata
+    - field.storage.node.field_teaser_image
+    - field.storage.node.field_teaser_text
+    - node.type.event
+    - pathauto.pattern.event
+    - taxonomy.vocabulary.event_types
+    - views.view.events
+  actions:
+    '?user.role.site_editor':
+      grantPermissions:
+        - 'create url aliases'
+        - 'access event_content_browser entity browser pages'
+        - 'create terms in event_types'
+        - 'edit terms in event_types'
+        - 'delete terms in event_types'
+      grantPermissionsForEachNodeType:
+        - 'create %bundle content'
+        - 'edit any %bundle content'
+        - 'delete any %bundle content'
+        - 'view %bundle revisions'
+        - 'revert %bundle revisions'
+        - 'delete %bundle revisions'
+    workflows.workflow.editorial:
+      addNodeTypes:
+        - event

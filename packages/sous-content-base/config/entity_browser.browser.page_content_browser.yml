@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.pages
+  module:
+    - views
+name: page_content_browser
+label: Page Content Browser
+display: modal
+display_configuration:
+  width: '950'
+  height: ''
+  link_text: Select Pages
+  auto_open: false
+  use_admin_theme: true
+selection_display: no_display
+selection_display_configuration: {}
+widget_selector: tabs
+widget_selector_configuration: {}
+widgets:
+  ea59f3b1-d02a-4d68-a8a0-d1720303cc49:
+    id: view
+    uuid: ea59f3b1-d02a-4d68-a8a0-d1720303cc49
+    label: Page Library
+    weight: 1
+    settings:
+      submit_text: Select Pages
+      auto_select: false
+      view: pages
+      view_display: entity_browser_page

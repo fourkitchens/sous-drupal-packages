@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.paragraphs_library_browser
+  module:
+    - views
+name: component_library
+label: 'Component Library'
+display: modal
+display_configuration:
+  width: '950'
+  height: ''
+  link_text: 'Select Components'
+  auto_open: false
+  use_admin_theme: true
+selection_display: no_display
+selection_display_configuration: {}
+widget_selector: tabs
+widget_selector_configuration: {}
+widgets:
+  63ab3cd0-1197-4de6-a7ed-0dfe754ffede:
+    id: view
+    uuid: 63ab3cd0-1197-4de6-a7ed-0dfe754ffede
+    label: Library
+    weight: 1
+    settings:
+      submit_text: 'Select Component'
+      auto_select: false
+      view: paragraphs_library_browser
+      view_display: entity_browser

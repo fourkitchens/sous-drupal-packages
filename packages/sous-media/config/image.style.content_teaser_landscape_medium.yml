@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: content_teaser_landscape_medium
+label: Content | Teaser (landscape) | Medium
+effects:
+  7cb18f68-d406-4b9a-b5e1-95817d179b86:
+    uuid: 7cb18f68-d406-4b9a-b5e1-95817d179b86
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 540
+      height: 304
+      crop_type: focal_point
+  b1e76e56-5388-4b9e-88a9-f6cc9e07f692:
+    uuid: b1e76e56-5388-4b9e-88a9-f6cc9e07f692
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

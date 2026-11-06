@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.block_content.field_style_layout_width
+    - block_content.type.tabs
+  module:
+    - style_selector
+id: block_content.tabs.field_style_layout_width
+field_name: field_style_layout_width
+entity_type: block_content
+bundle: tabs
+label: 'Tabs Width'
+description: ''
+required: true
+translatable: false
+default_value:
+  - value: container-width-standard
+default_value_callback: ''
+settings: {}
+field_type: style_selector_css_class

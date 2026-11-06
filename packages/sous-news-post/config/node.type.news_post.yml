@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - scheduler
+third_party_settings:
+  menu_ui:
+    available_menus: []
+    parent: ''
+  scheduler:
+    expand_fieldset: when_required
+    fields_display_mode: vertical_tab
+    publish_enable: true
+    publish_past_date: publish
+    publish_past_date_created: false
+    publish_required: false
+    publish_revision: true
+    publish_touch: false
+    show_message_after_update: true
+    unpublish_enable: true
+    unpublish_required: false
+    unpublish_revision: true
+name: 'News Post'
+type: news_post
+description: 'A news post with a byline, categories and teaser information.'
+help: 'Create News Categories before adding posts. The first category supplies the URL.'
+new_revision: true
+preview_mode: 1
+display_submitted: false

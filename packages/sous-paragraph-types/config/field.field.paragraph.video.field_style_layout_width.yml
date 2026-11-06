@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_style_layout_width
+    - paragraphs.paragraphs_type.video
+  module:
+    - style_selector
+id: paragraph.video.field_style_layout_width
+field_name: field_style_layout_width
+entity_type: paragraph
+bundle: video
+label: 'Video Width'
+description: ''
+required: true
+translatable: false
+default_value:
+  - value: container-width-standard
+default_value_callback: ''
+settings: {}
+field_type: style_selector_css_class

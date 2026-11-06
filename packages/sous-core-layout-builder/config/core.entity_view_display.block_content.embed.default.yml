@@ -1,0 +1,58 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.block_content.embed.field_embed_code
+    - field.field.block_content.embed.field_heading
+    - field.field.block_content.embed.field_show_texture
+    - field.field.block_content.embed.field_style_layout_width
+    - field.field.block_content.embed.field_text
+    - block_content.type.embed
+  module:
+    - options
+    - text
+id: block_content.embed.default
+targetEntityType: block_content
+bundle: embed
+mode: default
+content:
+  field_embed_code:
+    type: basic_string
+    label: hidden
+    settings: {}
+    third_party_settings: {}
+    weight: 0
+    region: content
+  field_heading:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {}
+    weight: 0
+    region: content
+  field_show_texture:
+    type: boolean
+    label: hidden
+    settings:
+      format: true-false
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {}
+    weight: 6
+    region: content
+  field_style_layout_width:
+    type: list_key
+    label: hidden
+    settings: {}
+    third_party_settings: {}
+    weight: 5
+    region: content
+  field_text:
+    type: text_default
+    label: hidden
+    settings: {}
+    third_party_settings: {}
+    weight: 1
+    region: content
+hidden: {}

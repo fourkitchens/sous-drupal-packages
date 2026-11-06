@@ -1,0 +1,68 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.uploaded_video.field_caption
+    - field.field.media.uploaded_video.field_copyright
+    - field.field.media.uploaded_video.field_description
+    - field.field.media.uploaded_video.field_media_file
+    - field.field.media.uploaded_video.field_tags
+    - field.field.media.uploaded_video.field_transcript
+    - media.type.uploaded_video
+  module:
+    - file
+    - link
+id: media.uploaded_video.default
+targetEntityType: media
+bundle: uploaded_video
+mode: default
+content:
+  field_caption:
+    type: basic_string
+    label: above
+    settings: {}
+    third_party_settings: {}
+    weight: 1
+    region: content
+  field_copyright:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {}
+    weight: 3
+    region: content
+  field_media_file:
+    type: file_video
+    label: hidden
+    settings:
+      controls: true
+      autoplay: false
+      loop: false
+      multiple_file_display_type: tags
+      muted: false
+      playsinline: true
+      width: 640
+      height: 360
+    third_party_settings: {}
+    weight: 0
+    region: content
+  field_transcript:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {}
+    weight: 2
+    region: content
+hidden:
+  created: true
+  field_description: true
+  field_tags: true
+  name: true
+  thumbnail: true
+  uid: true

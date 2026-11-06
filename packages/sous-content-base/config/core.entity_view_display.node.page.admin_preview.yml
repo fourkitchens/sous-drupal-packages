@@ -1,0 +1,40 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.preview
+    - core.entity_view_mode.node.admin_preview
+    - field.field.node.page.field_metadata
+    - field.field.node.page.field_tags
+    - field.field.node.page.field_teaser_image
+    - field.field.node.page.field_teaser_text
+    - node.type.page
+  module:
+    - user
+id: node.page.admin_preview
+targetEntityType: node
+bundle: page
+mode: admin_preview
+content:
+  field_teaser_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: preview
+      link: false
+    third_party_settings: {}
+    weight: 0
+    region: content
+  field_teaser_text:
+    type: basic_string
+    label: hidden
+    settings: {}
+    third_party_settings: {}
+    weight: 1
+    region: content
+hidden:
+  content_moderation_control: true
+  field_metadata: true
+  field_tags: true
+  links: true
+  published_at: true

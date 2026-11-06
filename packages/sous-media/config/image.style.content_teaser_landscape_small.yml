@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: content_teaser_landscape_small
+label: Content | Teaser (landscape) | Small
+effects:
+  8e17a2ba-5c8a-4ce9-bed6-a49204691f02:
+    uuid: 8e17a2ba-5c8a-4ce9-bed6-a49204691f02
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 360
+      height: 204
+      crop_type: focal_point
+  4354ba90-4fce-468a-bcaa-b336cfdf1ff4:
+    uuid: 4354ba90-4fce-468a-bcaa-b336cfdf1ff4
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

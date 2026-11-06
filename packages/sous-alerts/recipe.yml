@@ -1,0 +1,38 @@
+name: 'Sous Alerts'
+description: 'Site-wide alert banners with scheduling, dismissal and a top-of-page block.'
+type: Site
+install:
+  - sitewide_alert
+  - sitewide_alert_block
+config:
+  strict: false
+  actions:
+    sitewide_alert.settings:
+      simpleConfigUpdate:
+        display_order: descending
+        automatic_refresh: false
+    '?user.role.site_editor':
+      grantPermissions:
+        - 'add sitewide alert entities'
+        - 'administer sitewide alert entities'
+        - 'delete sitewide alert entities'
+        - 'edit sitewide alert entities'
+        - 'view unpublished sitewide alert entities'
+    user.role.anonymous:
+      grantPermissions:
+        - 'view published sitewide alert entities'
+    user.role.authenticated:
+      grantPermissions:
+        - 'view published sitewide alert entities'
+    block.block.sous_sitewide_alert:
+      placeBlockInDefaultTheme:
+        plugin: sitewide_alert_block
+        # Core uses the fallback region only when given a region map.
+        region: {}
+        default_region: content_top
+        position: first
+        settings:
+          id: sitewide_alert_block
+          label: 'Sitewide Alert'
+          label_display: '0'
+          provider: sitewide_alert_block

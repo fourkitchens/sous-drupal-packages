@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+  config:
+    - node.type.profile
+id: profile
+label: Profile
+type: 'canonical_entities:node'
+pattern: '/profile/[node:title]'
+selection_criteria:
+  5287b8cc-2a7b-45f8-85f2-12216486ada9:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 5287b8cc-2a7b-45f8-85f2-12216486ada9
+    context_mapping:
+      node: node
+    bundles:
+      profile: profile
+selection_logic: and
+weight: -5
+relationships: {}

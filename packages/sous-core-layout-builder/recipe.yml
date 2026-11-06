@@ -1,21 +1,131 @@
 name: 'Sous Core Layout Builder'
-description: 'Enable native Page and Frontpage layouts while retaining visible fields and per-page customization.'
-type: 'Site'
+description: 'Enables Layout Builder for Page and Frontpage with text, media, accordion, tab, quote, embed and table blocks.'
+type: Site
 recipes:
   - sous-content-types
-  - core/recipes/basic_block_type
 install:
   - block
+  - block_content
+  - entity_reference_revisions
   - contextual
-  - field_ui
+  - field_group
   - layout_discovery
   - layout_builder
+  - media_library
+  - media_library_edit
+  - options
+  - style_selector
+  - text
+  - inline_entity_form
+  - tablefield
 config:
   actions:
-    core.entity_view_display.node.page.default:
-      # Native entity saves convert existing formatters to field blocks.
-      enableLayoutBuilder: []
+    core.entity_view_display.node.page.default: &page_display
+      enableLayoutBuilder: {}
       allowLayoutOverrides: true
-    core.entity_view_display.node.frontpage.default:
-      enableLayoutBuilder: []
+    core.entity_view_display.node.page.full: *page_display
+    core.entity_view_display.node.frontpage.default: &frontpage_display
+      enableLayoutBuilder: {}
       allowLayoutOverrides: true
+    core.entity_view_display.node.frontpage.full: *frontpage_display
+    '?user.role.site_editor':
+      grantPermissions:
+        - 'administer block content'
+        - 'create and edit custom blocks'
+        - 'configure editable page node layout overrides'
+        - 'configure editable frontpage node layout overrides'
+  import:
+    style_selector: '*'
+    tablefield: '*'
+  strict:
+    - block_content.type.accordion
+    - block_content.type.accordion_item
+    - block_content.type.embed
+    - block_content.type.image
+    - block_content.type.quote
+    - block_content.type.table
+    - block_content.type.tabs
+    - block_content.type.tabs_item
+    - block_content.type.text
+    - block_content.type.text_with_media
+    - block_content.type.video
+    - core.entity_form_display.block_content.accordion.default
+    - core.entity_form_display.block_content.accordion_item.default
+    - core.entity_form_display.block_content.embed.default
+    - core.entity_form_display.block_content.image.default
+    - core.entity_form_display.block_content.quote.default
+    - core.entity_form_display.block_content.table.default
+    - core.entity_form_display.block_content.tabs.default
+    - core.entity_form_display.block_content.tabs_item.default
+    - core.entity_form_display.block_content.text.default
+    - core.entity_form_display.block_content.text_with_media.default
+    - core.entity_form_display.block_content.video.default
+    - core.entity_view_display.block_content.accordion.default
+    - core.entity_view_display.block_content.accordion_item.default
+    - core.entity_view_display.block_content.embed.default
+    - core.entity_view_display.block_content.image.default
+    - core.entity_view_display.block_content.quote.default
+    - core.entity_view_display.block_content.table.default
+    - core.entity_view_display.block_content.tabs.default
+    - core.entity_view_display.block_content.tabs_item.default
+    - core.entity_view_display.block_content.text.default
+    - core.entity_view_display.block_content.text_with_media.default
+    - core.entity_view_display.block_content.video.default
+    - field.field.block_content.accordion.field_content
+    - field.field.block_content.accordion.field_heading
+    - field.field.block_content.accordion.field_text
+    - field.field.block_content.accordion_item.field_content
+    - field.field.block_content.accordion_item.field_heading
+    - field.field.block_content.accordion_item.field_label
+    - field.field.block_content.embed.field_embed_code
+    - field.field.block_content.embed.field_heading
+    - field.field.block_content.embed.field_show_texture
+    - field.field.block_content.embed.field_style_layout_width
+    - field.field.block_content.embed.field_text
+    - field.field.block_content.image.field_heading
+    - field.field.block_content.image.field_image
+    - field.field.block_content.image.field_show_captions
+    - field.field.block_content.image.field_style_layout_width
+    - field.field.block_content.image.field_text
+    - field.field.block_content.quote.field_image
+    - field.field.block_content.quote.field_label
+    - field.field.block_content.quote.field_text
+    - field.field.block_content.table.field_heading
+    - field.field.block_content.table.field_label
+    - field.field.block_content.table.field_table
+    - field.field.block_content.table.field_text
+    - field.field.block_content.tabs.field_content
+    - field.field.block_content.tabs.field_heading
+    - field.field.block_content.tabs.field_style_layout_width
+    - field.field.block_content.tabs.field_text
+    - field.field.block_content.tabs_item.field_content
+    - field.field.block_content.tabs_item.field_label
+    - field.field.block_content.text.field_heading
+    - field.field.block_content.text.field_text
+    - field.field.block_content.text_with_media.field_component_focus
+    - field.field.block_content.text_with_media.field_heading
+    - field.field.block_content.text_with_media.field_media
+    - field.field.block_content.text_with_media.field_show_captions
+    - field.field.block_content.text_with_media.field_style_media_alignment
+    - field.field.block_content.text_with_media.field_text
+    - field.field.block_content.text_with_media.field_text_with_media_display
+    - field.field.block_content.video.field_heading
+    - field.field.block_content.video.field_show_captions
+    - field.field.block_content.video.field_style_layout_width
+    - field.field.block_content.video.field_text
+    - field.field.block_content.video.field_video
+    - field.storage.block_content.field_component_focus
+    - field.storage.block_content.field_content
+    - field.storage.block_content.field_embed_code
+    - field.storage.block_content.field_heading
+    - field.storage.block_content.field_image
+    - field.storage.block_content.field_label
+    - field.storage.block_content.field_media
+    - field.storage.block_content.field_show_captions
+    - field.storage.block_content.field_show_texture
+    - field.storage.block_content.field_style_layout_width
+    - field.storage.block_content.field_style_media_alignment
+    - field.storage.block_content.field_table
+    - field.storage.block_content.field_text
+    - field.storage.block_content.field_text_with_media_display
+    - field.storage.block_content.field_video

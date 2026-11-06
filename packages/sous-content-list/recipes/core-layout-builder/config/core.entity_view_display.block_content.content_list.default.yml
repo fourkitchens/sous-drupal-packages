@@ -1,0 +1,83 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.content_list
+    - field.field.block_content.content_list.field_content
+    - field.field.block_content.content_list.field_heading
+    - field.field.block_content.content_list.field_link
+    - field.field.block_content.content_list.field_style_columns
+    - field.field.block_content.content_list.field_style_layout_width
+    - field.field.block_content.content_list.field_text
+    - field.field.block_content.content_list.field_view
+  module:
+    - entity_reference_revisions
+    - link
+    - options
+    - text
+    - viewsreference
+id: block_content.content_list.default
+targetEntityType: block_content
+bundle: content_list
+mode: default
+content:
+  field_heading:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {}
+    weight: 0
+    region: content
+  field_text:
+    type: text_default
+    label: hidden
+    settings: {}
+    third_party_settings: {}
+    weight: 1
+    region: content
+  field_content:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {}
+    weight: 2
+    region: content
+  field_view:
+    type: viewsreference_formatter
+    label: hidden
+    settings:
+      plugin_types:
+        embed: embed
+    third_party_settings: {}
+    weight: 3
+    region: content
+  field_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {}
+    weight: 4
+    region: content
+  field_style_columns:
+    type: list_key
+    label: hidden
+    settings: {}
+    third_party_settings: {}
+    weight: 5
+    region: content
+  field_style_layout_width:
+    type: list_key
+    label: hidden
+    settings: {}
+    third_party_settings: {}
+    weight: 6
+    region: content
+hidden: {}

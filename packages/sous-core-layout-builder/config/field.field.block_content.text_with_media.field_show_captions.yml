@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.block_content.field_show_captions
+    - block_content.type.text_with_media
+id: block_content.text_with_media.field_show_captions
+field_name: field_show_captions
+entity_type: block_content
+bundle: text_with_media
+label: 'Show Captions'
+description: 'Display the caption associated with the referenced Image.'
+required: false
+translatable: false
+default_value:
+  - value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

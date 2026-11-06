@@ -1,0 +1,6 @@
+name: '__PACKAGE_TITLE__'
+description: 'Adds configuration for __PACKAGE_TITLE__.'
+type: 'Site'
+install: []
+config:
+  strict: false

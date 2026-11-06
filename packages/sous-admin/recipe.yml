@@ -1,12 +1,10 @@
 name: 'Sous Admin'
-description: 'A recipe that contains modules, themes, and configuration for the Sous administration experience.'
+description: 'Provides Gin administration, editorial tools, navigation, and roles for Superusers and Site Editors.'
 type: 'Site'
 recipes:
+  - sous-workflow
   # Install core recipes
   - core/recipes/core_recommended_performance
-  # Share the profile without applying the full Formats/CKEditor recipe.
-  # Slash-containing includes are Drupal-root relative, matching web/recipes.
-  - recipes/sous-formats/recipes/linkit
 install:
   # Install core dependencies.
   - automated_cron
@@ -20,14 +18,14 @@ install:
   - autosave_form
   # Install Config log.
   - config_log
+  - editoria11y
   # Install Gin theme and base modules that extend it.
   - gin
+  - gin_login
   # Install Entity Usuage
   - entity_usage
   # Install Field Group and dependencies
   - field_group
-  # Install Field UI
-  - field_ui
   # Install Login Destination
   - login_destination
   # Install Login History
@@ -37,23 +35,24 @@ install:
   # Install Navigation
   - navigation
   - navigation_extra_tools
+  # Make the non-breaking-space filter available without adding content formats.
+  - no_nbsp
   # Install Publication Date
   - publication_date
+  - role_delegation
   # Install Save and Edit
   - save_edit
-  # Install Scheduler
-  - scheduler
   # Install Tagify
   - tagify
   # Install Trash.
   - trash
+  - twig_tweak
   # Install Views AJAX History
   - views_ajax_history
   # Install Views Bulk Operations
   - views_bulk_operations
 config:
-  # Preserve existing roles while validating the Gin baseline. The shared
-  # Linkit subrecipe separately preserves project-owned profiles.
+  # Preserve existing roles while validating the Gin baseline.
   strict:
     - gin.settings
     - block.block.gin_breadcrumbs
@@ -98,30 +97,57 @@ config:
     login_history:
       - views.view.login_history
   actions:
+    user.role.site_editor:
+      grantPermissions:
+        - 'access administration pages'
+        - 'access block library'
+        - 'access content'
+        - 'access content overview'
+        - 'access files overview'
+        - 'access media overview'
+        - 'access navigation'
+        - 'access taxonomy overview'
+        - 'access trash'
+        - 'access user profiles'
+        - 'assign site_editor role'
+        - 'delete any file'
+        - 'mark as hidden in editoria11y'
+        - 'schedule publishing of nodes'
+        - 'use editorial transition archive_unpublish'
+        - 'use editorial transition create_new_draft'
+        - 'use editorial transition publish'
+        - 'view any unpublished content'
+        - 'view editoria11y checker'
+        - 'view latest version'
+        - 'view media'
+        - 'view own unpublished media'
+        - 'view scheduled content'
+        - 'view the administration theme'
+        - 'view unpublished block content'
     # Disable legacy Gin blocks only when that Gin version provides them.
     '?block.block.gin_admin':
-      simpleConfigUpdate:
+      setProperties:
         status: false
     '?block.block.gin_branding':
-      simpleConfigUpdate:
+      setProperties:
         status: false
     block.block.gin_local_actions:
-      simpleConfigUpdate:
+      setProperties:
         region: content
         weight: -10
     '?block.block.gin_local_tasks':
-      simpleConfigUpdate:
+      setProperties:
         status: false
     block.block.gin_page_title:
-      simpleConfigUpdate:
+      setProperties:
         region: header
         weight: -10
     block.block.gin_primary_local_tasks:
-      simpleConfigUpdate:
+      setProperties:
         region: header
         weight: -5
     '?block.block.gin_tools':
-      simpleConfigUpdate:
+      setProperties:
         status: false
     # Update entity_usage
     entity_usage.settings:

@@ -1,8 +1,8 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies: {}
 name: admins_and_editors_login_destination
-label: 'Admins and Editors Login Destination'
+label: 'All Roles Login Destination'
 triggers:
   registration: registration
   login: login
@@ -11,8 +11,6 @@ destination_path: 'internal:/admin/content'
 pages_type: 0
 pages: ''
 language: ''
-roles:
-  superuser: superuser
-  editor: editor
+roles: []
 weight: 0
 enabled: true

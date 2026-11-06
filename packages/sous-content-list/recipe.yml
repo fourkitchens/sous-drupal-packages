@@ -1,0 +1,21 @@
+name: 'Sous Content List'
+description: 'Adds a Content List component with hand-picked teasers, cards and a listing narrowed by terms.'
+type: Site
+recipes:
+  - sous-formats
+  - sous-media
+install:
+  - node
+  - views
+  - link
+  - entity_browser
+  - viewsreference
+  - viewsreference_sift
+config:
+  strict:
+    - entity_browser.browser.content_list_browser
+    - views.view.content_list_browser
+  actions:
+    '?user.role.site_editor':
+      grantPermissions:
+        - 'access content_list_browser entity browser pages'

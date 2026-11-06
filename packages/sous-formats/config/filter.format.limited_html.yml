@@ -3,6 +3,7 @@ status: true
 dependencies:
   module:
     - linkit
+    - no_nbsp
 name: 'Limited HTML'
 format: limited_html
 weight: 0
@@ -12,7 +13,7 @@ filters:
     provider: filter
     status: true
     weight: 0
-    settings: {  }
+    settings: {}
   filter_html:
     id: filter_html
     provider: filter
@@ -27,7 +28,14 @@ filters:
     provider: filter
     status: true
     weight: 10
-    settings: {  }
+    settings: {}
+  filter_no_nbsp:
+    id: filter_no_nbsp
+    provider: no_nbsp
+    status: true
+    weight: 0
+    settings:
+      preserve_placeholders: false
   filter_url:
     id: filter_url
     provider: filter

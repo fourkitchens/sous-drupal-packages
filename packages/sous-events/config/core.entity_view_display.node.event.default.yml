@@ -1,0 +1,50 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.event.field_event_date
+    - field.field.node.event.field_event_type
+    - field.field.node.event.field_metadata
+    - field.field.node.event.field_teaser_image
+    - field.field.node.event.field_teaser_text
+    - node.type.event
+    - smart_date.smart_date_format.default
+  module:
+    - smart_date
+    - smart_date_recur
+    - user
+id: node.event.default
+targetEntityType: node
+bundle: event
+mode: default
+content:
+  field_event_date:
+    type: smartdate_recurring
+    label: hidden
+    settings:
+      timezone_override: ''
+      format: default
+      force_chronological: true
+      add_classes: false
+      time_wrapper: true
+      past_display: 2
+      upcoming_display: 2
+      show_next: false
+      current_upcoming: true
+      filter_parameter_key: date
+    third_party_settings: {}
+    weight: 0
+    region: content
+  field_event_type:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {}
+    weight: 3
+    region: content
+hidden:
+  field_metadata: true
+  field_teaser_image: true
+  field_teaser_text: true
+  links: true

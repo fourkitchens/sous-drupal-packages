@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_style_media_alignment
+    - paragraphs.paragraphs_type.text_with_media
+  module:
+    - style_selector
+id: paragraph.text_with_media.field_style_media_alignment
+field_name: field_style_media_alignment
+entity_type: paragraph
+bundle: text_with_media
+label: 'Media Alignment'
+description: ''
+required: true
+translatable: false
+default_value:
+  - value: media-alignment-left
+default_value_callback: ''
+settings: {}
+field_type: style_selector_css_class
