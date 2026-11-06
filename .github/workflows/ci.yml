@@ -56,10 +56,20 @@ jobs:
           composer create-project drupal/recommended-project:^11.4 "$site" --no-interaction
           cp -R patches "$site/patches"
           versions=$(jq -s 'map({key:.name,value:"2.0.0"})|from_entries' packages/*/composer.json)
-          jq --arg path "$GITHUB_WORKSPACE/packages/*" --argjson versions "$versions" '
+          # Drop the Sift pin and VCS repository once beta1 is published.
+          jq --arg path "$GITHUB_WORKSPACE/packages/*" --argjson versions "$versions" \
+            --arg sift 39aea3c5fc21dcf42e4f90d76058a79cdb4d58a3 '
             .repositories += [
-              {type:"path",url:$path,options:{symlink:false,versions:$versions}}
+              {type:"path",url:$path,options:{symlink:false,versions:$versions}},
+              {type:"package",package:{
+                name:"fourkitchens/viewsreference_sift",version:"1.0.0-beta1",type:"drupal-module",
+                dist:{type:"zip",url:("https://api.github.com/repos/fourkitchens/viewsreference_sift/zipball/" + $sift),reference:$sift},
+                require:{"drupal/core":"^10.3 || ^11","drupal/viewsreference":"^2.0"}
+              }},
+              {type:"vcs",url:"https://github.com/fourkitchens/viewsreference_sift"}
             ] |
+            .["minimum-stability"] = "beta" |
+            .["prefer-stable"] = true |
             .require."cweagans/composer-patches" = "^2.0" |
             .config."allow-plugins"."cweagans/composer-patches" = true |
             .extra["composer-patches"]["patches-file"] = "patches/patches.json"
@@ -87,6 +97,10 @@ jobs:
                 vendor/bin/drush recipe "$PWD/recipes/$recipe/recipes/$composition" --yes
               fi
             done
+            vendor/bin/drush recipe "$PWD/recipes/sous-content-list" --yes
+            if [[ "$composition" == paragraphs || "$composition" == core-layout-builder ]]; then
+              vendor/bin/drush recipe "$PWD/recipes/sous-content-list/recipes/$composition" --yes
+            fi
             vendor/bin/drush recipe "$PWD/recipes/sous-seo" --yes
             vendor/bin/drush recipe "$PWD/recipes/sous-alerts" --yes
             vendor/bin/drush recipe "$PWD/recipes/sous-search" --yes
@@ -95,6 +109,7 @@ jobs:
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-events.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-news.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-profile.php"
+            COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-content-list.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-workflow.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-authoring.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-seo.php"

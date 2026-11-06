@@ -266,7 +266,7 @@ foreach (['paragraph' => $paragraphs, 'block_content' => $case === 'core-layout-
   if (!$enabled) {
     continue;
   }
-  foreach (['accordion' => ['accordion_item'], 'accordion_item' => ['image', 'text', 'video'], 'tabs' => ['tabs_item'], 'tabs_item' => array_merge(array_keys($components), array_keys($extra_components), $paragraphs ? ['from_library'] : [])] as $bundle => $allowed) {
+  foreach (['accordion' => ['accordion_item'], 'accordion_item' => ['image', 'text', 'video'], 'tabs' => ['tabs_item'], 'tabs_item' => array_merge(array_keys($components), array_keys($extra_components), ['content_list'], $paragraphs ? ['from_library'] : [])] as $bundle => $allowed) {
     $actual = array_values(FieldConfig::loadByName($entity_type, $bundle, 'field_content')->getSetting('handler_settings')['target_bundles']);
     sort($actual);
     sort($allowed);
