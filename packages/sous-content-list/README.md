@@ -19,11 +19,17 @@ field's item limit can override the display's default. Teaser embeds have no
 exposed filters, use tag-based caching, and offer a **See all** link to a page
 where visitors can filter the full listing.
 
-Views Reference Sift shows the **Terms** setting only when the display's first
-contextual filter accepts term IDs. Select **Any** to include items matching
-one or more selected terms, or **All** to include items matching every selected
-term. Leave Terms empty to use the unfiltered listing. Events and News support
-term narrowing. Profiles supports the item limit.
+The Listing field enables the **Sift filters** setting. When the selected
+display has supported contextual filters, editors see a control for each
+enabled filter under **Options** → **Filter this list**.
+
+- **All Upcoming Events** and **Past Events** offer **Event Type**.
+- **Recent News** offers **News Categories**.
+- **Profiles** offers **Items per page** and has no Sift control.
+
+Events and News offer **Any of these items** to match one or more selected
+terms and **All of these items** to require every selected term. Leave the
+selection empty to show all results for the chosen display up to the item limit.
 
 ## Theming
 
@@ -35,9 +41,24 @@ The package ships no templates. A theme can use
 ## Installation and application
 
 Choose Content List from the installer's optional sides on a Paragraphs or
-Layout Builder site. To install manually, configure the repositories as shown
-in the [collection guide](../../README.md). The site's root `composer.json`
-needs `"minimum-stability": "beta"` to resolve the Views Reference Sift beta.
+Layout Builder site. Starter-generated sites already include the GitHub
+repository for Views Reference Sift.
+
+To install manually on an existing site, set up the Sous Composer index and
+installer paths from the [collection guide](../../README.md). Add this entry
+under `repositories` in the site's root `composer.json` if it is missing:
+
+```json
+"viewsreference-sift": {
+  "type": "git",
+  "url": "https://github.com/fourkitchens/viewsreference_sift.git",
+  "only": ["fourkitchens/viewsreference_sift"]
+}
+```
+
+Keep this entry for future Composer updates. Set `"minimum-stability": "beta"`
+and `"prefer-stable": true` in the root manifest because the upstream Drupal
+Views Reference 2.x dependency is still in beta.
 
 ```sh
 ddev composer require fourkitchens/sous-content-list:^2.0

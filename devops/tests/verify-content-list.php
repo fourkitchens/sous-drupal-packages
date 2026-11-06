@@ -5,10 +5,15 @@
  * Verify Content List recipe composition and anonymous rendering.
  */
 
+use Drupal\Core\Form\FormState;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\layout_builder\Plugin\SectionStorage\OverridesSectionStorage;
+use Drupal\layout_builder\Section;
+use Drupal\layout_builder\SectionComponent;
 use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
+use Drupal\viewsreference_sift\Selection\Selection;
 
 $case = getenv('COMPOSITION');
 $entity_type = match ($case) {
@@ -35,7 +40,8 @@ if ($entity_type) {
   $item_form = $form_storage->load("$entity_type.content_list_item.default");
   $children_widget = $entity_type === 'paragraph' ? 'paragraphs' : 'inline_entity_form_complex';
   $checks['list children widget'] = $list_form->getRenderer('field_content')?->getPluginId() === $children_widget;
-  $checks['list View widget'] = $list_form->getRenderer('field_view')?->getPluginId() === 'viewsreference_select';
+  $listing_widget = $list_form->getRenderer('field_view');
+  $checks['list View widget'] = $listing_widget?->getPluginId() === 'viewsreference_select';
   $checks['item browser widget'] = $item_form->getRenderer('field_related_content')?->getPluginId() === 'entity_browser_entity_reference';
   $enabled_settings = FieldConfig::loadByName($entity_type, 'content_list', 'field_view')->getSetting('enabled_settings');
   $checks['list View settings'] = in_array('limit', $enabled_settings, TRUE) && in_array('sift_terms', $enabled_settings, TRUE);
@@ -124,40 +130,84 @@ try {
     'status' => TRUE,
     'field_heading' => 'Latest',
     'field_content' => [['entity' => $item], ['entity' => $card]],
-  ] + $block_values);
-  $host = $entity_type === 'paragraph' ? $node_storage->create([
+  ] + ($entity_type === 'block_content' ? ['reusable' => FALSE] : []));
+  $host = $node_storage->create([
     'type' => 'page',
     'title' => 'Content List verifier page',
     'moderation_state' => 'published',
-  ]) : NULL;
+  ]);
 
-  $term_values = array_values(array_map(static fn($term) => ['target_id' => $term->id()], $terms));
+  $settings = \Drupal::service('plugin.manager.viewsreference.setting');
+  if ((string) $settings->getDefinition('sift_terms')['label'] !== 'Sift filters') {
+    throw new \RuntimeException("$case Content List did not expose the Sift filters field setting.");
+  }
+  foreach ([
+    ['events', 'embed_upcoming', 'Event Type', 'event_types'],
+    ['events', 'embed_past', 'Event Type', 'event_types'],
+    ['news', 'embed_recent', 'News Categories', 'news_categories'],
+    ['profiles', 'embed_profiles', NULL, NULL],
+  ] as [$view, $display, $label, $vocabulary]) {
+    $list->set('field_view', ['target_id' => $view, 'display_id' => $display]);
+    $form = [];
+    $element = $listing_widget->formElement($list->get('field_view'), 0, ['#required' => FALSE], $form, new FormState());
+    $options = $element['options'];
+    $sift = $options['sift_terms'];
+    if ($label === NULL) {
+      if (($sift['#access'] ?? TRUE) !== FALSE || !isset($options['limit'])) {
+        throw new \RuntimeException("$case Content List Profiles did not offer the item limit without a Sift control.");
+      }
+      continue;
+    }
+    $filters = $sift['filters'] ?? [];
+    $filter = $filters['tid'] ?? [];
+    if (($sift['#access'] ?? TRUE) === FALSE || (string) ($sift['#title'] ?? '') !== 'Filter this list'
+      || array_keys($filters) !== ['tid'] || (string) ($filter['#title'] ?? '') !== $label
+      || ($filter['ids']['#selection_settings']['target_bundles'] ?? []) !== [$vocabulary]
+      || array_keys($filter['match']['#options'] ?? []) !== ['any', 'all']) {
+      throw new \RuntimeException("$case Content List $view:$display did not offer the expected Sift control.");
+    }
+  }
+
+  $term_ids = array_values(array_map(static fn($term) => (int) $term->id(), $terms));
   $titles = array_keys($news);
   $scenarios = [
-    'match any' => [$term_values, 'any', 3, array_slice($titles, 0, 3)],
-    'match all' => [$term_values, 'all', 3, [$titles[2]]],
+    'match any' => [$term_ids, 'any', 3, array_slice($titles, 0, 3)],
+    'match all' => [$term_ids, 'all', 3, [$titles[2]]],
     'no terms' => [[], 'any', 2, array_slice($titles, -2)],
   ];
   foreach ($scenarios as $scenario => [$selection, $match, $limit, $expected]) {
     $list->set('field_view', [
       'target_id' => 'news',
       'display_id' => 'embed_recent',
-      'data' => serialize(['limit' => $limit, 'sift_terms' => ['terms' => $selection, 'match' => $match]]),
+      'data' => serialize([
+        'limit' => $limit,
+        'sift_terms' => [
+          'version' => Selection::VERSION,
+          'filters' => ['tid' => ['ids' => $selection, 'match' => $match]],
+        ],
+      ]),
     ])->save();
     $component_ids['list'] = $list->id();
-    if ($host) {
-      $host->set('field_content', ['entity' => $list])->save();
-      $nodes['host'] = $host;
+    if ($entity_type === 'paragraph') {
+      $host->set('field_content', ['entity' => $list]);
     }
-    $parent = $host ?? $list;
-    $parent_type = $parent->getEntityTypeId();
-    $parent = $entities->getStorage($parent_type)->loadUnchanged($parent->id());
+    else {
+      $component = new SectionComponent(\Drupal::service('uuid')->generate(), 'content', [
+        'id' => 'inline_block:content_list',
+        'block_revision_id' => $list->getRevisionId(),
+        'label_display' => FALSE,
+      ]);
+      $host->set(OverridesSectionStorage::FIELD_NAME, ['section' => new Section('layout_onecol', [], [$component])]);
+    }
+    $host->save();
+    $nodes['host'] = $host;
+    $parent = $node_storage->loadUnchanged($host->id());
     $switcher->switchTo(new AnonymousUserSession());
     try {
       if (!$parent->access('view')) {
         throw new \RuntimeException("$case Content List is inaccessible to anonymous visitors.");
       }
-      $build = $entities->getViewBuilder($parent_type)->view($parent);
+      $build = $entities->getViewBuilder('node')->view($parent);
       $html = (string) $renderer->renderInIsolation($build);
     }
     finally {
@@ -180,7 +230,7 @@ try {
       throw new \RuntimeException("$case Content List did not link to /news.");
     }
   }
-  echo "$case Content List mixed sources, term matching and teaser limit verified.\n";
+  echo "$case Content List Sift controls, anonymous mixed sources, Any and All matching, item limit and More link verified.\n";
 }
 finally {
   $node_storage->delete($nodes);

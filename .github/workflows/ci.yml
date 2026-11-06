@@ -56,17 +56,10 @@ jobs:
           composer create-project drupal/recommended-project:^11.4 "$site" --no-interaction
           cp -R patches "$site/patches"
           versions=$(jq -s 'map({key:.name,value:"2.0.0"})|from_entries' packages/*/composer.json)
-          # Drop the Sift pin and VCS repository once beta1 is published.
-          jq --arg path "$GITHUB_WORKSPACE/packages/*" --argjson versions "$versions" \
-            --arg sift 39aea3c5fc21dcf42e4f90d76058a79cdb4d58a3 '
+          jq --arg path "$GITHUB_WORKSPACE/packages/*" --argjson versions "$versions" '
             .repositories += [
               {type:"path",url:$path,options:{symlink:false,versions:$versions}},
-              {type:"package",package:{
-                name:"fourkitchens/viewsreference_sift",version:"1.0.0-beta1",type:"drupal-module",
-                dist:{type:"zip",url:("https://api.github.com/repos/fourkitchens/viewsreference_sift/zipball/" + $sift),reference:$sift},
-                require:{"drupal/core":"^10.3 || ^11","drupal/viewsreference":"^2.0"}
-              }},
-              {type:"vcs",url:"https://github.com/fourkitchens/viewsreference_sift"}
+              {type:"git",url:"https://github.com/fourkitchens/viewsreference_sift.git",only:["fourkitchens/viewsreference_sift"]}
             ] |
             .["minimum-stability"] = "beta" |
             .["prefer-stable"] = true |
@@ -79,6 +72,8 @@ jobs:
           cd "$site"
           composer require 'drupal/login_destination:^2.0.0-beta10@beta' drush/drush --no-interaction
           composer require "${recipes[@]}" --no-interaction
+          composer show --locked fourkitchens/viewsreference_sift
+          composer show --locked drupal/viewsreference
       - name: Apply each composition to a fresh SQLite site
         run: |
           cd "$RUNNER_TEMP/sous-recipes"

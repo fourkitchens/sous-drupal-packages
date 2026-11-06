@@ -20,9 +20,11 @@ occurrences. Each list orders events by their relevant date.
 
 The `page_upcoming` display at `/events` and the `page_past` display at
 `/events/past` show 12 teasers per page and expose Event Type (`event_type`)
-and title/teaser-description Search (`event_search`). The first contextual
-filter on both embeds and both pages accepts Event Type term IDs. Use `+` for
-any of the listed IDs, `,` for all of them, or `all` to skip term filtering.
+and title/teaser-description Search (`event_search`). Both embeds and both
+pages have an Event Type contextual filter. Content List editors can choose
+Event Type terms under **Filter this list**. When passing term IDs directly,
+use `+` for any of the listed IDs, `,` for all of them, or `all` to skip term
+filtering.
 
 The same View's `entity_browser` display lets editors filter and select
 published events by title, including past events.

@@ -18,9 +18,10 @@ a **See all** link to `/news`.
 
 The `page_news` display at `/news` shows 12 teasers per page and exposes News
 Categories (`news_categories`) and title/teaser-description Search
-(`news_search`). The first contextual filter on the embed and the page accepts
-News Categories term IDs. Use `+` for any of the listed IDs, `,` for all of them,
-or `all` to skip term filtering.
+(`news_search`). The embed and page have a News Categories contextual filter.
+Content List editors can choose News Categories terms under **Filter this
+list**. When passing term IDs directly, use `+` for any of the listed IDs, `,`
+for all of them, or `all` to skip term filtering.
 
 The same View's `entity_browser` display lets editors filter and select
 published news posts by title.
