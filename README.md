@@ -21,6 +21,7 @@ shared version, beginning with `2.0.0`.
 | [sous-events](packages/sous-events)                           | Recurring events, event types, teasers and upcoming/past embeds  | Optional recipe            |
 | [sous-news-post](packages/sous-news-post)                     | News Posts, bylines, categories, teasers and a Recent News embed | Optional recipe            |
 | [sous-profile](packages/sous-profile)                         | Profiles, automatic names, images, bios and searchable teasers   | Optional recipe            |
+| [sous-content-list](packages/sous-content-list)               | Hand-picked teasers and cards with a term-filtered listing       | Optional component         |
 | [sous-seo](packages/sous-seo)                                 | Redirects, sitemaps, breadcrumbs and SEO integrations            | Starter base               |
 | [sous-alerts](packages/sous-alerts)                           | Site-wide alert banners with scheduling and dismissal            | Optional recipe            |
 | [sous-search](packages/sous-search)                           | Database search, content type filter and header search box       | Optional recipe            |
@@ -30,7 +31,7 @@ shared version, beginning with `2.0.0`.
 | [sous-core-layout-builder](packages/sous-core-layout-builder) | Native layouts with matching nested inline block types           | Optional composition       |
 | [sous-config-split](packages/sous-config-split)               | Local/staging development tools excluded from production         | Starter base               |
 
-Events, News Post, Profile, Alerts and Search are offered in the starter's optional recipe menu.
+Events, News Post, Profile, Content List, Alerts and Search are offered in the starter's optional recipe menu.
 
 The content compositions share a Body-free base. The default content package
 adds Body; Paragraphs adds its component reference instead. Page and Frontpage

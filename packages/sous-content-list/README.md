@@ -1,35 +1,69 @@
-# **PACKAGE_TITLE**
+# Sous Content List
 
 `fourkitchens/sous-content-list` · `drupal-recipe` · GPL-2.0-or-later
 
-Describe what this recipe provides and which projects should use it.
-Set `extra.sous.menu` to `true` in `composer.json` when the recipe is useful on its own.
+Adds a Content List with a heading, introduction, call to action, and two ways
+to add entries. Pick existing content to show its teaser, or create a Card
+with its own image, heading, text, and link. The hand-picked items appear first,
+followed by the automatic listing. Either source can be used on its own.
 
-## Customize this recipe
+The Paragraphs integration adds a Content List paragraph with nested Content
+Item and Card paragraphs. The Layout Builder integration provides the same
+types as inline blocks. The base recipe supplies the shared content picker.
+Admin-only and Content Types installations have no Content List component.
 
-1. Add the exported configuration this recipe owns to `config/`. Remove exported
-   site-specific `uuid` and `_core.default_config_hash` values.
-2. Add required modules to `install` in `recipe.yml` and their Composer packages
-   to `require` in `composer.json`. Update both descriptions.
-3. If another recipe is needed, require its package in `composer.json` and list
-   its recipe basename under `recipes` in `recipe.yml`. Keep Layout Builder and
-   Paragraphs dependencies optional unless this recipe specifically needs them.
-4. Run `npm test` from the repository root and review the configuration in a
-   disposable Drupal project before submitting a conventional commit.
+## Automatic listings
 
-The collection discovers packages automatically. Release tooling supplies the
-shared version; do not add `version`, `source`, or `dist` to `composer.json`.
+Choose an Embed display in the Listing field. Use the `some` pager so the
+field's item limit can override the display's default. Teaser embeds have no
+exposed filters, use tag-based caching, and offer a **See all** link to a page
+where visitors can filter the full listing.
 
-## Install and apply
+Views Reference Sift shows the **Terms** setting only when the display's first
+contextual filter accepts term IDs. Select **Any** to include items matching
+one or more selected terms, or **All** to include items matching every selected
+term. Leave Terms empty to use the unfiltered listing. Events and News support
+term narrowing. Profiles supports the item limit.
 
-Configure the [Sous Composer repository](https://github.com/fourkitchens/sous-drupal-packages/blob/main/README.md) in the consuming project,
-then install the published recipe and apply it explicitly:
+## Theming
+
+The package ships no templates. A theme can use
+`paragraph--content-list.html.twig` and
+`block--inline-block--content-list.html.twig` with the same field names. Render
+`field_content` before `field_view` to keep hand-picked entries first.
+
+## Installation and application
+
+Choose Content List from the installer's optional sides on a Paragraphs or
+Layout Builder site. To install manually, configure the repositories as shown
+in the [collection guide](../../README.md). The site's root `composer.json`
+needs `"minimum-stability": "beta"` to resolve the Views Reference Sift beta.
 
 ```sh
 ddev composer require fourkitchens/sous-content-list:^2.0
 ddev drush recipe /var/www/html/web/recipes/sous-content-list
 ```
 
-Installing or updating the Composer package does not apply its configuration.
+Apply the matching integration after your composition and any content sides:
 
-Distributed under [GPL-2.0-or-later](LICENSE).
+```sh
+# Paragraphs
+ddev drush recipe /var/www/html/web/recipes/sous-content-list/recipes/paragraphs
+
+# Layout Builder
+ddev drush recipe /var/www/html/web/recipes/sous-content-list/recipes/core-layout-builder
+```
+
+The Paragraphs integration allows Content List on Content fields that exist
+when the recipe runs. For content types added later, allow Content List on
+their Content field.
+
+Recipes apply once and then unpack. Sites own the resulting dependencies and
+configuration export. Package updates do not replay configuration.
+
+## Contributing
+
+Edit this package in Sous Drupal Packages. See the
+[contributor guide](../../CONTRIBUTING.md) for scaffolding and checks.
+
+[GPL-2.0-or-later](LICENSE). Dependency and package notices remain applicable.
