@@ -1,0 +1,54 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.content_list_card.field_heading
+    - field.field.paragraph.content_list_card.field_image
+    - field.field.paragraph.content_list_card.field_link
+    - field.field.paragraph.content_list_card.field_text
+    - paragraphs.paragraphs_type.content_list_card
+  module:
+    - link
+    - text
+id: paragraph.content_list_card.default
+targetEntityType: paragraph
+bundle: content_list_card
+mode: default
+content:
+  field_image:
+    type: entity_reference_entity_view
+    label: hidden
+    weight: 0
+    region: content
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {}
+  field_heading:
+    type: string
+    label: hidden
+    weight: 1
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {}
+  field_text:
+    type: text_default
+    label: hidden
+    weight: 2
+    region: content
+    settings: {}
+    third_party_settings: {}
+  field_link:
+    type: link
+    label: hidden
+    weight: 3
+    region: content
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {}
+hidden: {}
