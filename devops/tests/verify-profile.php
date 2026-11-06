@@ -116,32 +116,47 @@ try {
   foreach ($searches as [$input, $expected]) {
     $view = Views::getView('profiles');
     $view->setExposedInput($input);
-    $view->execute('embed_profiles');
+    $view->execute('page_profiles');
     $actual = array_map(static fn($row) => (string) $row->_entity->id(), $view->result);
     $expected_ids = array_map(static fn($key) => (string) $listing_nodes[$key]->id(), $expected);
     if ($actual !== $expected_ids) {
       throw new \RuntimeException('Profiles listing or search failed for ' . json_encode($input) . ': ' . json_encode($actual));
     }
-    if (!$input) {
-      $build = $view->render();
-      $html = (string) \Drupal::service('renderer')->renderInIsolation($build);
-      if ($view->getPager()->getPluginId() !== 'none' || $view->rowPlugin->getPluginId() !== 'fields' || $view->field['rendered_entity']->getPluginId() !== 'rendered_entity' || $view->field['rendered_entity']->options['view_mode'] !== 'teaser' || str_contains($html, 'laboratory') || str_contains($html, 'Profile teaser summary') || str_contains($html, 'Not a Profile teaser')) {
-        throw new \RuntimeException('Profiles did not render an unpaged published-only list of teaser entities.');
-      }
-      foreach ($samples as [, , , $teaser_text]) {
-        if (!str_contains($html, $teaser_text)) {
-          throw new \RuntimeException('Profiles did not render every published Profile teaser.');
-        }
-      }
-    }
   }
   $view = Views::getView('profiles');
-  $view->setDisplay('embed_profiles');
+  $view->setDisplay('page_profiles');
   $view->initHandlers();
+  if ($view->getPager()->getPluginId() !== 'full' || $view->getItemsPerPage() !== 24) {
+    throw new \RuntimeException('Profiles did not configure a full twenty-four-item pager.');
+  }
   $exposed = $view->display_handler->getPlugin('exposed_form')->renderExposedForm();
   $exposed_html = (string) \Drupal::service('renderer')->renderInIsolation($exposed);
   if (($exposed['profile_search']['#type'] ?? NULL) !== 'textfield' || !str_contains($exposed_html, 'name="profile_search"')) {
     throw new \RuntimeException('Profiles did not expose its name and Bio search input.');
+  }
+
+  $route = \Drupal::service('router.no_access_checks')->match('/profiles');
+  if ($route['_route'] !== 'view.profiles.page_profiles') {
+    throw new \RuntimeException('/profiles did not route to page_profiles.');
+  }
+  $renderer = \Drupal::service('renderer');
+  $view = Views::getView('profiles');
+  $build = $view->buildRenderable('embed_profiles', [], FALSE);
+  $html = (string) $renderer->renderInIsolation($build);
+  if ($view->getPager()->getPluginId() !== 'some' || $view->getItemsPerPage() !== 12 || $view->display_handler->usesExposed() || $view->rowPlugin->getPluginId() !== 'fields' || $view->field['rendered_entity']->getPluginId() !== 'rendered_entity' || $view->field['rendered_entity']->options['view_mode'] !== 'teaser' || str_contains($html, 'laboratory') || str_contains($html, 'Profile teaser summary') || str_contains($html, 'Not a Profile teaser')) {
+    throw new \RuntimeException('Profiles did not render a filter-free, published-only list of teaser entities.');
+  }
+  foreach ($samples as [, , , $teaser_text]) {
+    if (!str_contains($html, $teaser_text)) {
+      throw new \RuntimeException('Profiles did not render every published Profile teaser.');
+    }
+  }
+  $view = Views::getView('profiles');
+  $view->setItemsPerPage(2);
+  $build = $view->buildRenderable('embed_profiles', [], FALSE);
+  $html = (string) $renderer->renderInIsolation($build);
+  if (count($view->result) !== 2 || !str_contains($html, 'href="/profiles"')) {
+    throw new \RuntimeException('Profiles did not honor the two-item limit and link to /profiles.');
   }
 }
 finally {

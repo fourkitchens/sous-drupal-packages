@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {}
+id: content_list_item
+label: 'Content Item'
+revision: true
+description: 'An existing page or post, shown as its teaser.'

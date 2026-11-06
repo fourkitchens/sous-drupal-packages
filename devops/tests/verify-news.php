@@ -37,6 +37,8 @@ $campus = Term::create(['vid' => 'news_categories', 'name' => 'Campus News']);
 $campus->save();
 $research = Term::create(['vid' => 'news_categories', 'name' => 'Research']);
 $research->save();
+$announcements = Term::create(['vid' => 'news_categories', 'name' => 'Announcements']);
+$announcements->save();
 $other_vocabulary = Vocabulary::create(['vid' => 'listing_other', 'name' => 'Other']);
 $other_vocabulary->save();
 $other_term = Term::create(['vid' => 'listing_other', 'name' => 'Other category']);
@@ -48,6 +50,7 @@ try {
   $now = time();
   $samples = [
     'Old campus' => [-90000, [$campus->id()], 'Earlier campus story'],
+    'Announcement' => [-500, [$announcements->id()], 'A campus announcement'],
     'Research dispatch' => [-300, [$research->id()], 'New telescope instruments'],
     'Archive report' => [-200, [$campus->id()], 'Highlights from the collection'],
     'Latest story' => [-100, [$campus->id(), $research->id()], 'A new round of telescope discoveries'],
@@ -74,7 +77,7 @@ try {
   if (!str_contains($html, 'Jane &lt;em&gt;Reporter&lt;/em&gt;') || str_contains($html, '<em>Reporter</em>')) {
     throw new \RuntimeException('The News byline did not render as plain text.');
   }
-  $all = ['Latest story', 'Archive report', 'Research dispatch', 'Old campus'];
+  $all = ['Latest story', 'Archive report', 'Research dispatch', 'Announcement', 'Old campus'];
   $filters = [
     [[], $all],
     [['event_search' => 'not a news match'], $all],
@@ -82,7 +85,7 @@ try {
     [['news_search' => 'scope'], ['Latest story', 'Research dispatch']],
     [['news_categories' => [$campus->id()]], ['Latest story', 'Archive report', 'Old campus']],
     [['news_categories' => [$research->id()]], ['Latest story', 'Research dispatch']],
-    [['news_categories' => [$campus->id(), $research->id()]], $all],
+    [['news_categories' => [$campus->id(), $research->id()]], ['Latest story', 'Archive report', 'Research dispatch', 'Old campus']],
     [['news_categories' => [$campus->id()], 'news_search' => 'scope'], ['Latest story']],
     [['news_categories' => [$research->id()], 'news_search' => 'rchive'], []],
     [['news_search' => 'report Highlights'], []],
@@ -93,40 +96,75 @@ try {
   foreach ($filters as [$input, $expected]) {
     $view = Views::getView('news');
     $view->setExposedInput($input);
-    $view->execute('embed_recent');
+    $view->execute('page_news');
     $actual = array_map(static fn($row) => $row->_entity->label(), $view->result);
     if ($actual !== $expected) {
       throw new \RuntimeException('Recent News filter failed for ' . json_encode($input) . ': ' . json_encode($actual));
     }
-    if (!$input) {
-      $build = $view->render();
-      $html = (string) \Drupal::service('renderer')->renderInIsolation($build);
-      if (!str_contains($html, 'A new round of telescope discoveries') || str_contains($html, 'Unpublished story')) {
-        throw new \RuntimeException('Recent News did not render published teasers.');
-      }
-    }
   }
   $view = Views::getView('news');
-  $view->setDisplay('embed_recent');
+  $view->setDisplay('page_news');
   $view->initHandlers();
   $view->initStyle();
+  if ($view->getPager()->getPluginId() !== 'full' || $view->getItemsPerPage() !== 12) {
+    throw new \RuntimeException('News did not configure a full twelve-item pager.');
+  }
   $exposed = $view->display_handler->getPlugin('exposed_form')->renderExposedForm();
   if ($view->rowPlugin->getPluginId() !== 'fields' || $view->field['rendered_entity']->getPluginId() !== 'rendered_entity' || $view->field['rendered_entity']->options['view_mode'] !== 'teaser' || !isset($exposed['news_search'], $exposed['news_categories']) || isset($exposed['news_categories']['#options'][$other_term->id()])) {
     throw new \RuntimeException('Recent News did not build its rendered teaser field and vocabulary-limited exposed controls.');
   }
-  // Filtering must happen before the ten-item Recent News limit.
+  $route = \Drupal::service('router.no_access_checks')->match('/news');
+  if ($route['_route'] !== 'view.news.page_news') {
+    throw new \RuntimeException('/news did not route to page_news.');
+  }
+  $view = Views::getView('news');
+  $view->setItemsPerPage(2);
+  $build = $view->buildRenderable('embed_recent', [], FALSE);
+  $html = (string) \Drupal::service('renderer')->renderInIsolation($build);
+  if (count($view->result) !== 2 || $view->display_handler->usesExposed() || !str_contains($html, 'href="/news"')) {
+    throw new \RuntimeException('Recent News did not honor the filter-free two-item limit and link to /news.');
+  }
+  if (!str_contains($html, 'A new round of telescope discoveries') || str_contains($html, 'Unpublished story')) {
+    throw new \RuntimeException('Recent News did not render published teasers.');
+  }
+
+  $arguments = [
+    $campus->id() . '+' . $research->id() => ['Latest story', 'Archive report', 'Research dispatch', 'Old campus'],
+    $campus->id() . ',' . $research->id() => ['Latest story'],
+    'all' => $all,
+    $other_term->id() => [],
+  ];
+  foreach (['embed_recent', 'page_news'] as $display_id) {
+    foreach ($arguments as $argument => $titles) {
+      $view = Views::getView('news');
+      $view->setArguments([(string) $argument]);
+      $view->execute($display_id);
+      $actual = array_map(static fn($row) => $row->_entity->label(), $view->result);
+      if ($actual !== $titles || !empty($view->build_info['fail']) !== ((string) $argument === (string) $other_term->id())) {
+        throw new \RuntimeException("$display_id term argument $argument returned unexpected news: " . json_encode($actual));
+      }
+    }
+  }
+
+  // Filtering must happen before the page limit.
   for ($index = 0; $index < 12; $index++) {
     $title = "Limit story $index";
     $nodes[$title] = Node::create(['type' => 'news_post', 'uid' => 1, 'title' => $title, 'moderation_state' => 'published', 'created' => $now - 50 + $index, 'field_news_categories' => [$campus->id()]]);
     $nodes[$title]->save();
   }
-  foreach ([[[], array_map(static fn($index) => "Limit story $index", range(11, 2))], [['news_search' => 'Old campus'], ['Old campus']], [['news_categories' => [$research->id()]], ['Latest story', 'Research dispatch']], [['news_search' => 'Limit story 3'], ['Limit story 3']]] as [$input, $expected]) {
+  $view = Views::getView('news');
+  $view->execute('embed_recent');
+  $actual = array_map(static fn($row) => $row->_entity->label(), $view->result);
+  if ($view->getPager()->getPluginId() !== 'some' || $actual !== array_map(static fn($index) => "Limit story $index", range(11, 2))) {
+    throw new \RuntimeException('Recent News did not return its ten most recent teasers.');
+  }
+  foreach ([[[], array_map(static fn($index) => "Limit story $index", range(11, 0))], [['news_search' => 'Old campus'], ['Old campus']], [['news_categories' => [$research->id()]], ['Latest story', 'Research dispatch']], [['news_search' => 'Limit story 3'], ['Limit story 3']]] as [$input, $expected]) {
     $view = Views::getView('news');
     $view->setExposedInput($input);
-    $view->execute('embed_recent');
+    $view->execute('page_news');
     $actual = array_map(static fn($row) => $row->_entity->label(), $view->result);
     if ($actual !== $expected) {
-      throw new \RuntimeException('Recent News did not apply filtering before its ten-item limit.');
+      throw new \RuntimeException('News did not apply filtering before its twelve-item page limit.');
     }
   }
   echo "$case News Post recipe verified.\n";
@@ -136,6 +174,7 @@ finally {
   $entities->getStorage('node')->delete($nodes);
   $campus->delete();
   $research->delete();
+  $announcements->delete();
   $other_term->delete();
   $other_vocabulary->delete();
 }

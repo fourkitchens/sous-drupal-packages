@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.content_list_item
+    - core.entity_view_mode.node.teaser
+    - field.field.block_content.content_list_item.field_related_content
+id: block_content.content_list_item.default
+targetEntityType: block_content
+bundle: content_list_item
+mode: default
+content:
+  field_related_content:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: teaser
+      link: false
+    third_party_settings: {}
+    weight: 0
+    region: content
+hidden: {}

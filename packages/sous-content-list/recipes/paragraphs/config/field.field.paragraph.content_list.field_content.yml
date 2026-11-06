@@ -1,0 +1,35 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_content
+    - paragraphs.paragraphs_type.content_list
+    - paragraphs.paragraphs_type.content_list_card
+    - paragraphs.paragraphs_type.content_list_item
+  module:
+    - entity_reference_revisions
+id: paragraph.content_list.field_content
+field_name: field_content
+entity_type: paragraph
+bundle: content_list
+label: 'Hand-picked items'
+description: ''
+required: false
+translatable: false
+default_value: {}
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      content_list_item: content_list_item
+      content_list_card: content_list_card
+    negate: 0
+    target_bundles_drag_drop:
+      content_list_item:
+        weight: 0
+        enabled: true
+      content_list_card:
+        weight: 1
+        enabled: true
+field_type: entity_reference_revisions

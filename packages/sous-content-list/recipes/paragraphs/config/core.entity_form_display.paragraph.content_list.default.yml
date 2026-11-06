@@ -1,0 +1,212 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.content_list.field_content
+    - field.field.paragraph.content_list.field_heading
+    - field.field.paragraph.content_list.field_link
+    - field.field.paragraph.content_list.field_style_columns
+    - field.field.paragraph.content_list.field_style_layout_width
+    - field.field.paragraph.content_list.field_text
+    - field.field.paragraph.content_list.field_view
+    - linkit.linkit_profile.default
+    - paragraphs.paragraphs_type.content_list
+  module:
+    - field_group
+    - linkit
+    - paragraphs
+    - paragraphs_ee
+    - paragraphs_features
+    - style_selector
+    - text
+    - viewsreference
+third_party_settings:
+  field_group:
+    group_tabs:
+      children:
+        - group_content
+        - group_display_options
+      label: Tabs
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: tabs
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        direction: horizontal
+        width_breakpoint: 640
+    group_content:
+      children:
+        - field_heading
+        - field_text
+        - field_link
+        - group_hand_picked_items
+        - group_automatic_listing
+      label: Content
+      region: content
+      parent_name: group_tabs
+      weight: 7
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: open
+        description: ''
+        required_fields: true
+    group_display_options:
+      children:
+        - field_style_columns
+        - field_style_layout_width
+      label: 'Display Options'
+      region: content
+      parent_name: group_tabs
+      weight: 8
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_hand_picked_items:
+      children:
+        - field_content
+      label: 'Hand-picked items'
+      region: content
+      parent_name: group_content
+      weight: 4
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: false
+    group_automatic_listing:
+      children:
+        - field_view
+      label: 'Automatic listing'
+      region: content
+      parent_name: group_content
+      weight: 5
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: false
+id: paragraph.content_list.default
+targetEntityType: paragraph
+bundle: content_list
+mode: default
+content:
+  field_heading:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {}
+  field_text:
+    type: text_textarea
+    weight: 2
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+      hide_help: true
+      hide_guidelines: true
+    third_party_settings: {}
+  field_link:
+    type: linkit
+    weight: 3
+    region: content
+    settings:
+      linkit_profile: default
+      linkit_auto_link_text: false
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {}
+  field_content:
+    type: paragraphs
+    weight: 6
+    region: content
+    settings:
+      title: Component
+      title_plural: Components
+      edit_mode: closed
+      closed_mode: preview
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: button
+      form_display_mode: default
+      default_paragraph_type: _none
+      features:
+        add_above: add_above
+        collapse_edit_all: collapse_edit_all
+        convert: '0'
+        duplicate: duplicate
+    third_party_settings:
+      paragraphs_features:
+        add_in_between: false
+        add_in_between_link_count: 3
+        delete_confirmation: true
+        show_drag_and_drop: true
+        show_collapse_all: true
+      paragraphs_ee:
+        paragraphs_ee:
+          dialog_off_canvas: false
+          dialog_style: tiles
+          drag_drop: true
+          sidebar_disabled: true
+  field_view:
+    type: viewsreference_select
+    weight: 7
+    region: content
+    settings: {}
+    third_party_settings: {}
+  field_style_columns:
+    type: style_selector_tile_widget
+    weight: 9
+    region: content
+    settings:
+      size: default
+      advanced:
+        extra_classes: ''
+        empty_option: None
+        ui_settings:
+          alpha_grid: false
+          check_icon: true
+          empty_icon: true
+          text_icon: false
+    third_party_settings: {}
+  field_style_layout_width:
+    type: style_selector_tile_widget
+    weight: 10
+    region: content
+    settings:
+      size: default
+      advanced:
+        extra_classes: ''
+        empty_option: None
+        ui_settings:
+          alpha_grid: false
+          check_icon: true
+          empty_icon: true
+          text_icon: false
+    third_party_settings: {}
+hidden:
+  created: true
+  status: true
+  uid: true

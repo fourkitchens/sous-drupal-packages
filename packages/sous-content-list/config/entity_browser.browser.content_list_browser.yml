@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.content_list_browser
+  module:
+    - views
+name: content_list_browser
+label: Content List Browser
+display: modal
+display_configuration:
+  width: '950'
+  height: ''
+  link_text: Select Content
+  auto_open: false
+  use_admin_theme: true
+selection_display: no_display
+selection_display_configuration: {}
+widget_selector: tabs
+widget_selector_configuration: {}
+widgets:
+  65582cec-4c6e-47d4-9b5d-3d087a18bc34:
+    id: view
+    uuid: 65582cec-4c6e-47d4-9b5d-3d087a18bc34
+    label: Content Library
+    weight: 1
+    settings:
+      submit_text: Select Content
+      auto_select: false
+      view: content_list_browser
+      view_display: entity_browser

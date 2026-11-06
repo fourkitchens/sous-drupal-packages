@@ -12,10 +12,17 @@ Aliases use the first assigned category and title:
 `news/news-category/news-title`. Reorder the categories to choose the category
 used in a new alias.
 
-The `news` View's `embed_recent` (Recent News) display lists published posts
-newest first through a rendered-entity field in Teaser mode, limited to ten
-posts. Its exposed category selector (`news_categories`) and combined
-title/teaser-description Search (`news_search`) narrow the listing.
+Use `news:embed_recent` (Recent News) as a Content List source. It shows ten
+published post teasers by default, newest first, with no exposed filters and
+a **See all** link to `/news`.
+
+The `page_news` display at `/news` shows 12 teasers per page and exposes News
+Categories (`news_categories`) and title/teaser-description Search
+(`news_search`). The embed and page have a News Categories contextual filter.
+Content List editors can choose News Categories terms under **Filter this
+list**. When passing term IDs directly, use `+` for any of the listed IDs, `,`
+for all of them, or `all` to skip term filtering.
+
 The same View's `entity_browser` display lets editors filter and select
 published news posts by title.
 

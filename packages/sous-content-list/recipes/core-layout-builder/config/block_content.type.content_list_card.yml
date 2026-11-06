@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {}
+id: content_list_card
+label: Card
+revision: true
+description: 'An image, heading, text and link.'
