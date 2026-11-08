@@ -1,0 +1,36 @@
+name: 'Sous Gallery with Layout Paragraphs'
+description: 'Adds a Gallery component to Layout Paragraphs.'
+type: Site
+install:
+  - paragraphs
+  - paragraphs_ee
+  - paragraphs_type_permissions
+  - field_group
+  - media_library
+  - media_library_edit
+  - options
+  - style_selector
+  - text
+config:
+  strict:
+    - core.entity_form_display.paragraph.gallery.default
+    - core.entity_view_display.paragraph.gallery.default
+    - field.field.paragraph.gallery.field_heading
+    - field.field.paragraph.gallery.field_media_multiple
+    - field.field.paragraph.gallery.field_style_layout_width
+    - field.field.paragraph.gallery.field_text
+    - field.storage.paragraph.field_media_multiple
+    - paragraphs.paragraphs_type.gallery
+  actions:
+    field.field.node.*.field_content: &accept_gallery
+      setProperties:
+        settings.handler_settings.target_bundles.gallery: gallery
+        settings.handler_settings.target_bundles_drag_drop.gallery:
+          weight: -45
+          enabled: true
+    field.field.paragraph.accordion_item.field_content: *accept_gallery
+    field.field.paragraph.tabs_item.field_content: *accept_gallery
+    user.role.anonymous: &view_gallery
+      grantPermissions:
+        - 'view paragraph content gallery'
+    user.role.authenticated: *view_gallery

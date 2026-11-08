@@ -34,13 +34,13 @@ settings:
       text_with_media: text_with_media
       image: image
       video: video
+      quote: quote
+      table: table
       accordion: accordion
       accordion_item: accordion_item
-      quote: quote
-      embed: embed
-      table: table
       tabs: tabs
       tabs_item: tabs_item
+      embed: embed
     sort:
       field: _none
       direction: ASC

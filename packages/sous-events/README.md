@@ -13,16 +13,16 @@ Aliases use the first event date, type and title:
 date values; their aliases remain based on the first date.
 
 Use `events:embed_upcoming` and `events:embed_past` as Content List sources.
-Each embed shows six event teasers by default, with no exposed filters and a
-**See all** link to its listing page. Ongoing occurrences count as upcoming. A
-recurring series can appear once in each list when it has both past and future
-occurrences. Each list orders events by their relevant date.
+Each embed shows six event teasers by default, with no exposed filters.
+Ongoing occurrences count as upcoming. A recurring series can appear once in
+each list when it has both past and future occurrences. Each list orders events
+by their relevant date.
 
-The `page_upcoming` display at `/events` and the `page_past` display at
-`/events/past` show 12 teasers per page and expose Event Type (`event_type`)
-and title/teaser-description Search (`event_search`). Both embeds and both
-pages have an Event Type contextual filter. Content List editors can choose
-Event Type terms under **Filter this list**. When passing term IDs directly,
+The `block_upcoming` and `block_past` displays show 12 teasers per page and
+expose Event Type (`event_type`) and title/teaser-description Search
+(`event_search`). Both embeds and both blocks have an Event Type contextual
+filter. Content List editors can choose Event Type terms under **Filter this
+list**. When passing term IDs directly,
 use `+` for any of the listed IDs, `,` for all of them, or `all` to skip term
 filtering.
 

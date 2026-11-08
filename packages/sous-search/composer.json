@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-search",
-  "description": "Site search with a results page, content type filter and header search box.",
+  "description": "Site search with a placeable results block and content type filter.",
   "keywords": [
     "recipe",
     "Drupal recipes",

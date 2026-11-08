@@ -40,8 +40,8 @@ settings:
       table: table
       accordion: accordion
       tabs: tabs
-      embed: embed
       from_library: from_library
+      embed: embed
     negate: 0
     target_bundles_drag_drop:
       layout:
@@ -60,21 +60,21 @@ settings:
         weight: -46
         enabled: true
       quote:
-        weight: -45
-        enabled: true
-      table:
         weight: -44
         enabled: true
-      accordion:
+      table:
         weight: -43
         enabled: true
-      tabs:
+      accordion:
         weight: -42
         enabled: true
-      embed:
-        weight: -38
+      tabs:
+        weight: -40
         enabled: true
       from_library:
         weight: -37
+        enabled: true
+      embed:
+        weight: -36
         enabled: true
 field_type: entity_reference_revisions

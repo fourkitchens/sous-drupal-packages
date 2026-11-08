@@ -4,7 +4,6 @@ dependencies:
   config:
     - field.storage.paragraph.field_content
     - paragraphs.paragraphs_type.content_list
-    - paragraphs.paragraphs_type.content_list_teaser
     - paragraphs.paragraphs_type.content_list_item
   module:
     - entity_reference_revisions
@@ -23,13 +22,9 @@ settings:
   handler_settings:
     target_bundles:
       content_list_item: content_list_item
-      content_list_teaser: content_list_teaser
     negate: 0
     target_bundles_drag_drop:
       content_list_item:
         weight: 0
-        enabled: true
-      content_list_teaser:
-        weight: 1
         enabled: true
 field_type: entity_reference_revisions

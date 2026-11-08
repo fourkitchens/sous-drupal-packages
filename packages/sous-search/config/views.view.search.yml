@@ -101,34 +101,14 @@ display:
       tags:
         - 'config:search_api.index.content'
         - 'search_api_list:content'
-  block_1:
-    id: block_1
-    display_title: 'Header search form'
-    display_plugin: block
-    position: 2
-    display_options:
-      defaults:
-        link_display: false
-      link_display: page_1
-      exposed_block: true
-      display_extenders: {}
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_interface'
-        - url
-        - url.query_args
-        - 'user.node_grants:view'
-        - user.permissions
-      tags:
-        - 'config:search_api.index.content'
-        - 'search_api_list:content'
-  page_1:
-    id: page_1
+  block_results:
+    id: block_results
     display_title: 'Search results'
-    display_plugin: page
+    display_plugin: block
     position: 1
     display_options:
+      block_description: 'Search results'
+      use_ajax: true
       filters:
         search_api_fulltext:
           id: search_api_fulltext
@@ -171,10 +151,10 @@ display:
         groups:
           1: AND
       defaults:
+        use_ajax: false
         filters: false
         filter_groups: false
       display_extenders: {}
-      path: search
     cache_metadata:
       max-age: -1
       contexts:

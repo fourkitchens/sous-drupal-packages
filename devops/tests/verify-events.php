@@ -139,23 +139,19 @@ try {
 
   // A recurring event can occur once in each list when it has past and future dates.
   $expected = [
-    'page_upcoming' => ['All-day event', 'Ongoing', 'Recurring dates', 'Upcoming near', 'Mixed dates', 'Upcoming far', 'Many future'],
-    'page_past' => ['Recent past', 'Many past', 'Mixed dates', 'Recurring dates', 'Old past'],
+    'block_upcoming' => ['All-day event', 'Ongoing', 'Recurring dates', 'Upcoming near', 'Mixed dates', 'Upcoming far', 'Many future'],
+    'block_past' => ['Recent past', 'Many past', 'Mixed dates', 'Recurring dates', 'Old past'],
   ];
   $listings = [
-    'embed_upcoming' => ['page_upcoming', '/events', 'Upcoming near'],
-    'embed_past' => ['page_past', '/events/past', 'Old past'],
+    'embed_upcoming' => ['block_upcoming', 'Upcoming near'],
+    'embed_past' => ['block_past', 'Old past'],
   ];
   $renderer = \Drupal::service('renderer');
-  $router = \Drupal::service('router.no_access_checks');
-  foreach ($listings as $embed_id => [$page_id, $path]) {
-    if ($router->match($path)['_route'] !== "view.events.$page_id") {
-      throw new \RuntimeException("$path did not route to $page_id.");
-    }
+  foreach ($listings as $embed_id => [$block_id]) {
     $view = Views::getView('events');
     $build = $view->buildRenderable($embed_id, [], FALSE);
     $html = (string) $renderer->renderInIsolation($build);
-    $titles = array_slice($expected[$page_id], 0, 6);
+    $titles = array_slice($expected[$block_id], 0, 6);
     $actual = array_map(static fn($row) => $row->_entity->label(), $view->result);
     if ($actual !== $titles || $view->display_handler->usesExposed() || $view->getPager()->getPluginId() !== 'some' || $view->getItemsPerPage() !== 6) {
       throw new \RuntimeException("$embed_id did not return the expected filter-free events: " . json_encode($actual));
@@ -173,13 +169,13 @@ try {
     $view->setItemsPerPage(2);
     $build = $view->buildRenderable($embed_id, [], FALSE);
     $html = (string) $renderer->renderInIsolation($build);
-    if (count($view->result) !== 2 || !str_contains($html, "href=\"$path\"")) {
-      throw new \RuntimeException("$embed_id did not honor the two-item limit and link to $path.");
+    if (count($view->result) !== 2 || $view->display_handler->isMoreEnabled()) {
+      throw new \RuntimeException("$embed_id did not honor the two-item limit or still has a More link.");
     }
   }
   $filtered = [
-    'page_upcoming' => [
-      [['news_search' => 'not an event match'], $expected['page_upcoming']],
+    'block_upcoming' => [
+      [['news_search' => 'not an event match'], $expected['block_upcoming']],
       [['event_search' => 'coming ne'], ['Upcoming near']],
       [['event_search' => 'scope'], ['Upcoming far']],
       [['event_type' => $workshop->id()], ['Upcoming far']],
@@ -187,15 +183,15 @@ try {
       [['event_type' => $workshop->id(), 'event_search' => 'scope'], ['Upcoming far']],
       [['event_search' => '%'], []],
       [['event_search' => 'Unpublished'], []],
-      [['event_type' => 'All', 'event_search' => ''], $expected['page_upcoming']],
+      [['event_type' => 'All', 'event_search' => ''], $expected['block_upcoming']],
     ],
-    'page_past' => [
+    'block_past' => [
       [['event_search' => 'cent pa'], ['Recent past']],
       [['event_search' => 'scope'], ['Old past']],
       [['event_type' => $workshop->id()], ['Recent past']],
       [['event_type' => $term->id(), 'event_search' => 'scope'], ['Old past']],
       [['event_type' => $workshop->id(), 'event_search' => 'scope'], []],
-      [['event_type' => 'All', 'event_search' => ''], $expected['page_past']],
+      [['event_type' => 'All', 'event_search' => ''], $expected['block_past']],
     ],
   ];
   foreach ($filtered as $display_id => $samples) {
@@ -222,16 +218,16 @@ try {
   }
   $nodes['Mixed dates']->set('field_listing_test_tag', $workshop->id())->save();
 
-  foreach ($listings as $embed_id => [$page_id, $path, $unmatched]) {
+  foreach ($listings as $embed_id => [$block_id, $unmatched]) {
     $nodes[$unmatched]->set('field_event_type', $lecture->id())->save();
-    $all = $expected[$page_id];
+    $all = $expected[$block_id];
     $arguments = [
       $term->id() . '+' . $workshop->id() => array_values(array_diff($all, [$unmatched])),
       $term->id() . ',' . $workshop->id() => ['Mixed dates'],
       'all' => $all,
       $other_term->id() => [],
     ];
-    foreach ([$embed_id, $page_id] as $display_id) {
+    foreach ([$embed_id, $block_id] as $display_id) {
       foreach ($arguments as $argument => $titles) {
         $view = Views::getView('events');
         $view->setArguments([(string) $argument]);

@@ -2,15 +2,15 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.block_content.field_text
-    - block_content.type.content_list_teaser
-    - filter.format.basic_html
+    - field.storage.paragraph.field_text
+    - filter.format.limited_html
+    - paragraphs.paragraphs_type.content_list_item
   module:
     - text
-id: block_content.content_list_teaser.field_text
+id: paragraph.content_list_item.field_text
 field_name: field_text
-entity_type: block_content
-bundle: content_list_teaser
+entity_type: paragraph
+bundle: content_list_item
 label: Text
 description: ''
 required: false
@@ -19,5 +19,5 @@ default_value: {}
 default_value_callback: ''
 settings:
   allowed_formats:
-    - basic_html
+    - limited_html
 field_type: text_long

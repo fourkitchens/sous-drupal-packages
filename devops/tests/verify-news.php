@@ -96,14 +96,14 @@ try {
   foreach ($filters as [$input, $expected]) {
     $view = Views::getView('news');
     $view->setExposedInput($input);
-    $view->execute('page_news');
+    $view->execute('block_news');
     $actual = array_map(static fn($row) => $row->_entity->label(), $view->result);
     if ($actual !== $expected) {
       throw new \RuntimeException('Recent News filter failed for ' . json_encode($input) . ': ' . json_encode($actual));
     }
   }
   $view = Views::getView('news');
-  $view->setDisplay('page_news');
+  $view->setDisplay('block_news');
   $view->initHandlers();
   $view->initStyle();
   if ($view->getPager()->getPluginId() !== 'full' || $view->getItemsPerPage() !== 12) {
@@ -113,16 +113,12 @@ try {
   if ($view->rowPlugin->getPluginId() !== 'fields' || $view->field['rendered_entity']->getPluginId() !== 'rendered_entity' || $view->field['rendered_entity']->options['view_mode'] !== 'teaser' || !isset($exposed['news_search'], $exposed['news_categories']) || isset($exposed['news_categories']['#options'][$other_term->id()])) {
     throw new \RuntimeException('Recent News did not build its rendered teaser field and vocabulary-limited exposed controls.');
   }
-  $route = \Drupal::service('router.no_access_checks')->match('/news');
-  if ($route['_route'] !== 'view.news.page_news') {
-    throw new \RuntimeException('/news did not route to page_news.');
-  }
   $view = Views::getView('news');
   $view->setItemsPerPage(2);
   $build = $view->buildRenderable('embed_recent', [], FALSE);
   $html = (string) \Drupal::service('renderer')->renderInIsolation($build);
-  if (count($view->result) !== 2 || $view->display_handler->usesExposed() || !str_contains($html, 'href="/news"')) {
-    throw new \RuntimeException('Recent News did not honor the filter-free two-item limit and link to /news.');
+  if (count($view->result) !== 2 || $view->display_handler->usesExposed() || $view->display_handler->isMoreEnabled()) {
+    throw new \RuntimeException('Recent News did not honor the filter-free two-item limit or still has a More link.');
   }
   if (!str_contains($html, 'A new round of telescope discoveries') || str_contains($html, 'Unpublished story')) {
     throw new \RuntimeException('Recent News did not render published teasers.');
@@ -134,7 +130,7 @@ try {
     'all' => $all,
     $other_term->id() => [],
   ];
-  foreach (['embed_recent', 'page_news'] as $display_id) {
+  foreach (['embed_recent', 'block_news'] as $display_id) {
     foreach ($arguments as $argument => $titles) {
       $view = Views::getView('news');
       $view->setArguments([(string) $argument]);
@@ -161,7 +157,7 @@ try {
   foreach ([[[], array_map(static fn($index) => "Limit story $index", range(11, 0))], [['news_search' => 'Old campus'], ['Old campus']], [['news_categories' => [$research->id()]], ['Latest story', 'Research dispatch']], [['news_search' => 'Limit story 3'], ['Limit story 3']]] as [$input, $expected]) {
     $view = Views::getView('news');
     $view->setExposedInput($input);
-    $view->execute('page_news');
+    $view->execute('block_news');
     $actual = array_map(static fn($row) => $row->_entity->label(), $view->result);
     if ($actual !== $expected) {
       throw new \RuntimeException('News did not apply filtering before its twelve-item page limit.');

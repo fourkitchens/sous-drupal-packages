@@ -3,14 +3,14 @@ status: true
 dependencies:
   config:
     - field.storage.block_content.field_heading
-    - block_content.type.content_list_teaser
-id: block_content.content_list_teaser.field_heading
+    - block_content.type.content_list_item
+id: block_content.content_list_item.field_heading
 field_name: field_heading
 entity_type: block_content
-bundle: content_list_teaser
+bundle: content_list_item
 label: Heading
 description: ''
-required: true
+required: false
 translatable: false
 default_value: {}
 default_value_callback: ''

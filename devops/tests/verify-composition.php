@@ -23,6 +23,13 @@ $checks = [
   'default theme' => \Drupal::config('system.theme')->get('default') === 'emulsify',
   'DropzoneJS disabled' => !$modules->moduleExists('dropzonejs'),
 ];
+foreach ($entities->getStorage('view')->loadMultiple(['pages', 'content_list_browser', 'events', 'news', 'profiles', 'search']) as $id => $view) {
+  $checks["no page display.$id"] = !in_array('page', array_column($view->get('display'), 'display_plugin'), TRUE);
+}
+$routes = \Drupal::service('router.route_provider');
+foreach (['/events', '/events/past', '/news', '/profiles', '/search'] as $path) {
+  $checks["unclaimed path.$path"] = count($routes->getRoutesByPattern($path)) === 0;
+}
 $media_types = $entities->getStorage('media_type');
 foreach (['file' => 'File', 'image' => 'Image', 'video' => 'Video', 'video_file' => 'Video File'] as $bundle => $label) {
   $media_type = $media_types->load($bundle);
@@ -272,7 +279,7 @@ foreach (['paragraph' => $paragraphs, 'block_content' => $case === 'core-layout-
   if (!$enabled) {
     continue;
   }
-  foreach (['accordion' => ['accordion_item'], 'accordion_item' => ['image', 'text', 'video'], 'tabs' => ['tabs_item'], 'tabs_item' => array_merge(array_keys($components), array_keys($extra_components), ['content_list'], $paragraphs ? ['from_library'] : [])] as $bundle => $allowed) {
+  foreach (['accordion' => ['accordion_item'], 'accordion_item' => ['image', 'text', 'video', 'gallery'], 'tabs' => ['tabs_item'], 'tabs_item' => array_merge(array_keys($components), array_keys($extra_components), ['content_list', 'gallery'], $paragraphs ? ['from_library'] : [])] as $bundle => $allowed) {
     $actual = array_values(FieldConfig::loadByName($entity_type, $bundle, 'field_content')->getSetting('handler_settings')['target_bundles']);
     sort($actual);
     sort($allowed);

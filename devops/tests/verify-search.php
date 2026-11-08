@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Verify anonymous search results and the header search form.
+ * Verify anonymous search results in a block placed on an existing page.
  */
 
 use Drupal\block\Entity\Block;
@@ -10,13 +10,19 @@ use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\node\Entity\Node;
 use Drupal\search_api\Entity\Index;
 use Drupal\user\Entity\User;
+use Drupal\views\Views;
 use Symfony\Component\HttpFoundation\Request;
 
-$block = Block::load('sous_search_form');
-$theme = \Drupal::config('system.theme')->get('default');
-if (!$block || !$block->status() || $block->getTheme() !== $theme || $block->getRegion() !== 'header' || $block->getPluginId() !== 'views_exposed_filter_block:search-block_1' || $block->get('settings')['label_display'] !== '0') {
-  throw new \RuntimeException('The default theme header is missing the search exposed form block.');
+$view = Views::getView('search');
+$plugin = 'views_block:search-block_results';
+if (!$view->setDisplay('block_results') || $view->display_handler->getPluginId() !== 'block' || $view->hasUrl() || !$view->display_handler->ajaxEnabled()) {
+  throw new \RuntimeException('Search results must be an AJAX block without a route.');
 }
+if (Block::load('sous_search_form') || \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['plugin' => $plugin])) {
+  throw new \RuntimeException('Search blocks should be unplaced by default.');
+}
+$theme = \Drupal::config('system.theme')->get('default');
+$block = Block::create(['id' => 'sous_search_probe', 'theme' => $theme, 'region' => 'content', 'plugin' => $plugin]);
 
 $index = Index::load('content');
 if (!$index || !$index->status()) {
@@ -44,6 +50,7 @@ try {
       $nodes[$key] = $node;
     }
     $index->indexItems();
+    $block->save();
   }
   finally {
     $switcher->switchBack();
@@ -52,30 +59,20 @@ try {
   $switcher->switchTo(new AnonymousUserSession());
   try {
     $kernel = \Drupal::service('http_kernel');
-    // Use a different route so a form pointing to the current page fails.
-    $page = $kernel->handle(Request::create($nodes['published']->toUrl()->toString()));
-    if (!$page->isSuccessful()) {
-      throw new \RuntimeException('Could not load a public page to verify the header search form.');
-    }
-    $document = new \DOMDocument();
-    $document->loadHTML($page->getContent(), LIBXML_NOERROR | LIBXML_NOWARNING);
-    $xpath = new \DOMXPath($document);
-    $form = $xpath->query('//*[@id="block-sous-search-form"]//form[@action="/search"]')->item(0);
-    if (!$form || !$xpath->query('.//input[@name="keys"]', $form)->length || $xpath->query('.//*[@name="type" or starts-with(@name, "type[")]', $form)->length) {
-      throw new \RuntimeException('The header search box must send only the keys filter to /search.');
-    }
-
-    $results = $kernel->handle(Request::create('/search', 'GET', ['keys' => 'Meridian']));
+    $path = $nodes['published']->toUrl()->toString();
+    $results = $kernel->handle(Request::create($path, 'GET', ['keys' => 'Meridian']));
     $html = $results->getContent();
     if (!$results->isSuccessful() || !str_contains($html, 'Published search fixture teaser.') || str_contains($html, 'Draft search fixture teaser.') || str_contains($html, 'Unrelated search fixture teaser.')) {
       throw new \RuntimeException('Anonymous search must return the matching published Profile teaser only.');
     }
 
+    $document = new \DOMDocument();
     $document->loadHTML($html, LIBXML_NOERROR | LIBXML_NOWARNING);
     $xpath = new \DOMXPath($document);
-    $option = $xpath->query('//form[starts-with(@id, "views-exposed-form-search-page-1")]//select[@name="type"]/option[@value="profile"]')->item(0);
-    if (!$option || trim($option->textContent) !== 'Profile') {
-      throw new \RuntimeException('The search page must expose the Content type facet.');
+    $form = $xpath->query('//*[@id="block-sous-search-probe"]//form[starts-with(@id, "views-exposed-form-search-block-results")]')->item(0);
+    $option = $form ? $xpath->query('.//select[@name="type"]/option[@value="profile"]', $form)->item(0) : NULL;
+    if (!$form || $form->getAttribute('action') !== $path || !$xpath->query('.//input[@name="keys"]', $form)->length || !$option || trim($option->textContent) !== 'Profile') {
+      throw new \RuntimeException('The search block must expose keyword and Content type filters on its host page.');
     }
   }
   finally {
@@ -83,8 +80,11 @@ try {
   }
 }
 finally {
+  if (!$block->isNew()) {
+    $block->delete();
+  }
   \Drupal::entityTypeManager()->getStorage('node')->delete($nodes);
   $index->clear();
 }
 
-print getenv('COMPOSITION') . " search results, Content type facet and header search form verified.\n";
+print getenv('COMPOSITION') . " search results block and Content type facet verified on an existing page.\n";

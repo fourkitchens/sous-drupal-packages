@@ -5,7 +5,6 @@ dependencies:
     - field.storage.block_content.field_content
     - block_content.type.content_list
     - block_content.type.content_list_item
-    - block_content.type.content_list_teaser
   module:
     - entity_reference_revisions
 id: block_content.content_list.field_content
@@ -23,7 +22,6 @@ settings:
   handler_settings:
     target_bundles:
       content_list_item: content_list_item
-      content_list_teaser: content_list_teaser
     sort:
       field: _none
       direction: ASC

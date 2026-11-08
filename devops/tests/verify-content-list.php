@@ -23,13 +23,14 @@ $entity_type = match ($case) {
 };
 $entities = \Drupal::entityTypeManager();
 $storage = \Drupal::service('config.storage');
-$bundles = ['content_list', 'content_list_item', 'content_list_teaser'];
+$bundles = ['content_list', 'content_list_item'];
 $checks = [
   'browser' => $storage->exists('entity_browser.browser.content_list_browser'),
   'browser View' => $storage->exists('views.view.content_list_browser'),
   'editor browser access' => Role::load('site_editor')->hasPermission('access content_list_browser entity browser pages'),
 ];
 foreach (['paragraphs.paragraphs_type' => 'paragraph', 'block_content.type' => 'block_content'] as $prefix => $type) {
+  $checks["$type uses a single item bundle"] = !$storage->exists("$prefix.content_list_teaser");
   foreach ($bundles as $bundle) {
     $checks["$type.$bundle"] = $storage->exists("$prefix.$bundle") === ($type === $entity_type);
   }
@@ -41,10 +42,11 @@ if ($entity_type) {
   $children_widget = $entity_type === 'paragraph' ? 'paragraphs' : 'inline_entity_form_complex';
   $checks['list children widget'] = $list_form->getRenderer('field_content')?->getPluginId() === $children_widget;
   $list_children = FieldConfig::loadByName($entity_type, 'content_list', 'field_content')->getSetting('handler_settings')['target_bundles'];
-  $checks['list teaser bundles'] = count($list_children) === 2 && !array_diff(['content_list_item', 'content_list_teaser'], $list_children);
+  $checks['list teaser bundle'] = $list_children === ['content_list_item' => 'content_list_item'];
   $listing_widget = $list_form->getRenderer('field_view');
   $checks['list View widget'] = $listing_widget?->getPluginId() === 'viewsreference_select';
   $checks['item browser widget'] = $item_form->getRenderer('field_related_content')?->getPluginId() === 'entity_browser_entity_reference';
+  $checks['item type widget'] = $item_form->getRenderer('field_item_type')?->getPluginId() === 'options_select';
   $enabled_settings = FieldConfig::loadByName($entity_type, 'content_list', 'field_view')->getSetting('enabled_settings');
   $checks['list View settings'] = in_array('limit', $enabled_settings, TRUE) && in_array('sift_terms', $enabled_settings, TRUE);
   $hosts = [[$entity_type, 'tabs_item']];
@@ -62,7 +64,7 @@ if ($entity_type) {
   foreach ($hosts as [$type, $bundle]) {
     $allowed = FieldConfig::loadByName($type, $bundle, 'field_content')->getSetting('handler_settings')['target_bundles'];
     $checks["list placement.$type.$bundle"] = in_array('content_list', $allowed, TRUE)
-      && !array_intersect(['content_list_item', 'content_list_teaser'], $allowed);
+      && !in_array('content_list_item', $allowed, TRUE);
   }
 }
 foreach ($checks as $check => $passed) {
@@ -115,17 +117,28 @@ try {
     'info' => 'Picked content',
     'status' => TRUE,
     'field_related_content' => $picked->id(),
+    'field_heading' => 'Inactive existing item heading',
   ] + $block_values);
   $item->save();
   $component_ids['item'] = $item->id();
   $teaser = $component_storage->create([
-    'type' => 'content_list_teaser',
+    'type' => 'content_list_item',
     'info' => 'Custom teaser heading',
     'status' => TRUE,
+    'field_item_type' => 'custom_content',
     'field_heading' => 'Custom teaser heading',
+    'field_related_content' => $nodes['Content List untagged post']->id(),
   ] + $block_values);
   $teaser->save();
   $component_ids['teaser'] = $teaser->id();
+  $item_widgets = ['#parents' => ['field_content', 'subform']];
+  $item_form->buildForm($item, $item_widgets, new FormState());
+  $selector = 'select[name="field_content[subform][field_item_type]"]';
+  foreach (['field_related_content' => 'existing_content', 'field_heading' => 'custom_content', 'field_image' => 'custom_content', 'field_link' => 'custom_content', 'field_text' => 'custom_content'] as $field => $source) {
+    if (($item_widgets[$field]['#states']['visible'][$selector]['value'] ?? NULL) !== $source) {
+      throw new \RuntimeException("$case Content List Item has the wrong visibility rule for $field.");
+    }
+  }
   $list = $component_storage->create([
     'type' => 'content_list',
     'info' => 'Latest',
@@ -220,6 +233,9 @@ try {
         throw new \RuntimeException("$case Content List $scenario did not render $marker.");
       }
     }
+    if (str_contains($html, 'Inactive existing item heading')) {
+      throw new \RuntimeException("$case Content List displayed the inactive custom fields of an existing item.");
+    }
     foreach (array_diff($titles, $expected) as $title) {
       if (str_contains($html, $title)) {
         throw new \RuntimeException("$case Content List $scenario unexpectedly rendered $title.");
@@ -228,11 +244,11 @@ try {
     if (strpos($html, 'Custom teaser heading') > strpos($html, $expected[0]) || strpos($html, 'Picked page') > strpos($html, $expected[0])) {
       throw new \RuntimeException("$case Content List did not render hand-picked teasers before the listing.");
     }
-    if ($scenario === 'no terms' && !str_contains($html, 'href="/news"')) {
-      throw new \RuntimeException("$case Content List did not link to /news.");
+    if (str_contains($html, 'href="/news"')) {
+      throw new \RuntimeException("$case Content List still links to the removed News route.");
     }
   }
-  echo "$case Content List Sift controls, anonymous mixed sources, Any and All matching, item limit and More link verified.\n";
+  echo "$case Content List Sift controls, anonymous mixed sources, Any and All matching and item limit verified.\n";
 }
 finally {
   $node_storage->delete($nodes);

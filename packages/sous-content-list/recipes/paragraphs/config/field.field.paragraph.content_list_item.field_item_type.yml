@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_item_type
+    - paragraphs.paragraphs_type.content_list_item
+  module:
+    - options
+id: paragraph.content_list_item.field_item_type
+field_name: field_item_type
+entity_type: paragraph
+bundle: content_list_item
+label: 'Item Type'
+description: ''
+required: true
+translatable: false
+default_value:
+  - value: existing_content
+default_value_callback: ''
+settings: {}
+field_type: list_string

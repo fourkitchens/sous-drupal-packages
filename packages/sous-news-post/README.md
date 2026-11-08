@@ -13,12 +13,11 @@ Aliases use the first assigned category and title:
 used in a new alias.
 
 Use `news:embed_recent` (Recent News) as a Content List source. It shows ten
-published post teasers by default, newest first, with no exposed filters and
-a **See all** link to `/news`.
+published post teasers by default, newest first, with no exposed filters.
 
-The `page_news` display at `/news` shows 12 teasers per page and exposes News
+The `block_news` display shows 12 teasers per page and exposes News
 Categories (`news_categories`) and title/teaser-description Search
-(`news_search`). The embed and page have a News Categories contextual filter.
+(`news_search`). Both displays have a News Categories contextual filter.
 Content List editors can choose News Categories terms under **Filter this
 list**. When passing term IDs directly, use `+` for any of the listed IDs, `,`
 for all of them, or `all` to skip term filtering.

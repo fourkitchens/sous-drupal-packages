@@ -2,16 +2,16 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.paragraph.field_text
+    - field.storage.block_content.field_text
     - filter.format.limited_html
-    - paragraphs.paragraphs_type.content_list_teaser
+    - block_content.type.gallery
   module:
     - text
-id: paragraph.content_list_teaser.field_text
+id: block_content.gallery.field_text
 field_name: field_text
-entity_type: paragraph
-bundle: content_list_teaser
-label: Text
+entity_type: block_content
+bundle: gallery
+label: 'Intro Text'
 description: ''
 required: false
 translatable: false

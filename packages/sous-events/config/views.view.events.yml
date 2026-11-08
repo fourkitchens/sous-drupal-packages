@@ -267,16 +267,8 @@ display:
         options:
           items_per_page: 6
           offset: 0
-      use_more: true
-      use_more_always: true
-      use_more_text: 'See all'
-      link_display: page_upcoming
       defaults:
         pager: false
-        use_more: false
-        use_more_always: false
-        use_more_text: false
-        link_display: false
         filters: false
         filter_groups: false
       filters:
@@ -335,16 +327,8 @@ display:
         options:
           items_per_page: 6
           offset: 0
-      use_more: true
-      use_more_always: true
-      use_more_text: 'See all'
-      link_display: page_past
       defaults:
         pager: false
-        use_more: false
-        use_more_always: false
-        use_more_text: false
-        link_display: false
         filters: false
         filter_groups: false
         title: false
@@ -513,10 +497,10 @@ display:
         sorts: false
         filters: false
         group_by: false
-  page_upcoming:
-    id: page_upcoming
+  block_upcoming:
+    id: block_upcoming
     display_title: 'Events'
-    display_plugin: page
+    display_plugin: block
     position: 4
     display_options:
       title: 'Events'
@@ -528,11 +512,10 @@ display:
       defaults:
         title: false
         pager: false
-      path: events
-  page_past:
-    id: page_past
+  block_past:
+    id: block_past
     display_title: 'Past events'
-    display_plugin: page
+    display_plugin: block
     position: 5
     display_options:
       title: 'Past events'
@@ -672,4 +655,3 @@ display:
           plugin_id: standard
           order: ASC
           exposed: false
-      path: events/past

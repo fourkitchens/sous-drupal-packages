@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'file:file:eb2c1088-b9f1-471f-9dbb-5d7dfca603ba'
+  module:
+    - paragraphs_ee
+third_party_settings:
+  paragraphs_ee:
+    paragraphs_categories:
+      media_components: media_components
+id: gallery
+label: Gallery
+icon_uuid: eb2c1088-b9f1-471f-9dbb-5d7dfca603ba
+icon_default: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAChUlEQVR4nO3dzVHzMBRGYYehJ3bQQCgAVpSWFRSAGyC7VAULJvx4QrBj6d5Xes+zYviG2JZOFDsOfMMAAAAAAAAAAAAAAAAAAAB6sIna0O324T1qW87248uiOb2qtSNoAwGYIwBz11kbfnt9ztp0V+7uH1f9PCuAOQIwRwDmCMAcAZgjAHMEYI4AzBGAOQIwRwDmFt8LKHVff+172L2LulfCCmCOAMwRgLnVnwfgvn4ZWedErADmCMAcAZgjAHMEYI4AzBGAOQIwl/aLIafsxsPX10/bm8Q98SERwM+Jn36PEOpKfwk4NflL/h3rpAeAXKkBzH12swrUwwpgjgDMpQYw9wyfK4F6WAEm3M430gP479kd+ew/Tr5TBOkBDMPnJE8n+tT3appOuksEEu8EHmW91v812bvx0P35h8QKoKz3lcA+gDkT3HME1gEsmdheI7AN4JIJ3Y2H7kKQCyBigNduo6cIpAKIuA4v9di9RCATQMR1eOnH7CECiQDOXYera2Efz0kPIOoTQS28rGSw+EBICyeWWdICWDpglw5w5MS0GEFKAGsmU/3Nm9YiCA+gxACpv33bUgShAZQcmHOPpTABCvswR1gALVzXl6a+f8MQFEDkJZjaoKvtz1T1ACIvwVQHW/kmUtUAuAT7TXEfqwWgeLAK1MalSgBqB6lGaXyKB6B0cMpUxqloACoH1QqF8SoWgMLBtCh73IoEkH0QuFz65wGQS+o3g/At6q+HswKYIwBzBGCOcwBR+/FlE7EdVgBzBGCOAMwRgDkCMEcA5gjAHAGYIwBzBGCuyFvBvf8xxZ6tDiDrf71GGbwEmCMAcwQAAAAAAAAAAAAAAAAAAAAAAE37ACCk1u6VYh/XAAAAAElFTkSuQmCC'
+description: 'Displays a collection of images and videos.'
+behavior_plugins: {}

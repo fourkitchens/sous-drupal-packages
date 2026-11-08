@@ -2,11 +2,12 @@
 
 `fourkitchens/sous-search` · `drupal-recipe` · GPL-2.0-or-later
 
-Adds a header search box and a results page at `/search` with a Content type
-filter. The database index covers all node bundles, including Page, Events,
-News Posts, Profiles and content types added later. Search indexes titles and
-the text from each node's default display. Results show teasers and respect the
-visitor's access to the content.
+Provides a **Search results** block with keyword search and a Content type
+filter. Place the block on an existing page or in a theme region. The database
+index covers all node bundles, including Page, Events, News Posts, Profiles
+and content types added later. Search indexes titles and the text from each
+node's default display. Results show teasers and respect the visitor's access
+to the content.
 
 ## Installation and application
 

@@ -257,14 +257,6 @@ display:
           group: 1
       defaults:
         filters: false
-        use_more: false
-        use_more_always: false
-        use_more_text: false
-        link_display: false
-      use_more: true
-      use_more_always: true
-      use_more_text: 'See all'
-      link_display: page_news
   entity_browser:
     id: entity_browser
     display_title: News Content Browser
@@ -357,10 +349,10 @@ display:
         sorts: false
         arguments: false
         filters: false
-  page_news:
-    id: page_news
+  block_news:
+    id: block_news
     display_title: News
-    display_plugin: page
+    display_plugin: block
     position: 3
     display_options:
       title: News
@@ -372,4 +364,3 @@ display:
       defaults:
         title: false
         pager: false
-      path: news

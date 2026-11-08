@@ -12,13 +12,13 @@ install:
   - viewsreference
   - viewsreference_sift
   - entity_browser
+  - options
+  - sous_component_support
 config:
   strict:
     - core.entity_form_display.paragraph.content_list.default
-    - core.entity_form_display.paragraph.content_list_teaser.default
     - core.entity_form_display.paragraph.content_list_item.default
     - core.entity_view_display.paragraph.content_list.default
-    - core.entity_view_display.paragraph.content_list_teaser.default
     - core.entity_view_display.paragraph.content_list_item.default
     - field.field.paragraph.content_list.field_content
     - field.field.paragraph.content_list.field_heading
@@ -27,29 +27,29 @@ config:
     - field.field.paragraph.content_list.field_style_layout_width
     - field.field.paragraph.content_list.field_text
     - field.field.paragraph.content_list.field_view
-    - field.field.paragraph.content_list_teaser.field_heading
-    - field.field.paragraph.content_list_teaser.field_image
-    - field.field.paragraph.content_list_teaser.field_link
-    - field.field.paragraph.content_list_teaser.field_text
+    - field.field.paragraph.content_list_item.field_heading
+    - field.field.paragraph.content_list_item.field_image
+    - field.field.paragraph.content_list_item.field_item_type
+    - field.field.paragraph.content_list_item.field_link
+    - field.field.paragraph.content_list_item.field_text
     - field.field.paragraph.content_list_item.field_related_content
+    - field.storage.paragraph.field_item_type
     - field.storage.paragraph.field_link
     - field.storage.paragraph.field_related_content
     - field.storage.paragraph.field_style_columns
     - field.storage.paragraph.field_view
     - paragraphs.paragraphs_type.content_list
-    - paragraphs.paragraphs_type.content_list_teaser
     - paragraphs.paragraphs_type.content_list_item
   actions:
     field.field.node.*.field_content: &accept_content_list
       setProperties:
         settings.handler_settings.target_bundles.content_list: content_list
         settings.handler_settings.target_bundles_drag_drop.content_list:
-          weight: -39
+          weight: -38
           enabled: true
     field.field.paragraph.tabs_item.field_content: *accept_content_list
     user.role.anonymous: &view_content_list
       grantPermissions:
         - 'view paragraph content content_list'
         - 'view paragraph content content_list_item'
-        - 'view paragraph content content_list_teaser'
     user.role.authenticated: *view_content_list

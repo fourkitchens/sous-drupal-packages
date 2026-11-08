@@ -5,6 +5,7 @@
  * Verify authoring forms, format processing, icons and account access natively.
  */
 
+use Drupal\block_content\Entity\BlockContent;
 use Drupal\Component\Utility\Html;
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\layout_paragraphs\Controller\ChooseComponentController;
@@ -105,7 +106,7 @@ try {
 
   if ($case === 'paragraphs') {
     $chooser = ChooseComponentController::create(\Drupal::getContainer());
-    $expected_order = ['text', 'text_with_media', 'image', 'video', 'quote', 'table', 'accordion', 'tabs', 'content_list', 'embed', 'from_library'];
+    $expected_order = ['text', 'text_with_media', 'image', 'video', 'gallery', 'quote', 'table', 'accordion', 'tabs', 'content_list', 'from_library', 'embed'];
     foreach (['page', 'frontpage', 'event', 'news_post'] as $bundle) {
       $host = Node::create(['type' => $bundle]);
       $layout = new LayoutParagraphsLayout($host->get('field_content'));
@@ -115,6 +116,18 @@ try {
       }
     }
 
+    $display = $entities->getStorage('entity_form_display')->load('paragraph.accordion_item.default');
+    $widget = $display->getRenderer('field_content');
+    if (array_keys($widget->getAllowedTypes()) !== ['text', 'image', 'video', 'gallery']) {
+      throw new \RuntimeException('Accordion Item paragraph component chooser is out of order.');
+    }
+    $tabs_item = $entities->getStorage('paragraph')->create(['type' => 'tabs_item']);
+    $menu = $chooser->list(new Request(), new LayoutParagraphsLayout($tabs_item->get('field_content')));
+    $tabs_order = ['text', 'text_with_media', 'image', 'video', 'gallery', 'quote', 'table', 'accordion', 'accordion_item', 'tabs', 'tabs_item', 'content_list', 'from_library', 'embed'];
+    if (array_keys($menu['#types']['content']) !== $tabs_order) {
+      throw new \RuntimeException('Tabs Item paragraph component chooser is out of order.');
+    }
+
     foreach (['text', 'text_with_media', 'image', 'video', 'accordion', 'accordion_item', 'quote', 'embed', 'table', 'tabs', 'tabs_item', 'from_library', 'layout'] as $bundle) {
       $type = $entities->getStorage('paragraphs_type')->load($bundle);
       $icon = $type->getIconFile();
@@ -122,6 +135,19 @@ try {
       $bytes = str_starts_with($data, 'data:image/png;base64,') ? base64_decode(substr($data, strlen('data:image/png;base64,')), TRUE) : FALSE;
       if (!$icon || !$icon->isPermanent() || !$bytes || file_get_contents($icon->getFileUri()) !== $bytes || !str_starts_with($bytes, "\x89PNG\r\n\x1a\n") || !$type->getIconUrl()) {
         throw new \RuntimeException("$bundle has no permanent native PNG icon.");
+      }
+    }
+  }
+  elseif ($case === 'core-layout-builder') {
+    $nested = [
+      'accordion_item' => ['text', 'image', 'video', 'gallery'],
+      'tabs_item' => ['text', 'text_with_media', 'image', 'video', 'gallery', 'quote', 'table', 'accordion', 'accordion_item', 'tabs', 'tabs_item', 'content_list', 'embed'],
+    ];
+    foreach ($nested as $bundle => $order) {
+      $form = \Drupal::service('entity.form_builder')->getForm(BlockContent::create(['type' => $bundle]));
+      $options = $form['field_content']['widget']['actions']['bundle']['#options'] ?? [];
+      if (array_keys($options) !== $order) {
+        throw new \RuntimeException("$bundle inline block component chooser is out of order.");
       }
     }
   }

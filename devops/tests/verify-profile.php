@@ -116,7 +116,7 @@ try {
   foreach ($searches as [$input, $expected]) {
     $view = Views::getView('profiles');
     $view->setExposedInput($input);
-    $view->execute('page_profiles');
+    $view->execute('block_profiles');
     $actual = array_map(static fn($row) => (string) $row->_entity->id(), $view->result);
     $expected_ids = array_map(static fn($key) => (string) $listing_nodes[$key]->id(), $expected);
     if ($actual !== $expected_ids) {
@@ -124,7 +124,7 @@ try {
     }
   }
   $view = Views::getView('profiles');
-  $view->setDisplay('page_profiles');
+  $view->setDisplay('block_profiles');
   $view->initHandlers();
   if ($view->getPager()->getPluginId() !== 'full' || $view->getItemsPerPage() !== 24) {
     throw new \RuntimeException('Profiles did not configure a full twenty-four-item pager.');
@@ -135,10 +135,6 @@ try {
     throw new \RuntimeException('Profiles did not expose its name and Bio search input.');
   }
 
-  $route = \Drupal::service('router.no_access_checks')->match('/profiles');
-  if ($route['_route'] !== 'view.profiles.page_profiles') {
-    throw new \RuntimeException('/profiles did not route to page_profiles.');
-  }
   $renderer = \Drupal::service('renderer');
   $view = Views::getView('profiles');
   $build = $view->buildRenderable('embed_profiles', [], FALSE);
@@ -155,8 +151,8 @@ try {
   $view->setItemsPerPage(2);
   $build = $view->buildRenderable('embed_profiles', [], FALSE);
   $html = (string) $renderer->renderInIsolation($build);
-  if (count($view->result) !== 2 || !str_contains($html, 'href="/profiles"')) {
-    throw new \RuntimeException('Profiles did not honor the two-item limit and link to /profiles.');
+  if (count($view->result) !== 2 || $view->display_handler->isMoreEnabled()) {
+    throw new \RuntimeException('Profiles did not honor the two-item limit or still has a More link.');
   }
 }
 finally {

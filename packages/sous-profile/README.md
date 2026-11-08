@@ -15,9 +15,9 @@ They cannot be placed in menus. The model works without a content composition.
 
 Use `profiles:embed_profiles` as a Content List source. It shows 12 published
 profile teasers by default, ordered by Last Name, First Name and ID, with no
-exposed filters and a **See all** link to `/profiles`.
+exposed filters.
 
-The `page_profiles` display at `/profiles` shows 24 teasers per page. Its exposed
+The `block_profiles` display shows 24 teasers per page. Its exposed
 Search field (`profile_search`) finds terms in First Name, Last Name or Bio.
 
 The same View's `entity_browser` display lets editors filter and select

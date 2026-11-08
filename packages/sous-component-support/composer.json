@@ -1,0 +1,9 @@
+{
+  "name": "fourkitchens/sous-component-support",
+  "description": "Provides runtime support for Sous components.",
+  "type": "drupal-module",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "drupal/core": "^11.4"
+  }
+}

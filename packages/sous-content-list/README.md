@@ -3,21 +3,21 @@
 `fourkitchens/sous-content-list` · `drupal-recipe` · GPL-2.0-or-later
 
 Adds a Content List with a heading, introduction, call to action, and two ways
-to add teasers. Use **Content Teaser** to pick existing content or **Custom Teaser**
-to provide an image, heading, text, and link. The hand-picked teasers appear first,
-followed by the automatic listing. Either source can be used on its own.
+to add teasers. In a **Content List Item**, choose **Existing Content** to pick
+a node teaser or **Custom Content** to enter an image, heading, text, and link.
+The hand-picked teasers appear first, followed by the automatic listing.
+Either source can be used on its own.
 
-The Paragraphs integration adds a Content List paragraph with nested Content
-Teaser and Custom Teaser paragraphs. The Layout Builder integration provides the same
-types as inline blocks. The base recipe supplies the shared content picker.
+The Paragraphs integration adds Content List and nested Content List Item
+paragraphs. The Layout Builder integration provides the same types as inline
+blocks. The base recipe supplies the shared content picker.
 Admin-only and Content Types installations have no Content List component.
 
 ## Automatic listings
 
 Choose an Embed display in the Teaser listing field. Use the `some` pager so the
-field's item limit can override the display's default. Teaser embeds have no
-exposed filters, use tag-based caching, and offer a **See all** link to a page
-where visitors can filter the full listing.
+field's item limit can override the display's default. Teaser embeds use tag-based
+caching and expose their filters through the Content List editor.
 
 The Teaser listing field enables the **Sift filters** setting. When the selected
 display has supported contextual filters, editors see a control for each

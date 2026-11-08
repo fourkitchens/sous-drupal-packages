@@ -2,13 +2,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.paragraph.field_image
+    - field.storage.block_content.field_image
+    - block_content.type.content_list_item
     - media.type.image
-    - paragraphs.paragraphs_type.content_list_teaser
-id: paragraph.content_list_teaser.field_image
+id: block_content.content_list_item.field_image
 field_name: field_image
-entity_type: paragraph
-bundle: content_list_teaser
+entity_type: block_content
+bundle: content_list_item
 label: Image
 description: ''
 required: false
@@ -23,6 +23,6 @@ settings:
     sort:
       field: _none
       direction: ASC
-    auto_create: true
+    auto_create: false
     auto_create_bundle: ''
 field_type: entity_reference

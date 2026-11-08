@@ -3,13 +3,13 @@ status: true
 dependencies:
   config:
     - field.storage.block_content.field_link
-    - block_content.type.content_list_teaser
+    - block_content.type.content_list_item
   module:
     - link
-id: block_content.content_list_teaser.field_link
+id: block_content.content_list_item.field_link
 field_name: field_link
 entity_type: block_content
-bundle: content_list_teaser
+bundle: content_list_item
 label: Link
 description: ''
 required: false

@@ -1,5 +1,5 @@
 name: 'Sous Search'
-description: 'Site search with a results page, content type filter and header search box.'
+description: 'Site search with a placeable results block and content type filter.'
 type: Site
 install:
   - search_api
@@ -9,16 +9,3 @@ install:
   - views
 config:
   strict: false
-  actions:
-    block.block.sous_search_form:
-      placeBlockInDefaultTheme:
-        plugin: 'views_exposed_filter_block:search-block_1'
-        # Core uses the fallback region only when given a region map.
-        region: {}
-        default_region: header
-        position: last
-        settings:
-          id: 'views_exposed_filter_block:search-block_1'
-          label: 'Search'
-          label_display: '0'
-          provider: views

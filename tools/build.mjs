@@ -90,7 +90,7 @@ function archiveBase(value) {
   return url.href;
 }
 
-async function packageFiles(directory) {
+async function packageFiles(directory, moduleName) {
   const files = [];
   async function visit(folder, prefix = '') {
     const entries = (await readdir(folder)).sort();
@@ -116,7 +116,10 @@ async function packageFiles(directory) {
         check(
           info.isDirectory()
             ? permittedDirectories.has(name)
-            : permittedFile(name),
+            : permittedFile(name) ||
+                [`${moduleName}.info.yml`, `${moduleName}.module`].includes(
+                  name
+                ),
           `Unexpected package entry: ${path}`
         );
       if (info.isDirectory()) await visit(path, file);
@@ -136,7 +139,10 @@ function validateManifest(manifest, name) {
     manifest.name === name,
     `Expected Composer name ${name}, got ${manifest.name}.`
   );
-  check(manifest.type === 'drupal-recipe', `${name} must be a drupal-recipe.`);
+  check(
+    ['drupal-recipe', 'drupal-module'].includes(manifest.type),
+    `${name} must be a Drupal recipe or module.`
+  );
   check(
     manifest.license === 'GPL-2.0-or-later',
     `${name} must declare GPL-2.0-or-later.`
@@ -156,7 +162,7 @@ function validateManifest(manifest, name) {
   check(
     !manifest.extra?.['installer-name'] ||
       manifest.extra['installer-name'] === basename(name),
-    `${name} must preserve its installed recipe basename.`
+    `${name} must preserve its installed package basename.`
   );
   for (const [dependency, constraint] of Object.entries(
     manifest.require ?? {}
@@ -175,7 +181,7 @@ export async function validatePackages(root) {
   const entries = (await readdir(join(root, 'packages')))
     .filter((name) => !name.startsWith('.'))
     .sort();
-  check(entries.length > 0, 'Add at least one recipe under packages/.');
+  check(entries.length > 0, 'Add at least one package under packages/.');
   for (const folder of entries) {
     const name = `fourkitchens/${folder}`;
     const directory = join(root, 'packages', folder);
@@ -184,44 +190,22 @@ export async function validatePackages(root) {
         !(await lstat(directory)).isSymbolicLink(),
       `Invalid package directory: ${directory}`
     );
-    const files = await packageFiles(directory);
-    for (const required of [
-      'composer.json',
-      'recipe.yml',
-      'README.md',
-      'LICENSE',
-    ])
+    const moduleName = folder.replaceAll('-', '_');
+    const files = await packageFiles(directory, moduleName);
+    for (const required of ['composer.json', 'README.md', 'LICENSE'])
       check(files.includes(required), `${name} is missing ${required}.`);
     const manifest = JSON.parse(
       await readFile(join(directory, 'composer.json'), 'utf8')
     );
     validateManifest(manifest, name);
-    const recipe = await readFile(join(directory, 'recipe.yml'), 'utf8');
-    check(
-      /^name:\s*\S/m.test(recipe) && /^type:\s*\S/m.test(recipe),
-      `${name} needs recipe name/type metadata.`
-    );
-    // YAML can continue a plain scalar on the next indented line.
-    const [, descriptionLine, continuation] =
-      recipe.match(
-        /^description:([^\r\n]*)(?:\r?\n[ \t]*(?:#[^\r\n]*)?$)*(?:\r?\n([ \t]+[^ \t\r\n#]))?/m
-      ) ?? [];
-    const [, singleQuoted, doubleQuoted, plain] =
-      descriptionLine?.match(
-        /^[ \t]+(?:'((?:[^']|'')*)'|"((?:[^"\\]|\\["\\])*)"|((?![-?:](?:[ \t]|$))[^ \t"'[\]{}&*!|>,%@`#](?:(?!:[ \t]|:$).)*?))(?:[ \t]+#.*)?[ \t]*$/
-      ) ?? [];
-    const description =
-      singleQuoted?.replaceAll("''", "'") ??
-      doubleQuoted?.replace(/\\(["\\])/g, '$1') ??
-      plain;
-    check(
-      description?.trim() && !continuation,
-      `${name} needs a nonempty, single-line recipe.yml description.`
-    );
-    check(
-      description === manifest.description,
-      `${name} has different descriptions in recipe.yml and composer.json.`
-    );
+    if (manifest.type === 'drupal-module') {
+      check(
+        files.includes(`${moduleName}.info.yml`),
+        `${name} is missing ${moduleName}.info.yml.`
+      );
+    } else {
+      await validateRecipe(directory, name, manifest.description);
+    }
     for (const file of [
       ...(typeof manifest.bin === 'string'
         ? [manifest.bin]
@@ -245,6 +229,35 @@ export async function validatePackages(root) {
     }
   }
   return packages;
+}
+
+async function validateRecipe(directory, name, manifestDescription) {
+  const recipe = await readFile(join(directory, 'recipe.yml'), 'utf8');
+  check(
+    /^name:\s*\S/m.test(recipe) && /^type:\s*\S/m.test(recipe),
+    `${name} needs recipe name/type metadata.`
+  );
+  // YAML can continue a plain scalar on the next indented line.
+  const [, descriptionLine, continuation] =
+    recipe.match(
+      /^description:([^\r\n]*)(?:\r?\n[ \t]*(?:#[^\r\n]*)?$)*(?:\r?\n([ \t]+[^ \t\r\n#]))?/m
+    ) ?? [];
+  const [, singleQuoted, doubleQuoted, plain] =
+    descriptionLine?.match(
+      /^[ \t]+(?:'((?:[^']|'')*)'|"((?:[^"\\]|\\["\\])*)"|((?![-?:](?:[ \t]|$))[^ \t"'[\]{}&*!|>,%@`#](?:(?!:[ \t]|:$).)*?))(?:[ \t]+#.*)?[ \t]*$/
+    ) ?? [];
+  const description =
+    singleQuoted?.replaceAll("''", "'") ??
+    doubleQuoted?.replace(/\\(["\\])/g, '$1') ??
+    plain;
+  check(
+    description?.trim() && !continuation,
+    `${name} needs a nonempty, single-line recipe.yml description.`
+  );
+  check(
+    description === manifestDescription,
+    `${name} has different descriptions in recipe.yml and composer.json.`
+  );
 }
 
 export function validateRelease(manifest) {
@@ -486,7 +499,7 @@ if (direct) {
     if (options.check) {
       check(args.length === 1, '--check does not accept build arguments.');
       console.log(
-        `Validated ${(await validatePackages(options.root)).size} independently installable recipe packages.`
+        `Validated ${(await validatePackages(options.root)).size} installable Sous packages.`
       );
     } else {
       check(

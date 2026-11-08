@@ -23,8 +23,8 @@ settings:
   handler: 'default:block_content'
   handler_settings:
     target_bundles:
-      image: image
       text: text
+      image: image
       video: video
     sort:
       field: _none

@@ -31,54 +31,54 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
-      accordion: accordion
-      accordion_item: accordion_item
-      embed: embed
-      from_library: from_library
-      image: image
-      quote: quote
-      table: table
-      tabs: tabs
-      tabs_item: tabs_item
       text: text
       text_with_media: text_with_media
+      image: image
       video: video
+      quote: quote
+      table: table
+      accordion: accordion
+      accordion_item: accordion_item
+      tabs: tabs
+      tabs_item: tabs_item
+      from_library: from_library
+      embed: embed
     negate: 0
     target_bundles_drag_drop:
-      accordion:
-        weight: 0
-        enabled: true
-      accordion_item:
-        weight: 1
-        enabled: true
-      embed:
-        weight: 2
-        enabled: true
-      from_library:
-        weight: 3
-        enabled: true
-      image:
-        weight: 4
-        enabled: true
-      quote:
-        weight: 5
-        enabled: true
-      table:
-        weight: 6
-        enabled: true
-      tabs:
-        weight: 7
-        enabled: true
-      tabs_item:
-        weight: 8
-        enabled: true
       text:
-        weight: 9
+        weight: -49
         enabled: true
       text_with_media:
-        weight: 10
+        weight: -48
+        enabled: true
+      image:
+        weight: -47
         enabled: true
       video:
-        weight: 11
+        weight: -46
+        enabled: true
+      quote:
+        weight: -44
+        enabled: true
+      table:
+        weight: -43
+        enabled: true
+      accordion:
+        weight: -42
+        enabled: true
+      accordion_item:
+        weight: -41
+        enabled: true
+      tabs:
+        weight: -40
+        enabled: true
+      tabs_item:
+        weight: -39
+        enabled: true
+      from_library:
+        weight: -37
+        enabled: true
+      embed:
+        weight: -36
         enabled: true
 field_type: entity_reference_revisions

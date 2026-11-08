@@ -23,45 +23,45 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
-      image: image
       text: text
+      image: image
       video: video
     negate: 0
     target_bundles_drag_drop:
-      accordion:
-        weight: 0
-        enabled: false
-      accordion_item:
-        weight: 1
-        enabled: false
-      embed:
-        weight: 2
-        enabled: false
-      from_library:
-        weight: 3
-        enabled: false
-      image:
-        weight: 4
-        enabled: true
-      quote:
-        weight: 5
-        enabled: false
-      table:
-        weight: 6
-        enabled: false
-      tabs:
-        weight: 7
-        enabled: false
-      tabs_item:
-        weight: 8
-        enabled: false
       text:
-        weight: 9
+        weight: -49
         enabled: true
       text_with_media:
-        weight: 10
+        weight: -48
         enabled: false
-      video:
-        weight: 11
+      image:
+        weight: -47
         enabled: true
+      video:
+        weight: -46
+        enabled: true
+      quote:
+        weight: -44
+        enabled: false
+      table:
+        weight: -43
+        enabled: false
+      accordion:
+        weight: -42
+        enabled: false
+      accordion_item:
+        weight: -41
+        enabled: false
+      tabs:
+        weight: -40
+        enabled: false
+      tabs_item:
+        weight: -39
+        enabled: false
+      from_library:
+        weight: -37
+        enabled: false
+      embed:
+        weight: -36
+        enabled: false
 field_type: entity_reference_revisions

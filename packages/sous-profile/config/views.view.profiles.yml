@@ -251,14 +251,6 @@ display:
       defaults:
         pager: false
         filters: false
-        use_more: false
-        use_more_always: false
-        use_more_text: false
-        link_display: false
-      use_more: true
-      use_more_always: true
-      use_more_text: 'See all'
-      link_display: page_profiles
   entity_browser:
     id: entity_browser
     display_title: Profile Content Browser
@@ -349,10 +341,10 @@ display:
         fields: false
         sorts: false
         filters: false
-  page_profiles:
-    id: page_profiles
+  block_profiles:
+    id: block_profiles
     display_title: Profiles
-    display_plugin: page
+    display_plugin: block
     position: 3
     display_options:
       pager:
@@ -362,4 +354,3 @@ display:
           offset: 0
       defaults:
         pager: false
-      path: profiles
