@@ -2,15 +2,15 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.paragraph.field_link
-    - paragraphs.paragraphs_type.content_list_card
+    - field.storage.media.field_transcript
+    - media.type.video_file
   module:
     - link
-id: paragraph.content_list_card.field_link
-field_name: field_link
-entity_type: paragraph
-bundle: content_list_card
-label: Link
+id: media.video_file.field_transcript
+field_name: field_transcript
+entity_type: media
+bundle: video_file
+label: Transcript
 description: ''
 required: false
 translatable: false

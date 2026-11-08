@@ -4,7 +4,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.full
     - field.field.node.page.field_metadata
-    - field.field.node.page.field_tags
     - field.field.node.page.field_teaser_image
     - field.field.node.page.field_teaser_text
     - node.type.page
@@ -17,7 +16,6 @@ mode: full
 content: {}
 hidden:
   field_metadata: true
-  field_tags: true
   field_teaser_image: true
   field_teaser_text: true
   links: true

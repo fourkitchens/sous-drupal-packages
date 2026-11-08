@@ -3,7 +3,7 @@
 `fourkitchens/sous-content-base` · `drupal-recipe` · GPL-2.0-or-later
 
 Shared Page and Frontpage fields, authoring tabs, teasers and title-based
-Pathauto aliases. It applies Formats and Media; Page also has tags. Title sits
+Pathauto aliases. It applies Formats and Media. Title sits
 above the horizontal Content/Teaser tabs, with no SEO Title field or Info tab.
 The base attaches neither Body nor a Paragraph reference.
 

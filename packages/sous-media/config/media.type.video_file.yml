@@ -1,9 +1,9 @@
 langcode: en
 status: true
 dependencies: {}
-id: uploaded_video
-label: Uploaded Video
-description: Upload a video file directly to this website. For approved uses only; use Video whenever possible.
+id: video_file
+label: Video File
+description: Upload an approved MP4 or WebM file. Use Video for YouTube or Vimeo.
 source: video_file
 queue_thumbnail_downloads: false
 new_revision: true

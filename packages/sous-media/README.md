@@ -2,7 +2,7 @@
 
 `fourkitchens/sous-media` · `drupal-recipe` · GPL-2.0-or-later
 
-Provides File, Image, Video and Uploaded Video media bundles with shared fields,
+Provides File, Image, Video and Video File media bundles with shared fields,
 form/view displays, Media Library defaults, media tags and authoring dependencies. It is
 shared by Content Types and Paragraph Types and has no dependency on either
 optional content composition.
@@ -19,8 +19,8 @@ providers, preserving matching configuration without copying core defaults.
 Scheduler fields stay hidden on the media forms. The consuming project
 owns its complete export, including imported core modes and project overrides.
 
-File, Image and Uploaded Video use Drupal's Media Library upload form. Uploaded
-Video accepts MP4 and WebM files. Use remote Video for ordinary embeds.
+File, Image and Video File use Drupal's Media Library upload form. Video File
+accepts approved MP4 and WebM files. Use Video for YouTube and Vimeo embeds.
 
 The landscape, portrait and square teaser displays use Focal Point crops and
 WebP derivatives at the xSmall, Small and Medium Emulsify breakpoints. The

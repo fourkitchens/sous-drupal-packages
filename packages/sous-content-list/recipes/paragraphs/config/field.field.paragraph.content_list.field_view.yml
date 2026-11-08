@@ -10,7 +10,7 @@ id: paragraph.content_list.field_view
 field_name: field_view
 entity_type: paragraph
 bundle: content_list
-label: Listing
+label: 'Teaser listing'
 description: ''
 required: false
 translatable: false

@@ -4,4 +4,4 @@ dependencies: {}
 id: content_list
 label: 'Content List'
 revision: true
-description: 'Hand-picked content and cards, or a listing from a View narrowed by terms.'
+description: 'Hand-picked teasers or an automatic teaser listing that can be filtered by terms.'

@@ -3,7 +3,7 @@ status: true
 dependencies: {}
 id: video
 label: Video
-description: ''
+description: Embed a video from YouTube or Vimeo.
 source: 'oembed:video'
 queue_thumbnail_downloads: false
 new_revision: true

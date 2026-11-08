@@ -2,12 +2,12 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.block_content.field_heading
-    - block_content.type.content_list_card
-id: block_content.content_list_card.field_heading
+    - field.storage.paragraph.field_heading
+    - paragraphs.paragraphs_type.content_list_teaser
+id: paragraph.content_list_teaser.field_heading
 field_name: field_heading
-entity_type: block_content
-bundle: content_list_card
+entity_type: paragraph
+bundle: content_list_teaser
 label: Heading
 description: ''
 required: true

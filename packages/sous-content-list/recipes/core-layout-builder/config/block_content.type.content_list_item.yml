@@ -2,6 +2,6 @@ langcode: en
 status: true
 dependencies: {}
 id: content_list_item
-label: 'Content Item'
+label: 'Content Teaser'
 revision: true
 description: 'An existing page or post, shown as its teaser.'

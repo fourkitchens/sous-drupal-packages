@@ -3,13 +3,13 @@ status: true
 dependencies:
   config:
     - field.storage.media.field_description
-    - media.type.uploaded_video
+    - media.type.video_file
   module:
     - text
-id: media.uploaded_video.field_description
+id: media.video_file.field_description
 field_name: field_description
 entity_type: media
-bundle: uploaded_video
+bundle: video_file
 label: Description
 description: ''
 required: false

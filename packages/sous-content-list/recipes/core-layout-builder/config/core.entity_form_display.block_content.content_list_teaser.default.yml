@@ -2,18 +2,18 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.paragraph.content_list_card.field_heading
-    - field.field.paragraph.content_list_card.field_image
-    - field.field.paragraph.content_list_card.field_link
-    - field.field.paragraph.content_list_card.field_text
-    - paragraphs.paragraphs_type.content_list_card
+    - block_content.type.content_list_teaser
+    - field.field.block_content.content_list_teaser.field_heading
+    - field.field.block_content.content_list_teaser.field_image
+    - field.field.block_content.content_list_teaser.field_link
+    - field.field.block_content.content_list_teaser.field_text
   module:
     - link
     - media_library
     - text
-id: paragraph.content_list_card.default
-targetEntityType: paragraph
-bundle: content_list_card
+id: block_content.content_list_teaser.default
+targetEntityType: block_content
+bundle: content_list_teaser
 mode: default
 content:
   field_image:
@@ -49,7 +49,12 @@ content:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {}
-hidden:
-  created: true
-  status: true
-  uid: true
+  info:
+    type: string_textfield
+    weight: -10
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {}
+hidden: {}

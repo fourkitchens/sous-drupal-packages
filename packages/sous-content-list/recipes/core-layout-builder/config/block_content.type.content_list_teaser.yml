@@ -1,7 +1,7 @@
 langcode: en
 status: true
 dependencies: {}
-id: content_list_card
-label: Card
+id: content_list_teaser
+label: 'Custom Teaser'
 revision: true
 description: 'An image, heading, text and link.'

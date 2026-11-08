@@ -2,17 +2,17 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.paragraph.content_list_card.field_heading
-    - field.field.paragraph.content_list_card.field_image
-    - field.field.paragraph.content_list_card.field_link
-    - field.field.paragraph.content_list_card.field_text
-    - paragraphs.paragraphs_type.content_list_card
+    - field.field.paragraph.content_list_teaser.field_heading
+    - field.field.paragraph.content_list_teaser.field_image
+    - field.field.paragraph.content_list_teaser.field_link
+    - field.field.paragraph.content_list_teaser.field_text
+    - paragraphs.paragraphs_type.content_list_teaser
   module:
     - link
     - text
-id: paragraph.content_list_card.default
+id: paragraph.content_list_teaser.default
 targetEntityType: paragraph
-bundle: content_list_card
+bundle: content_list_teaser
 mode: default
 content:
   field_image:

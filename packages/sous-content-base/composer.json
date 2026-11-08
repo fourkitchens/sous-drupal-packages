@@ -22,7 +22,6 @@
     "drupal/metatag": "^2.2.3",
     "drupal/pathauto": "^1.15.0",
     "drupal/publication_date": "^3.2.0",
-    "drupal/tagify": "^2.0.5",
     "fourkitchens/sous-formats": "^2.0",
     "fourkitchens/sous-media": "^2.0",
     "fourkitchens/sous-workflow": "^2.0"

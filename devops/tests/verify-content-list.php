@@ -23,7 +23,7 @@ $entity_type = match ($case) {
 };
 $entities = \Drupal::entityTypeManager();
 $storage = \Drupal::service('config.storage');
-$bundles = ['content_list', 'content_list_item', 'content_list_card'];
+$bundles = ['content_list', 'content_list_item', 'content_list_teaser'];
 $checks = [
   'browser' => $storage->exists('entity_browser.browser.content_list_browser'),
   'browser View' => $storage->exists('views.view.content_list_browser'),
@@ -40,6 +40,8 @@ if ($entity_type) {
   $item_form = $form_storage->load("$entity_type.content_list_item.default");
   $children_widget = $entity_type === 'paragraph' ? 'paragraphs' : 'inline_entity_form_complex';
   $checks['list children widget'] = $list_form->getRenderer('field_content')?->getPluginId() === $children_widget;
+  $list_children = FieldConfig::loadByName($entity_type, 'content_list', 'field_content')->getSetting('handler_settings')['target_bundles'];
+  $checks['list teaser bundles'] = count($list_children) === 2 && !array_diff(['content_list_item', 'content_list_teaser'], $list_children);
   $listing_widget = $list_form->getRenderer('field_view');
   $checks['list View widget'] = $listing_widget?->getPluginId() === 'viewsreference_select';
   $checks['item browser widget'] = $item_form->getRenderer('field_related_content')?->getPluginId() === 'entity_browser_entity_reference';
@@ -60,7 +62,7 @@ if ($entity_type) {
   foreach ($hosts as [$type, $bundle]) {
     $allowed = FieldConfig::loadByName($type, $bundle, 'field_content')->getSetting('handler_settings')['target_bundles'];
     $checks["list placement.$type.$bundle"] = in_array('content_list', $allowed, TRUE)
-      && !array_intersect(['content_list_item', 'content_list_card'], $allowed);
+      && !array_intersect(['content_list_item', 'content_list_teaser'], $allowed);
   }
 }
 foreach ($checks as $check => $passed) {
@@ -116,20 +118,20 @@ try {
   ] + $block_values);
   $item->save();
   $component_ids['item'] = $item->id();
-  $card = $component_storage->create([
-    'type' => 'content_list_card',
-    'info' => 'Card heading',
+  $teaser = $component_storage->create([
+    'type' => 'content_list_teaser',
+    'info' => 'Custom teaser heading',
     'status' => TRUE,
-    'field_heading' => 'Card heading',
+    'field_heading' => 'Custom teaser heading',
   ] + $block_values);
-  $card->save();
-  $component_ids['card'] = $card->id();
+  $teaser->save();
+  $component_ids['teaser'] = $teaser->id();
   $list = $component_storage->create([
     'type' => 'content_list',
     'info' => 'Latest',
     'status' => TRUE,
     'field_heading' => 'Latest',
-    'field_content' => [['entity' => $item], ['entity' => $card]],
+    'field_content' => [['entity' => $item], ['entity' => $teaser]],
   ] + ($entity_type === 'block_content' ? ['reusable' => FALSE] : []));
   $host = $node_storage->create([
     'type' => 'page',
@@ -213,7 +215,7 @@ try {
     finally {
       $switcher->switchBack();
     }
-    foreach (array_merge(['Latest', 'Card heading', 'Picked page'], $expected) as $marker) {
+    foreach (array_merge(['Latest', 'Custom teaser heading', 'Picked page'], $expected) as $marker) {
       if (!str_contains($html, $marker)) {
         throw new \RuntimeException("$case Content List $scenario did not render $marker.");
       }
@@ -223,8 +225,8 @@ try {
         throw new \RuntimeException("$case Content List $scenario unexpectedly rendered $title.");
       }
     }
-    if (strpos($html, 'Card heading') > strpos($html, $expected[0]) || strpos($html, 'Picked page') > strpos($html, $expected[0])) {
-      throw new \RuntimeException("$case Content List did not render hand-picked items before the listing.");
+    if (strpos($html, 'Custom teaser heading') > strpos($html, $expected[0]) || strpos($html, 'Picked page') > strpos($html, $expected[0])) {
+      throw new \RuntimeException("$case Content List did not render hand-picked teasers before the listing.");
     }
     if ($scenario === 'no terms' && !str_contains($html, 'href="/news"')) {
       throw new \RuntimeException("$case Content List did not link to /news.");

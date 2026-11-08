@@ -24,9 +24,9 @@ config:
   strict:
     - core.entity_form_display.media.file.default
     - core.entity_form_display.media.image.default
-    - core.entity_form_display.media.uploaded_video.default
-    - core.entity_form_display.media.uploaded_video.media_library
     - core.entity_form_display.media.video.default
+    - core.entity_form_display.media.video_file.default
+    - core.entity_form_display.media.video_file.media_library
     - core.entity_form_mode.media.media_library
     - core.entity_view_display.media.file.default
     - core.entity_view_display.media.file.media_library
@@ -37,12 +37,12 @@ config:
     - core.entity_view_display.media.image.default
     - core.entity_view_display.media.image.media_library
     - core.entity_view_display.media.image.preview
-    - core.entity_view_display.media.uploaded_video.default
-    - core.entity_view_display.media.uploaded_video.media_library
-    - core.entity_view_display.media.uploaded_video.preview
     - core.entity_view_display.media.video.default
     - core.entity_view_display.media.video.media_library
     - core.entity_view_display.media.video.preview
+    - core.entity_view_display.media.video_file.default
+    - core.entity_view_display.media.video_file.media_library
+    - core.entity_view_display.media.video_file.preview
     - core.entity_view_mode.file.token
     - core.entity_view_mode.media.content_teaser_landscape
     - core.entity_view_mode.media.content_teaser_portrait
@@ -60,18 +60,18 @@ config:
     - field.field.media.image.field_description
     - field.field.media.image.field_media_image
     - field.field.media.image.field_tags
-    - field.field.media.uploaded_video.field_caption
-    - field.field.media.uploaded_video.field_copyright
-    - field.field.media.uploaded_video.field_description
-    - field.field.media.uploaded_video.field_media_file
-    - field.field.media.uploaded_video.field_tags
-    - field.field.media.uploaded_video.field_transcript
     - field.field.media.video.field_caption
     - field.field.media.video.field_copyright
     - field.field.media.video.field_description
     - field.field.media.video.field_media_oembed_video
     - field.field.media.video.field_tags
     - field.field.media.video.field_transcript
+    - field.field.media.video_file.field_caption
+    - field.field.media.video_file.field_copyright
+    - field.field.media.video_file.field_description
+    - field.field.media.video_file.field_media_file
+    - field.field.media.video_file.field_tags
+    - field.field.media.video_file.field_transcript
     - field.storage.media.field_caption
     - field.storage.media.field_copyright
     - field.storage.media.field_description
@@ -99,8 +99,8 @@ config:
     - media.settings
     - media.type.file
     - media.type.image
-    - media.type.uploaded_video
     - media.type.video
+    - media.type.video_file
     - media_library.settings
     - responsive_image.styles.content_teaser_landscape
     - responsive_image.styles.content_teaser_portrait

@@ -19,7 +19,6 @@ install:
   - field_group
   - metatag
   - publication_date
-  - tagify
 config:
   import:
     metatag: '*'
@@ -31,9 +30,6 @@ config:
         - 'create url aliases'
         - 'access page_content_browser entity browser pages'
         - 'access frontpage_content_browser entity browser pages'
-        - 'create terms in tags'
-        - 'edit terms in tags'
-        - 'delete terms in tags'
       grantPermissionsForEachNodeType:
         - 'create %bundle content'
         - 'edit any %bundle content'

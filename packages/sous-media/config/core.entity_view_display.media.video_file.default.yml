@@ -2,19 +2,19 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.media.uploaded_video.field_caption
-    - field.field.media.uploaded_video.field_copyright
-    - field.field.media.uploaded_video.field_description
-    - field.field.media.uploaded_video.field_media_file
-    - field.field.media.uploaded_video.field_tags
-    - field.field.media.uploaded_video.field_transcript
-    - media.type.uploaded_video
+    - field.field.media.video_file.field_caption
+    - field.field.media.video_file.field_copyright
+    - field.field.media.video_file.field_description
+    - field.field.media.video_file.field_media_file
+    - field.field.media.video_file.field_tags
+    - field.field.media.video_file.field_transcript
+    - media.type.video_file
   module:
     - file
     - link
-id: media.uploaded_video.default
+id: media.video_file.default
 targetEntityType: media
-bundle: uploaded_video
+bundle: video_file
 mode: default
 content:
   field_caption:

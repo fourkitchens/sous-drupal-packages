@@ -10,7 +10,7 @@ id: block_content.content_list.field_view
 field_name: field_view
 entity_type: block_content
 bundle: content_list
-label: Listing
+label: 'Teaser listing'
 description: ''
 required: false
 translatable: false

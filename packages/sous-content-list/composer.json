@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-content-list",
-  "description": "Adds a Content List component with hand-picked teasers, cards and a listing narrowed by terms.",
+  "description": "Adds a Content List component with hand-picked teasers and an automatic listing that can be filtered by terms.",
   "keywords": [
     "recipe",
     "Drupal recipes",

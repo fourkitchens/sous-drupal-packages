@@ -24,8 +24,8 @@ third_party_settings:
     group_main:
       children:
         - group_content
-        - group_teaser
         - group_organization
+        - group_teaser
       label: Main
       region: content
       parent_name: ''
@@ -59,7 +59,7 @@ third_party_settings:
       label: Teaser
       region: content
       parent_name: group_main
-      weight: 22
+      weight: 23
       format_type: tab
       format_settings:
         classes: ''
@@ -74,7 +74,7 @@ third_party_settings:
       label: Organization
       region: content
       parent_name: group_main
-      weight: 23
+      weight: 22
       format_type: tab
       format_settings:
         classes: ''

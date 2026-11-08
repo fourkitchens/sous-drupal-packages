@@ -5,14 +5,14 @@ dependencies:
     - field.storage.block_content.field_content
     - block_content.type.content_list
     - block_content.type.content_list_item
-    - block_content.type.content_list_card
+    - block_content.type.content_list_teaser
   module:
     - entity_reference_revisions
 id: block_content.content_list.field_content
 field_name: field_content
 entity_type: block_content
 bundle: content_list
-label: 'Hand-picked items'
+label: 'Hand-picked teasers'
 description: ''
 required: false
 translatable: false
@@ -23,7 +23,7 @@ settings:
   handler_settings:
     target_bundles:
       content_list_item: content_list_item
-      content_list_card: content_list_card
+      content_list_teaser: content_list_teaser
     sort:
       field: _none
       direction: ASC

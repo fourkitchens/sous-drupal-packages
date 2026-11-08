@@ -3,7 +3,7 @@ status: true
 dependencies: {}
 id: file
 label: File
-description: ''
+description: Upload a document such as a PDF, Word document, or plain text file.
 source: file
 queue_thumbnail_downloads: false
 new_revision: true

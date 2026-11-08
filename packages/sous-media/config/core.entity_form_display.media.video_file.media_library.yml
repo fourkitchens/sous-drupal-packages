@@ -3,13 +3,13 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.media.media_library
-    - field.field.media.uploaded_video.field_caption
-    - field.field.media.uploaded_video.field_copyright
-    - field.field.media.uploaded_video.field_description
-    - field.field.media.uploaded_video.field_media_file
-    - field.field.media.uploaded_video.field_tags
-    - field.field.media.uploaded_video.field_transcript
-    - media.type.uploaded_video
+    - field.field.media.video_file.field_caption
+    - field.field.media.video_file.field_copyright
+    - field.field.media.video_file.field_description
+    - field.field.media.video_file.field_media_file
+    - field.field.media.video_file.field_tags
+    - field.field.media.video_file.field_transcript
+    - media.type.video_file
   module:
     - field_group
     - file
@@ -63,9 +63,9 @@ third_party_settings:
         formatter: closed
         description: ''
         required_fields: true
-id: media.uploaded_video.media_library
+id: media.video_file.media_library
 targetEntityType: media
-bundle: uploaded_video
+bundle: video_file
 mode: media_library
 content:
   field_caption:

@@ -5,7 +5,7 @@
 Provides the default Page and Frontpage composition with Body. It applies
 [Content Base](../sous-content-base), which owns shared fields, authoring tabs,
 teasers and title-based Pathauto aliases, and attaches Body to both types.
-Page additionally has tags. Formats and Media come through the shared base;
+Formats and Media come through the shared base;
 Admin remains independently optional.
 
 Create content at `/node/add/page` or `/node/add/frontpage`. Title appears above

@@ -3,11 +3,11 @@ status: true
 dependencies:
   config:
     - field.storage.media.field_copyright
-    - media.type.uploaded_video
-id: media.uploaded_video.field_copyright
+    - media.type.video_file
+id: media.video_file.field_copyright
 field_name: field_copyright
 entity_type: media
-bundle: uploaded_video
+bundle: video_file
 label: Copyright
 description: ''
 required: false

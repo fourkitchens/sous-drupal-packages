@@ -7,10 +7,13 @@
 
 use Drupal\Component\Utility\Html;
 use Drupal\filter\Entity\FilterFormat;
+use Drupal\layout_paragraphs\Controller\ChooseComponentController;
+use Drupal\layout_paragraphs\LayoutParagraphsLayout;
 use Drupal\node\Entity\Node;
 use Drupal\path_alias\Entity\PathAlias;
 use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
+use Symfony\Component\HttpFoundation\Request;
 
 $case = getenv('COMPOSITION');
 $entities = \Drupal::entityTypeManager();
@@ -38,6 +41,12 @@ try {
     }
   }
   $bundles = array_keys($entities->getStorage('node_type')->loadMultiple());
+  $config = \Drupal::service('config.storage');
+  foreach (['field.field.node.page.field_tags', 'field.storage.node.field_tags', 'taxonomy.vocabulary.tags'] as $name) {
+    if ($config->exists($name)) {
+      throw new \RuntimeException("Page Tags config $name is still installed.");
+    }
+  }
   foreach ($bundles as $bundle) {
     $display = $entities->getStorage('entity_form_display')->load("node.$bundle.default");
     $widget = $display->getRenderer('field_metadata');
@@ -45,9 +54,17 @@ try {
     if ($widget?->getPluginId() !== 'metatag_firehose' || !$widget->getSetting('sidebar') || ($form['field_metadata']['widget'][0]['#group'] ?? NULL) !== 'advanced' || ($form['field_metadata']['#access'] ?? TRUE) === FALSE) {
       throw new \RuntimeException("$bundle is missing its accessible Metatag sidebar widget.");
     }
+    $groups = $display->getThirdPartySettings('field_group');
+    $tabs = array_intersect_key($groups, array_flip($groups['group_main']['children']));
+    uasort($tabs, static fn($a, $b) => $a['weight'] <=> $b['weight']);
+    if (array_key_last($tabs) !== 'group_teaser' || $groups['group_teaser']['children'] !== ['field_teaser_image', 'field_teaser_text'] || ($form['#group_children']['field_teaser_image'] ?? NULL) !== 'group_teaser' || ($form['#group_children']['field_teaser_text'] ?? NULL) !== 'group_teaser') {
+      throw new \RuntimeException("$bundle must end with the Teaser tab and its image and text fields.");
+    }
+    if ($bundle === 'page' && (isset($groups['group_taxonomy']) || isset($form['field_tags']))) {
+      throw new \RuntimeException('Page still has a Taxonomy group or Tags widget.');
+    }
     if (in_array($bundle, ['event', 'news_post'], TRUE)) {
       $field = $bundle === 'event' ? 'field_event_type' : 'field_news_categories';
-      $groups = $display->getThirdPartySettings('field_group');
       $organization = $groups['group_organization'];
       if ($groups['group_main']['format_settings']['direction'] !== 'horizontal' || !in_array('group_organization', $groups['group_main']['children'], TRUE) || $organization['format_type'] !== 'tab' || $organization['parent_name'] !== 'group_main' || $organization['children'] !== [$field] || in_array($field, $groups['group_content']['children'], TRUE) || ($form['#group_children'][$field] ?? NULL) !== 'group_organization' || !isset($form[$field])) {
         throw new \RuntimeException("$bundle taxonomy is not in the Organization tab.");
@@ -87,6 +104,17 @@ try {
   }
 
   if ($case === 'paragraphs') {
+    $chooser = ChooseComponentController::create(\Drupal::getContainer());
+    $expected_order = ['text', 'text_with_media', 'image', 'video', 'quote', 'table', 'accordion', 'tabs', 'content_list', 'embed', 'from_library'];
+    foreach (['page', 'frontpage', 'event', 'news_post'] as $bundle) {
+      $host = Node::create(['type' => $bundle]);
+      $layout = new LayoutParagraphsLayout($host->get('field_content'));
+      $menu = $chooser->list(new Request(), $layout);
+      if (array_keys($menu['#types']['content']) !== $expected_order || array_keys($menu['#types']['layout']) !== ['layout']) {
+        throw new \RuntimeException("$bundle component chooser is out of order.");
+      }
+    }
+
     foreach (['text', 'text_with_media', 'image', 'video', 'accordion', 'accordion_item', 'quote', 'embed', 'table', 'tabs', 'tabs_item', 'from_library', 'layout'] as $bundle) {
       $type = $entities->getStorage('paragraphs_type')->load($bundle);
       $icon = $type->getIconFile();
@@ -114,4 +142,4 @@ finally {
   $switcher->switchBack();
 }
 
-print "$case authoring forms, text filters, paragraph icons and account access verified.\n";
+print "$case authoring forms, text filters, paragraph icons, component order and account access verified.\n";

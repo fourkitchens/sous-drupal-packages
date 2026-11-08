@@ -16,13 +16,13 @@ install:
 config:
   strict:
     - block_content.type.content_list
-    - block_content.type.content_list_card
+    - block_content.type.content_list_teaser
     - block_content.type.content_list_item
     - core.entity_form_display.block_content.content_list.default
-    - core.entity_form_display.block_content.content_list_card.default
+    - core.entity_form_display.block_content.content_list_teaser.default
     - core.entity_form_display.block_content.content_list_item.default
     - core.entity_view_display.block_content.content_list.default
-    - core.entity_view_display.block_content.content_list_card.default
+    - core.entity_view_display.block_content.content_list_teaser.default
     - core.entity_view_display.block_content.content_list_item.default
     - field.field.block_content.content_list.field_content
     - field.field.block_content.content_list.field_heading
@@ -31,10 +31,10 @@ config:
     - field.field.block_content.content_list.field_style_layout_width
     - field.field.block_content.content_list.field_text
     - field.field.block_content.content_list.field_view
-    - field.field.block_content.content_list_card.field_heading
-    - field.field.block_content.content_list_card.field_image
-    - field.field.block_content.content_list_card.field_link
-    - field.field.block_content.content_list_card.field_text
+    - field.field.block_content.content_list_teaser.field_heading
+    - field.field.block_content.content_list_teaser.field_image
+    - field.field.block_content.content_list_teaser.field_link
+    - field.field.block_content.content_list_teaser.field_text
     - field.field.block_content.content_list_item.field_related_content
     - field.storage.block_content.field_link
     - field.storage.block_content.field_related_content

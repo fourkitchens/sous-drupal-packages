@@ -5,7 +5,6 @@ dependencies:
     - core.entity_view_mode.media.preview
     - core.entity_view_mode.node.admin_preview
     - field.field.node.page.field_metadata
-    - field.field.node.page.field_tags
     - field.field.node.page.field_teaser_image
     - field.field.node.page.field_teaser_text
     - node.type.page
@@ -35,6 +34,5 @@ content:
 hidden:
   content_moderation_control: true
   field_metadata: true
-  field_tags: true
   links: true
   published_at: true

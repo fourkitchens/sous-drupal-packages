@@ -78,7 +78,7 @@ third_party_settings:
     group_hand_picked_items:
       children:
         - field_content
-      label: 'Hand-picked items'
+      label: 'Hand-picked teasers'
       region: content
       parent_name: group_content
       weight: 4
@@ -93,7 +93,7 @@ third_party_settings:
     group_automatic_listing:
       children:
         - field_view
-      label: 'Automatic listing'
+      label: 'Automatic teasers'
       region: content
       parent_name: group_content
       weight: 5
@@ -143,8 +143,8 @@ content:
     weight: 6
     region: content
     settings:
-      title: Component
-      title_plural: Components
+      title: Teaser
+      title_plural: Teasers
       edit_mode: closed
       closed_mode: preview
       autocollapse: none

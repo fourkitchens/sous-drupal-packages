@@ -21,7 +21,7 @@ shared version, beginning with `2.0.0`.
 | [sous-events](packages/sous-events)                           | Recurring events, event types, teasers and upcoming/past embeds  | Optional recipe            |
 | [sous-news-post](packages/sous-news-post)                     | News Posts, bylines, categories, teasers and a Recent News embed | Optional recipe            |
 | [sous-profile](packages/sous-profile)                         | Profiles, automatic names, images, bios and searchable teasers   | Optional recipe            |
-| [sous-content-list](packages/sous-content-list)               | Hand-picked teasers and cards with a term-filtered listing       | Optional component         |
+| [sous-content-list](packages/sous-content-list)               | Hand-picked teasers and a term-filtered automatic listing        | Optional component         |
 | [sous-seo](packages/sous-seo)                                 | Redirects, sitemaps, breadcrumbs and SEO integrations            | Starter base               |
 | [sous-alerts](packages/sous-alerts)                           | Site-wide alert banners with scheduling and dismissal            | Optional recipe            |
 | [sous-search](packages/sous-search)                           | Database search, content type filter and header search box       | Optional recipe            |

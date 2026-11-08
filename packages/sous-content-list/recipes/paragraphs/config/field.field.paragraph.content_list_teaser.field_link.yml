@@ -2,14 +2,14 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.block_content.field_link
-    - block_content.type.content_list_card
+    - field.storage.paragraph.field_link
+    - paragraphs.paragraphs_type.content_list_teaser
   module:
     - link
-id: block_content.content_list_card.field_link
+id: paragraph.content_list_teaser.field_link
 field_name: field_link
-entity_type: block_content
-bundle: content_list_card
+entity_type: paragraph
+bundle: content_list_teaser
 label: Link
 description: ''
 required: false

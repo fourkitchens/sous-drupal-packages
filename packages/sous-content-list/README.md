@@ -3,23 +3,23 @@
 `fourkitchens/sous-content-list` · `drupal-recipe` · GPL-2.0-or-later
 
 Adds a Content List with a heading, introduction, call to action, and two ways
-to add entries. Pick existing content to show its teaser, or create a Card
-with its own image, heading, text, and link. The hand-picked items appear first,
+to add teasers. Use **Content Teaser** to pick existing content or **Custom Teaser**
+to provide an image, heading, text, and link. The hand-picked teasers appear first,
 followed by the automatic listing. Either source can be used on its own.
 
 The Paragraphs integration adds a Content List paragraph with nested Content
-Item and Card paragraphs. The Layout Builder integration provides the same
+Teaser and Custom Teaser paragraphs. The Layout Builder integration provides the same
 types as inline blocks. The base recipe supplies the shared content picker.
 Admin-only and Content Types installations have no Content List component.
 
 ## Automatic listings
 
-Choose an Embed display in the Listing field. Use the `some` pager so the
+Choose an Embed display in the Teaser listing field. Use the `some` pager so the
 field's item limit can override the display's default. Teaser embeds have no
 exposed filters, use tag-based caching, and offer a **See all** link to a page
 where visitors can filter the full listing.
 
-The Listing field enables the **Sift filters** setting. When the selected
+The Teaser listing field enables the **Sift filters** setting. When the selected
 display has supported contextual filters, editors see a control for each
 enabled filter under **Options** → **Filter this list**.
 
@@ -36,7 +36,7 @@ selection empty to show all results for the chosen display up to the item limit.
 The package ships no templates. A theme can use
 `paragraph--content-list.html.twig` and
 `block--inline-block--content-list.html.twig` with the same field names. Render
-`field_content` before `field_view` to keep hand-picked entries first.
+`field_content` before `field_view` to keep hand-picked teasers first.
 
 ## Installation and application
 

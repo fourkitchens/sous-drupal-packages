@@ -23,13 +23,19 @@ $checks = [
   'default theme' => \Drupal::config('system.theme')->get('default') === 'emulsify',
   'DropzoneJS disabled' => !$modules->moduleExists('dropzonejs'),
 ];
-$uploaded_video = $entities->getStorage('media_type')->load('uploaded_video');
-$video_source = $uploaded_video?->getSource();
-$video_field = $video_source?->getSourceFieldDefinition($uploaded_video);
-$video_form = $entities->getStorage('entity_form_display')->load('media.uploaded_video.default');
-$video_display = $entities->getStorage('entity_view_display')->load('media.uploaded_video.default');
-$checks['uploaded video source'] = $video_source?->getPluginId() === 'video_file' && $video_field?->getName() === 'field_media_file' && $video_field->getSetting('file_extensions') === 'mp4 webm';
-$checks['uploaded video widgets'] = $video_form?->getRenderer('field_media_file')?->getPluginId() === 'file_generic' && $video_display?->getRenderer('field_media_file')?->getPluginId() === 'file_video';
+$media_types = $entities->getStorage('media_type');
+foreach (['file' => 'File', 'image' => 'Image', 'video' => 'Video', 'video_file' => 'Video File'] as $bundle => $label) {
+  $media_type = $media_types->load($bundle);
+  $description = trim($media_type?->getDescription() ?? '');
+  $checks["media type.$bundle"] = $media_type?->label() === $label && $description !== '' && mb_strlen($description) <= 128;
+}
+$video_file = $media_types->load('video_file');
+$video_source = $video_file?->getSource();
+$video_field = $video_source?->getSourceFieldDefinition($video_file);
+$video_form = $entities->getStorage('entity_form_display')->load('media.video_file.default');
+$video_display = $entities->getStorage('entity_view_display')->load('media.video_file.default');
+$checks['video file source'] = $video_source?->getPluginId() === 'video_file' && $video_field?->getName() === 'field_media_file' && $video_field->getSetting('file_extensions') === 'mp4 webm';
+$checks['video file widgets'] = $video_form?->getRenderer('field_media_file')?->getPluginId() === 'file_generic' && $video_display?->getRenderer('field_media_file')?->getPluginId() === 'file_video';
 
 $breakpoints = \Drupal::service('breakpoint.manager')->getBreakpointsByGroup('emulsify');
 foreach (['landscape', 'portrait', 'square'] as $aspect) {

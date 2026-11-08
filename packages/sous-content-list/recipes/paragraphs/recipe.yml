@@ -1,5 +1,5 @@
 name: 'Sous Content List with Layout Paragraphs'
-description: 'Add Content List and its hand-picked components to Layout Paragraphs.'
+description: 'Add Content List and its hand-picked teasers to Layout Paragraphs.'
 type: Site
 install:
   - paragraphs
@@ -15,10 +15,10 @@ install:
 config:
   strict:
     - core.entity_form_display.paragraph.content_list.default
-    - core.entity_form_display.paragraph.content_list_card.default
+    - core.entity_form_display.paragraph.content_list_teaser.default
     - core.entity_form_display.paragraph.content_list_item.default
     - core.entity_view_display.paragraph.content_list.default
-    - core.entity_view_display.paragraph.content_list_card.default
+    - core.entity_view_display.paragraph.content_list_teaser.default
     - core.entity_view_display.paragraph.content_list_item.default
     - field.field.paragraph.content_list.field_content
     - field.field.paragraph.content_list.field_heading
@@ -27,17 +27,17 @@ config:
     - field.field.paragraph.content_list.field_style_layout_width
     - field.field.paragraph.content_list.field_text
     - field.field.paragraph.content_list.field_view
-    - field.field.paragraph.content_list_card.field_heading
-    - field.field.paragraph.content_list_card.field_image
-    - field.field.paragraph.content_list_card.field_link
-    - field.field.paragraph.content_list_card.field_text
+    - field.field.paragraph.content_list_teaser.field_heading
+    - field.field.paragraph.content_list_teaser.field_image
+    - field.field.paragraph.content_list_teaser.field_link
+    - field.field.paragraph.content_list_teaser.field_text
     - field.field.paragraph.content_list_item.field_related_content
     - field.storage.paragraph.field_link
     - field.storage.paragraph.field_related_content
     - field.storage.paragraph.field_style_columns
     - field.storage.paragraph.field_view
     - paragraphs.paragraphs_type.content_list
-    - paragraphs.paragraphs_type.content_list_card
+    - paragraphs.paragraphs_type.content_list_teaser
     - paragraphs.paragraphs_type.content_list_item
   actions:
     field.field.node.*.field_content: &accept_content_list
@@ -51,5 +51,5 @@ config:
       grantPermissions:
         - 'view paragraph content content_list'
         - 'view paragraph content content_list_item'
-        - 'view paragraph content content_list_card'
+        - 'view paragraph content content_list_teaser'
     user.role.authenticated: *view_content_list
