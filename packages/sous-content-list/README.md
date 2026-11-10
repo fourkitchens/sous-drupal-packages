@@ -27,9 +27,9 @@ enabled filter under **Options** → **Filter this list**.
 - **Recent News** offers **News Categories**.
 - **Profiles** offers **Items per page** and has no Sift control.
 
-Events and News offer **Any of these items** to match one or more selected
-terms and **All of these items** to require every selected term. Leave the
-selection empty to show all results for the chosen display up to the item limit.
+Events and News let editors match at least one selected term or require every
+selected term. Leave the selection empty to show all results for the chosen
+display up to the item limit.
 
 ## Theming
 
@@ -44,7 +44,8 @@ until an editor picks a type.
 
 Choose Content List from the installer's optional sides on a Paragraphs or
 Layout Builder site. Starter-generated sites already include the GitHub
-repository for Views Reference Sift.
+repository for Views Reference Sift. Content List supports Sift 1.0.0-beta4
+and later 1.x betas.
 
 To install manually on an existing site, set up the Sous Composer index and
 installer paths from the [collection guide](../../README.md). Add this entry

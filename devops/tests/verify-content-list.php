@@ -14,7 +14,6 @@ use Drupal\layout_builder\Section;
 use Drupal\layout_builder\SectionComponent;
 use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
-use Drupal\viewsreference_sift\Selection\Selection;
 
 $case = getenv('COMPOSITION');
 $entity_type = match ($case) {
@@ -192,17 +191,21 @@ try {
     $form = [];
     $element = $listing_widget->formElement($list->get('field_view'), 0, ['#required' => FALSE], $form, new FormState());
     $options = $element['options'];
-    $sift = $options['sift_terms'];
+    $sift = $options['sift_terms'] ?? [];
+    $sift_visible = $sift !== [] && ($sift['#access'] ?? TRUE) !== FALSE
+      && !in_array($sift['#type'] ?? NULL, ['value', 'hidden'], TRUE);
     if ($label === NULL) {
-      if (($sift['#access'] ?? TRUE) !== FALSE || !isset($options['limit'])) {
+      $limit = $options['limit'] ?? [];
+      if ($sift_visible || (string) ($limit['#title'] ?? '') !== 'Items per page'
+        || ($limit['#access'] ?? TRUE) === FALSE
+        || in_array($limit['#type'] ?? NULL, ['value', 'hidden'], TRUE)) {
         throw new \RuntimeException("$case Content List Profiles did not offer the item limit without a Sift control.");
       }
       continue;
     }
-    $filters = $sift['filters'] ?? [];
-    $filter = $filters['tid'] ?? [];
-    if (($sift['#access'] ?? TRUE) === FALSE || (string) ($sift['#title'] ?? '') !== 'Filter this list'
-      || array_keys($filters) !== ['tid'] || (string) ($filter['#title'] ?? '') !== $label
+    $filter = $sift['filters']['tid'] ?? [];
+    if (!$sift_visible || (string) ($sift['#title'] ?? '') !== 'Filter this list'
+      || (string) ($filter['#title'] ?? '') !== $label
       || ($filter['ids']['#selection_settings']['target_bundles'] ?? []) !== [$vocabulary]
       || array_keys($filter['match']['#options'] ?? []) !== ['any', 'all']) {
       throw new \RuntimeException("$case Content List $view:$display did not offer the expected Sift control.");
@@ -226,7 +229,7 @@ try {
       'data' => serialize([
         'limit' => $limit,
         'sift_terms' => [
-          'version' => Selection::VERSION,
+          'version' => 2,
           'filters' => ['tid' => ['ids' => $selection, 'match' => $match]],
         ],
       ]),
