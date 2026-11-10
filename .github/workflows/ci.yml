@@ -5,6 +5,8 @@ on:
   push:
     branches: [main, 'codex/**']
   workflow_dispatch:
+  schedule:
+    - cron: '23 7 * * 1'
 
 permissions:
   contents: read
@@ -36,7 +38,11 @@ jobs:
   recipes:
     name: Apply recipe compositions
     needs: lint
-    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+    if: >-
+      github.event_name == 'pull_request' ||
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main')
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -72,8 +78,12 @@ jobs:
           cd "$site"
           composer require 'drupal/login_destination:^2.0.0-beta10@beta' drush/drush --no-interaction
           composer require "${recipes[@]}" --no-interaction
-          composer show --locked fourkitchens/viewsreference_sift
-          composer show --locked drupal/viewsreference
+          locked_versions=$(jq -r '
+            .packages[] |
+            select(.name == "fourkitchens/viewsreference_sift" or .name == "drupal/viewsreference") |
+            "- `\(.name)` `\(.version)`"
+          ' composer.lock)
+          printf '### Locked Views Reference versions\n\n%s\n' "$locked_versions" | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Apply each composition to a fresh SQLite site
         run: |
           cd "$RUNNER_TEMP/sous-recipes"
@@ -119,7 +129,7 @@ jobs:
 
   release:
     needs: [lint, recipes]
-    if: github.repository == 'fourkitchens/sous-drupal-packages' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: github.repository == 'fourkitchens/sous-drupal-packages' && github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     outputs:

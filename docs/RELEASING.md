@@ -5,6 +5,12 @@ semantic-release publishes the collection. Review branches and pull requests
 run checks without publishing. There is one version for the repository and all
 hosted packages, starting at `2.0.0`.
 
+Every Monday at 07:23 UTC, CI applies all four recipe compositions with the
+newest compatible Sift beta. The weekly run never publishes a release or
+deploys the Composer index. If it fails, check the locked versions in the run
+summary and either fix Content List in a normal PR or report the regression in
+the [Sift repository](https://github.com/fourkitchens/viewsreference_sift/issues).
+
 ## Version rules
 
 Use Conventional Commits for commits merged into `main`, including squash titles:
