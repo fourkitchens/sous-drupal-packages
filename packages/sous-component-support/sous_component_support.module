@@ -57,12 +57,12 @@ function sous_component_support_field_group_form_process_alter(array &$element, 
   if ($group->bundle !== 'content_list' || !isset($form['field_list_type']['widget']['#parents'])) {
     return;
   }
-  $other_type = match ($group->group_name) {
-    'group_hand_picked_items' => 'automatic',
-    'group_automatic_listing' => 'hand_picked',
+  $type = match ($group->group_name) {
+    'group_hand_picked_items' => 'hand_picked',
+    'group_automatic_listing' => 'automatic',
     default => NULL,
   };
-  if ($other_type === NULL) {
+  if ($type === NULL) {
     return;
   }
 
@@ -71,8 +71,7 @@ function sous_component_support_field_group_form_process_alter(array &$element, 
   foreach ($parents as $parent) {
     $name .= "[$parent]";
   }
-  // Show both groups on legacy lists until an editor selects a type.
-  $element['#states']['visible']['select[name="' . $name . '"]'] = ['!value' => $other_type];
+  $element['#states']['visible']['select[name="' . $name . '"]'] = ['value' => $type];
 }
 
 /**
@@ -81,12 +80,7 @@ function sous_component_support_field_group_form_process_alter(array &$element, 
 function sous_component_support_entity_view(array &$build, EntityInterface $entity): void {
   if ($entity instanceof FieldableEntityInterface && $entity->bundle() === 'content_list' && $entity->hasField('field_list_type')) {
     $type = $entity->get('field_list_type')->value;
-    if ($type === 'hand_picked') {
-      unset($build['field_view']);
-    }
-    elseif ($type === 'automatic') {
-      unset($build['field_content']);
-    }
+    unset($build[$type === 'hand_picked' ? 'field_view' : 'field_content']);
     return;
   }
 

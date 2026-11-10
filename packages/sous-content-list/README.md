@@ -37,8 +37,7 @@ The package ships no templates. A theme can use
 `paragraph--content-list.html.twig` and
 `block--inline-block--content-list.html.twig` with the same field names. Use
 the rendered `field_content` and `field_view` so Drupal can show the selected
-source. Lists saved before List Type was added display their existing sources
-until an editor picks a type.
+source.
 
 ## Installation and application
 

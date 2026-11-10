@@ -166,8 +166,8 @@ try {
     throw new \RuntimeException("$case Content List has the wrong type choices or default.");
   }
   $selector = 'select[name="settings[subform][field_list_type]"]';
-  foreach (['group_hand_picked_items' => 'automatic', 'group_automatic_listing' => 'hand_picked'] as $group => $other_type) {
-    if (($list_widgets[$group]['#states']['visible'][$selector]['!value'] ?? NULL) !== $other_type) {
+  foreach (['group_hand_picked_items' => 'hand_picked', 'group_automatic_listing' => 'automatic'] as $group => $type) {
+    if (($list_widgets[$group]['#states']['visible'][$selector] ?? NULL) !== ['value' => $type]) {
       throw new \RuntimeException("$case Content List has the wrong visibility rule for $group.");
     }
   }
@@ -215,9 +215,9 @@ try {
   $term_ids = array_values(array_map(static fn($term) => (int) $term->id(), $terms));
   $titles = array_keys($news);
   $scenarios = [
-    'legacy match any' => [NULL, $term_ids, 'any', 3, array_slice($titles, 0, 3)],
-    'legacy match all' => [NULL, $term_ids, 'all', 3, [$titles[2]]],
-    'legacy no terms' => [NULL, [], 'any', 2, array_slice($titles, -2)],
+    'automatic match any' => ['automatic', $term_ids, 'any', 3, array_slice($titles, 0, 3)],
+    'automatic match all' => ['automatic', $term_ids, 'all', 3, [$titles[2]]],
+    'automatic no terms' => ['automatic', [], 'any', 2, array_slice($titles, -2)],
     'hand-picked' => ['hand_picked', [], 'any', 2, []],
     'automatic' => ['automatic', [], 'any', 2, array_slice($titles, -2)],
   ];
@@ -261,7 +261,7 @@ try {
       $switcher->switchBack();
     }
     $hand_picked = ['Custom teaser heading', 'Picked page'];
-    $active = $type === 'automatic' ? $expected : array_merge($hand_picked, $expected);
+    $active = $type === 'automatic' ? $expected : $hand_picked;
     foreach (array_merge(['Latest'], $active) as $marker) {
       if (!str_contains($html, $marker)) {
         throw new \RuntimeException("$case Content List $scenario did not render $marker.");
@@ -274,9 +274,6 @@ try {
       if (str_contains($html, $title)) {
         throw new \RuntimeException("$case Content List $scenario unexpectedly rendered $title.");
       }
-    }
-    if ($type === NULL && (strpos($html, 'Custom teaser heading') > strpos($html, $expected[0]) || strpos($html, 'Picked page') > strpos($html, $expected[0]))) {
-      throw new \RuntimeException("$case Content List did not render hand-picked teasers before the listing.");
     }
     if (str_contains($html, 'href="/news"')) {
       throw new \RuntimeException("$case Content List still links to the removed News route.");
