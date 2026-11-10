@@ -15,10 +15,12 @@ config:
   strict:
     - core.entity_form_display.paragraph.gallery.default
     - core.entity_view_display.paragraph.gallery.default
+    - field.field.paragraph.gallery.field_gallery_display
     - field.field.paragraph.gallery.field_heading
     - field.field.paragraph.gallery.field_media_multiple
     - field.field.paragraph.gallery.field_style_layout_width
     - field.field.paragraph.gallery.field_text
+    - field.storage.paragraph.field_gallery_display
     - field.storage.paragraph.field_media_multiple
     - paragraphs.paragraphs_type.gallery
   actions:

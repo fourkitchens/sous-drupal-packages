@@ -33,6 +33,15 @@ if ($type) {
       throw new \RuntimeException("$case Gallery does not reuse the Image field $name in its form and view.");
     }
   }
+  $display = FieldConfig::loadByName($type, 'gallery', 'field_gallery_display');
+  $display_widget = $form->getRenderer('field_gallery_display');
+  $width = $form->getComponent('field_style_layout_width');
+  if ($display?->getSetting('allowed_values') !== ['gallery-slider' => 'Slider', 'gallery-grid' => 'Grid'] || $display->getDefaultValueLiteral() !== [['value' => 'gallery-slider']]) {
+    throw new \RuntimeException("$case Gallery Display must offer Slider and Grid, with Slider selected by default.");
+  }
+  if ($display_widget?->getPluginId() !== 'style_selector_tile_widget' || $display_widget->getSetting('size') !== 'large' || $display_widget->getSettings() !== $form->getRenderer('field_style_layout_width')->getSettings() || $form->getComponent('field_gallery_display')['weight'] !== $width['weight'] + 1 || $view->getRenderer('field_gallery_display')?->getPluginId() !== 'style_selector_css_class_formatter') {
+    throw new \RuntimeException("$case Gallery Display must use matching large tiles under Gallery Width and provide its selected CSS class.");
+  }
   $media = FieldConfig::loadByName($type, 'gallery', 'field_media_multiple');
   if ($media?->getFieldStorageDefinition()->getCardinality() !== FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED || $media->getSetting('target_type') !== 'media' || $media->getSetting('handler_settings')['target_bundles'] !== ['image' => 'image', 'video' => 'video']) {
     throw new \RuntimeException("$case Gallery media must allow unlimited Image and Video references.");

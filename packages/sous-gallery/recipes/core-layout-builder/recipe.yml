@@ -14,10 +14,12 @@ config:
     - block_content.type.gallery
     - core.entity_form_display.block_content.gallery.default
     - core.entity_view_display.block_content.gallery.default
+    - field.field.block_content.gallery.field_gallery_display
     - field.field.block_content.gallery.field_heading
     - field.field.block_content.gallery.field_media_multiple
     - field.field.block_content.gallery.field_style_layout_width
     - field.field.block_content.gallery.field_text
+    - field.storage.block_content.field_gallery_display
     - field.storage.block_content.field_media_multiple
   actions:
     field.field.block_content.accordion_item.field_content: &accept_gallery

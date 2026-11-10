@@ -2,6 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.paragraph.gallery.field_gallery_display
     - field.field.paragraph.gallery.field_heading
     - field.field.paragraph.gallery.field_media_multiple
     - field.field.paragraph.gallery.field_style_layout_width
@@ -52,6 +53,7 @@ third_party_settings:
     group_display_options:
       children:
         - field_style_layout_width
+        - field_gallery_display
       label: 'Display Options'
       region: content
       parent_name: group_tabs
@@ -70,6 +72,21 @@ targetEntityType: paragraph
 bundle: gallery
 mode: default
 content:
+  field_gallery_display:
+    type: style_selector_tile_widget
+    weight: 5
+    region: content
+    settings:
+      size: large
+      advanced:
+        extra_classes: ''
+        empty_option: None
+        ui_settings:
+          alpha_grid: false
+          check_icon: true
+          empty_icon: true
+          text_icon: false
+    third_party_settings: {}
   field_heading:
     type: string_textfield
     weight: 1
@@ -93,7 +110,7 @@ content:
     weight: 4
     region: content
     settings:
-      size: default
+      size: large
       advanced:
         extra_classes: ''
         empty_option: None

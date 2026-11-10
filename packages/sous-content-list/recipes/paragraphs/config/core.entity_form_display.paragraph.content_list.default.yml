@@ -5,6 +5,7 @@ dependencies:
     - field.field.paragraph.content_list.field_content
     - field.field.paragraph.content_list.field_heading
     - field.field.paragraph.content_list.field_link
+    - field.field.paragraph.content_list.field_list_type
     - field.field.paragraph.content_list.field_style_columns
     - field.field.paragraph.content_list.field_style_layout_width
     - field.field.paragraph.content_list.field_text
@@ -43,6 +44,7 @@ third_party_settings:
         - field_heading
         - field_text
         - field_link
+        - field_list_type
         - group_hand_picked_items
         - group_automatic_listing
       label: Content
@@ -81,7 +83,7 @@ third_party_settings:
       label: 'Hand-picked teasers'
       region: content
       parent_name: group_content
-      weight: 4
+      weight: 5
       format_type: fieldset
       format_settings:
         classes: ''
@@ -96,7 +98,7 @@ third_party_settings:
       label: 'Automatic teasers'
       region: content
       parent_name: group_content
-      weight: 5
+      weight: 6
       format_type: fieldset
       format_settings:
         classes: ''
@@ -137,6 +139,12 @@ content:
       linkit_auto_link_text: false
       placeholder_url: ''
       placeholder_title: ''
+    third_party_settings: {}
+  field_list_type:
+    type: options_select
+    weight: 4
+    region: content
+    settings: {}
     third_party_settings: {}
   field_content:
     type: paragraphs

@@ -2,6 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.block_content.gallery.field_gallery_display
     - field.field.block_content.gallery.field_heading
     - field.field.block_content.gallery.field_media_multiple
     - field.field.block_content.gallery.field_style_layout_width
@@ -9,12 +10,21 @@ dependencies:
     - block_content.type.gallery
   module:
     - options
+    - style_selector
     - text
 id: block_content.gallery.default
 targetEntityType: block_content
 bundle: gallery
 mode: default
 content:
+  field_gallery_display:
+    type: style_selector_css_class_formatter
+    label: hidden
+    settings:
+      extra_classes: ''
+    third_party_settings: {}
+    weight: 4
+    region: content
   field_heading:
     type: string
     label: hidden

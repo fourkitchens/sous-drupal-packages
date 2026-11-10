@@ -51,9 +51,45 @@ function sous_component_support_field_widget_complete_form_alter(array &$widget,
 }
 
 /**
+ * Implements hook_field_group_form_process_alter().
+ */
+function sous_component_support_field_group_form_process_alter(array &$element, object $group, array $form): void {
+  if ($group->bundle !== 'content_list' || !isset($form['field_list_type']['widget']['#parents'])) {
+    return;
+  }
+  $other_type = match ($group->group_name) {
+    'group_hand_picked_items' => 'automatic',
+    'group_automatic_listing' => 'hand_picked',
+    default => NULL,
+  };
+  if ($other_type === NULL) {
+    return;
+  }
+
+  $parents = $form['field_list_type']['widget']['#parents'];
+  $name = array_shift($parents);
+  foreach ($parents as $parent) {
+    $name .= "[$parent]";
+  }
+  // Show both groups on legacy lists until an editor selects a type.
+  $element['#states']['visible']['select[name="' . $name . '"]'] = ['!value' => $other_type];
+}
+
+/**
  * Implements hook_entity_view().
  */
 function sous_component_support_entity_view(array &$build, EntityInterface $entity): void {
+  if ($entity instanceof FieldableEntityInterface && $entity->bundle() === 'content_list' && $entity->hasField('field_list_type')) {
+    $type = $entity->get('field_list_type')->value;
+    if ($type === 'hand_picked') {
+      unset($build['field_view']);
+    }
+    elseif ($type === 'automatic') {
+      unset($build['field_content']);
+    }
+    return;
+  }
+
   if (!sous_component_support_is_list_item($entity)) {
     return;
   }

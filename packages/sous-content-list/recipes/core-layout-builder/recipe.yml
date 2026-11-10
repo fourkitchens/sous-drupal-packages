@@ -26,6 +26,7 @@ config:
     - field.field.block_content.content_list.field_content
     - field.field.block_content.content_list.field_heading
     - field.field.block_content.content_list.field_link
+    - field.field.block_content.content_list.field_list_type
     - field.field.block_content.content_list.field_style_columns
     - field.field.block_content.content_list.field_style_layout_width
     - field.field.block_content.content_list.field_text
@@ -38,6 +39,7 @@ config:
     - field.field.block_content.content_list_item.field_related_content
     - field.storage.block_content.field_item_type
     - field.storage.block_content.field_link
+    - field.storage.block_content.field_list_type
     - field.storage.block_content.field_related_content
     - field.storage.block_content.field_style_columns
     - field.storage.block_content.field_view

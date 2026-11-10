@@ -23,6 +23,7 @@ config:
     - field.field.paragraph.content_list.field_content
     - field.field.paragraph.content_list.field_heading
     - field.field.paragraph.content_list.field_link
+    - field.field.paragraph.content_list.field_list_type
     - field.field.paragraph.content_list.field_style_columns
     - field.field.paragraph.content_list.field_style_layout_width
     - field.field.paragraph.content_list.field_text
@@ -35,6 +36,7 @@ config:
     - field.field.paragraph.content_list_item.field_related_content
     - field.storage.paragraph.field_item_type
     - field.storage.paragraph.field_link
+    - field.storage.paragraph.field_list_type
     - field.storage.paragraph.field_related_content
     - field.storage.paragraph.field_style_columns
     - field.storage.paragraph.field_view

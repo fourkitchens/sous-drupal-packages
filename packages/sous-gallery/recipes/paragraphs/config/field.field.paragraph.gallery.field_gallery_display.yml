@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_gallery_display
+    - paragraphs.paragraphs_type.gallery
+  module:
+    - style_selector
+id: paragraph.gallery.field_gallery_display
+field_name: field_gallery_display
+entity_type: paragraph
+bundle: gallery
+label: 'Gallery Display'
+description: ''
+required: true
+translatable: false
+default_value:
+  - value: gallery-slider
+default_value_callback: ''
+settings: {}
+field_type: style_selector_css_class

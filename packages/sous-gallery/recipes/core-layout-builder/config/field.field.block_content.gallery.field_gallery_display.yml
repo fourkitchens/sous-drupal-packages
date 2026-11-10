@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.gallery
+    - field.storage.block_content.field_gallery_display
+  module:
+    - style_selector
+id: block_content.gallery.field_gallery_display
+field_name: field_gallery_display
+entity_type: block_content
+bundle: gallery
+label: 'Gallery Display'
+description: ''
+required: true
+translatable: false
+default_value:
+  - value: gallery-slider
+default_value_callback: ''
+settings: {}
+field_type: style_selector_css_class
