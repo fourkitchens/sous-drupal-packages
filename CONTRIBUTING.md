@@ -58,12 +58,16 @@ npm run format
 npm test
 ```
 
-Checks live under `devops/tests` and cover JavaScript/PHP syntax, code-sniffing and
-code/JSON/YAML formatting. The formatting command fixes supported files; review
-its changes before committing. After these checks, CI applies Events and News Post with four recipe
-compositions to fresh SQLite Drupal sites and verifies their bootstrap and
-configuration. Contributors also try changes in the application where they will
-be used.
+`npm test` validates the packages, checks JavaScript and PHP syntax, and runs
+ESLint and Prettier. Review any changes from `npm run format` before committing.
+
+After these checks, CI applies the baseline, Events, News Post, Profile, Content
+List, SEO, Alerts, and Search on fresh SQLite sites for `admin`, `content-types`,
+`core-layout-builder`, and `paragraphs` and runs the composition and package
+verification scripts. The Layout Builder and Paragraphs sites also get Gallery
+and the matching Events, News Post, and Content List integrations.
+
+Contributors also try changes in the application where they will be used.
 
 Maintainer tools, repository dependencies and checks belong outside `packages/`;
 consumer ZIPs contain only recipe files and their notices.
@@ -87,9 +91,12 @@ The automatic release workflow loads that history itself.
 
 ## Commit and review
 
-Use Conventional Commits: `fix:` for corrections, `feat:` for additions, and a
-`BREAKING CHANGE:` footer or `!` for incompatible changes. Other merge commits
-produce a patch release. Keep the squash-merge title in this format as well.
+Use Conventional Commits for commits and squash titles. Use `fix:` for
+corrections, `perf:` for performance improvements, `feat:` for additions, and
+a `BREAKING CHANGE:` footer or `!` for incompatible changes. The default analyzer
+assigns no increment to `docs`, `ci`, `refactor`, `test`, or `chore` commits.
+After the initial `2.0.0` release, the collection's release plugin sets a patch
+minimum for commits eligible for release.
 
 A release applies to the whole collection, while installations still select
 individual packages. Source manifests omit `version`; release tooling supplies

@@ -1,9 +1,9 @@
 # Releasing the collection
 
-A merge to `main` runs syntax, code-sniffing and formatting checks, then
-semantic-release publishes the collection. Review branches and pull requests
-run checks without publishing. There is one version for the repository and all
-hosted packages, starting at `2.0.0`.
+On pushes to `main`, CI runs `npm test` and applies the `admin`, `content-types`,
+`core-layout-builder`, and `paragraphs` compositions before semantic-release
+determines the next version. The repository and its hosted packages share one
+version, starting at `2.0.0`.
 
 Every Monday at 07:23 UTC, CI applies all four recipe compositions with the
 newest compatible Sift beta. The weekly run never publishes a release or
@@ -13,23 +13,27 @@ the [Sift repository](https://github.com/fourkitchens/viewsreference_sift/issues
 
 ## Version rules
 
-Use Conventional Commits for commits merged into `main`, including squash titles:
+Use Conventional Commits for commits merged into `main`, including squash
+titles. The default commit analyzer assigns the following increments.
 
-| Change                                                 | Example                            | Increment |
-| ------------------------------------------------------ | ---------------------------------- | --------- |
-| Incompatible public behavior or dependency requirement | `feat!: change the content model`  | Major     |
-| New package or capability                              | `feat: add an Event recipe`        | Minor     |
-| Correction                                             | `fix: correct a recipe dependency` | Patch     |
-| Other changes, including docs and CI                   | `docs: improve the package guide`  | Patch     |
+| Change                                                                    | Example                            | Increment |
+| ------------------------------------------------------------------------- | ---------------------------------- | --------- |
+| Breaking change                                                           | `feat!: change the content model`  | Major     |
+| Feature (`feat`)                                                          | `feat: add an Event recipe`        | Minor     |
+| Correction or performance improvement (`fix`, `perf`)                     | `fix: correct a recipe dependency` | Patch     |
+| Documentation and maintenance (`docs`, `ci`, `refactor`, `test`, `chore`) | `docs: improve the package guide`  | None      |
 
-A `BREAKING CHANGE:` footer also requests a major release. semantic-release
-selects the largest increment since the previous release. The `1.0.0` tag at
-`d3dcd219d251e322a3b206a6bf12889712b2b3f0` records the release baseline on
-`main`; it has no hosted packages, release assets or Composer index entry.
-The first merge after that baseline produces `2.0.0`, including when a PR is
-squashed. Subsequent releases follow the rules above. The workflow verifies the
-baseline commit and excludes only that tag from its published-asset checks.
-Contributors do not manually edit package versions or create release tags.
+A `BREAKING CHANGE:` footer also counts as a major change. The collection's
+release plugin sets a patch minimum after `2.0.0` for commits eligible for
+release, including docs-only commits. semantic-release selects the largest
+increment from both analyzers since the previous release.
+
+The `1.0.0` tag at `d3dcd219d251e322a3b206a6bf12889712b2b3f0` records the
+release baseline on `main` and predates the hosted packages. The collection's
+release plugin sets a major increment at that baseline so the first collection
+release is `2.0.0`. The workflow verifies the baseline commit and excludes only
+that tag from its published-asset checks. Contributors do not manually edit
+package versions or create release tags.
 
 ## Repository setup
 
