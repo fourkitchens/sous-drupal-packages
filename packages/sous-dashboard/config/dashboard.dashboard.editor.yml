@@ -1,0 +1,117 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.content
+    - views.view.dashboard_accessibility
+    - views.view.dashboard_editorial
+  module:
+    - layout_builder
+    - system
+    - views
+id: editor
+label: Editor
+description: 'Content work for Site Editors.'
+layout:
+  - layout_id: layout_twocol_section
+    layout_settings:
+      label: Start
+      context_mapping: {}
+      column_widths: 67-33
+    components:
+      dd46debe-768f-4a65-befa-83bdabd45394:
+        uuid: dd46debe-768f-4a65-befa-83bdabd45394
+        region: first
+        configuration:
+          id: dashboard_text_block
+          label: 'Welcome and help'
+          label_display: visible
+          provider: dashboard
+          context_mapping: {}
+          text:
+            value: '<p>Welcome. Use <strong>Create and manage</strong> to add content, or pick up a draft below.</p><p>Questions? Contact your site administrator.</p>'
+            format: basic_html
+        weight: 0
+        additional: {}
+      253daf77-e36b-4b5f-a1c8-0b05c9787ce2:
+        uuid: 253daf77-e36b-4b5f-a1c8-0b05c9787ce2
+        region: second
+        configuration:
+          id: 'system_menu_block:content'
+          label: 'Create and manage'
+          label_display: visible
+          provider: system
+          context_mapping: {}
+          level: 1
+          depth: 2
+          expand_all_items: true
+        weight: 0
+        additional: {}
+    third_party_settings: {}
+  - layout_id: layout_twocol_section
+    layout_settings:
+      label: 'Your work'
+      context_mapping: {}
+      column_widths: 50-50
+    components:
+      921c0091-5c5f-48d1-b6bf-4b1d436c397b:
+        uuid: 921c0091-5c5f-48d1-b6bf-4b1d436c397b
+        region: first
+        configuration:
+          id: 'views_block:dashboard_editorial-block_drafts'
+          label: ''
+          label_display: visible
+          provider: views
+          context_mapping: {}
+          views_label: ''
+          items_per_page: null
+        weight: 0
+        additional: {}
+      5bf13393-6a72-4383-a38b-6f002e6e001a:
+        uuid: 5bf13393-6a72-4383-a38b-6f002e6e001a
+        region: second
+        configuration:
+          id: 'views_block:dashboard_editorial-block_scheduled'
+          label: ''
+          label_display: visible
+          provider: views
+          context_mapping: {}
+          views_label: ''
+          items_per_page: null
+        weight: 0
+        additional: {}
+    third_party_settings: {}
+  - layout_id: layout_twocol_section
+    layout_settings:
+      label: 'Site content'
+      context_mapping: {}
+      column_widths: 50-50
+    components:
+      4bd4b63b-26f5-422a-b0f4-4df4ad23b137:
+        uuid: 4bd4b63b-26f5-422a-b0f4-4df4ad23b137
+        region: first
+        configuration:
+          id: 'views_block:dashboard_editorial-block_recent'
+          label: ''
+          label_display: visible
+          provider: views
+          context_mapping: {}
+          views_label: ''
+          items_per_page: null
+        weight: 0
+        additional: {}
+      d7626bee-cb92-4c7b-8817-7c7891a6320c:
+        uuid: d7626bee-cb92-4c7b-8817-7c7891a6320c
+        region: second
+        configuration:
+          id: 'views_block:dashboard_accessibility-block_alerts'
+          label: ''
+          label_display: visible
+          provider: views
+          context_mapping: {}
+          views_label: ''
+          items_per_page: null
+        weight: 0
+        additional: {}
+    third_party_settings: {}
+weight: 0

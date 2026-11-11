@@ -71,7 +71,7 @@ try {
     throw new \RuntimeException('Plain text no longer preserves escaped markup and nonbreaking spaces.');
   }
   $formats = FilterFormat::loadMultiple(['basic_html', 'full_html', 'limited_html', 'restricted_html']);
-  if ($case !== 'admin' && count($formats) !== 4) {
+  if (count($formats) !== 4) {
     throw new \RuntimeException('A provided HTML format is missing.');
   }
   if ($formats) {
