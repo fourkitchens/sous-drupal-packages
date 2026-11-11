@@ -1,0 +1,30 @@
+{
+  "name": "fourkitchens/sous-dashboard",
+  "description": "Adds Site admin and Editor dashboards that Superusers and Site Editors land on after signing in.",
+  "keywords": [
+    "recipe",
+    "Drupal recipes",
+    "drupal recipe"
+  ],
+  "type": "drupal-recipe",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Four Kitchens",
+      "role": "Maintainer"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "drupal/core": "^11.4",
+    "drupal/dashboard": "^2.2.1",
+    "drupal/editoria11y": "^3.0",
+    "drupal/login_history": "^2.0",
+    "fourkitchens/sous-workflow": "^2.0"
+  },
+  "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
+  "support": {
+    "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
+    "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-dashboard"
+  }
+}

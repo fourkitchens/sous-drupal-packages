@@ -92,7 +92,7 @@ jobs:
             chmod -R u+w web/sites/default
             rm -f web/sites/default/settings.php site.sqlite
             vendor/bin/drush site:install minimal --db-url="sqlite://localhost/$PWD/site.sqlite?module=sqlite" --yes
-            for recipe in sous-admin sous-emulsify sous-media sous-config-split; do
+            for recipe in sous-admin sous-emulsify sous-media sous-formats sous-dashboard sous-config-split; do
               vendor/bin/drush recipe "$PWD/recipes/$recipe" --yes
             done
             if [[ "$composition" != admin ]]; then vendor/bin/drush recipe "$PWD/recipes/sous-$composition" --yes; fi
@@ -120,6 +120,7 @@ jobs:
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-gallery.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-workflow.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-authoring.php"
+            COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-dashboard.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-seo.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-alerts.php"
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-search.php"

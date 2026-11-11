@@ -17,7 +17,6 @@ $paragraphs = $case === 'paragraphs';
 $modules = \Drupal::moduleHandler();
 $storage = \Drupal::service('config.storage');
 $entities = \Drupal::entityTypeManager();
-$formats = $content || $storage->exists('node.type.profile');
 $checks = [
   'admin theme' => \Drupal::config('system.theme')->get('admin') === 'gin',
   'default theme' => \Drupal::config('system.theme')->get('default') === 'emulsify',
@@ -106,7 +105,7 @@ foreach (['page', 'frontpage'] as $type) {
     $checks["content.$type"] = $groups['group_content']['children'] === ['field_content'] && $display->getRenderer('field_content')->getPluginId() === 'layout_paragraphs';
   }
 }
-foreach (['linkit' => $formats, 'emulsify_tools' => TRUE, 'ckeditor5' => $formats, 'paragraphs' => $paragraphs, 'config_split' => TRUE] as $module => $enabled) {
+foreach (['linkit' => TRUE, 'emulsify_tools' => TRUE, 'ckeditor5' => TRUE, 'paragraphs' => $paragraphs, 'config_split' => TRUE] as $module => $enabled) {
   $checks[$module] = $modules->moduleExists($module) === $enabled;
 }
 foreach (['layout_paragraphs', 'layout_paragraphs_library', 'layout_paragraphs_permissions', 'layout_paragraphs_limit', 'paragraphs_type_permissions'] as $module) {

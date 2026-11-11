@@ -1,0 +1,79 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.dashboard_accounts
+    - views.view.dashboard_log
+    - views.view.dashboard_sign_ins
+  module:
+    - layout_builder
+    - layout_discovery
+    - views
+id: site_admin
+label: 'Site admin'
+description: 'Site health and accounts for Superusers.'
+layout:
+  - layout_id: layout_onecol
+    layout_settings:
+      label: Status
+      context_mapping: {}
+    components:
+      7b282dd9-c706-40ae-80a5-e267f56e5698:
+        uuid: 7b282dd9-c706-40ae-80a5-e267f56e5698
+        region: content
+        configuration:
+          id: dashboard_site_status
+          label: 'Site status'
+          label_display: visible
+          provider: dashboard
+          context_mapping: {}
+        weight: 0
+        additional: {}
+    third_party_settings: {}
+  - layout_id: layout_twocol_section
+    layout_settings:
+      label: Activity
+      context_mapping: {}
+      column_widths: 50-50
+    components:
+      8fac0b0f-f111-47b6-9ee0-3c72d04a3aae:
+        uuid: 8fac0b0f-f111-47b6-9ee0-3c72d04a3aae
+        region: first
+        configuration:
+          id: 'views_block:dashboard_log-block_recent'
+          label: ''
+          label_display: visible
+          provider: views
+          context_mapping: {}
+          views_label: ''
+          items_per_page: null
+        weight: 0
+        additional: {}
+      a8aa01c8-72d3-421b-8b22-be82756f582a:
+        uuid: a8aa01c8-72d3-421b-8b22-be82756f582a
+        region: first
+        configuration:
+          id: 'views_block:dashboard_accounts-block_new'
+          label: ''
+          label_display: visible
+          provider: views
+          context_mapping: {}
+          views_label: ''
+          items_per_page: null
+        weight: 1
+        additional: {}
+      e6e1d359-5fc8-4430-ad8f-463d27a614cd:
+        uuid: e6e1d359-5fc8-4430-ad8f-463d27a614cd
+        region: second
+        configuration:
+          id: 'views_block:dashboard_sign_ins-block_recent'
+          label: ''
+          label_display: visible
+          provider: views
+          context_mapping: {}
+          views_label: ''
+          items_per_page: null
+        weight: 0
+        additional: {}
+    third_party_settings: {}
+weight: -10

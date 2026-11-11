@@ -12,11 +12,12 @@ shared version, beginning with `2.0.0`.
 | Package                                                       | Purpose                                                          | Installation choice        |
 | ------------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------- |
 | [sous-admin](packages/sous-admin)                             | Gin, Navigation, Superuser and management Views                  | Starter base               |
+| [sous-dashboard](packages/sous-dashboard)                     | Site admin and Editor dashboards                                 | Starter base               |
 | [sous-emulsify](packages/sous-emulsify)                       | Emulsify theme and tools                                         | Starter base               |
 | [sous-workflow](packages/sous-workflow)                       | Shared Editorial moderation and scheduled publishing             | Starter/shared dependency  |
 | [sous-content-base](packages/sous-content-base)               | Shared Page/Frontpage fields, tabs, teasers and aliases          | Shared dependency          |
 | [sous-content-types](packages/sous-content-types)             | Page and Frontpage with Body                                     | Default content            |
-| [sous-formats](packages/sous-formats)                         | Text formats, CKEditor 5 and Linkit defaults                     | Shared dependency          |
+| [sous-formats](packages/sous-formats)                         | Text formats, CKEditor 5 and Linkit defaults                     | Starter base               |
 | [sous-media](packages/sous-media)                             | File, Image, Video and media authoring                           | Starter base               |
 | [sous-events](packages/sous-events)                           | Recurring events, event types, teasers and upcoming/past embeds  | Optional recipe            |
 | [sous-news-post](packages/sous-news-post)                     | News Posts, bylines, categories, teasers and a Recent News embed | Optional recipe            |
