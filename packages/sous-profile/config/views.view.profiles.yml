@@ -216,6 +216,19 @@ display:
         groups:
           1: AND
       group_by: false
+      display_extenders: {}
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_description'
+        - 'config:field.storage.node.field_first_name'
+        - 'config:field.storage.node.field_last_name'
   embed_profiles:
     id: embed_profiles
     display_title: Profiles
@@ -251,17 +264,29 @@ display:
       defaults:
         pager: false
         filters: false
+      display_extenders: {}
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_description'
+        - 'config:field.storage.node.field_first_name'
+        - 'config:field.storage.node.field_last_name'
   entity_browser:
     id: entity_browser
-    display_title: Profile Content Browser
+    display_title: 'Profile Content Browser'
     display_plugin: entity_browser
     position: 2
     display_options:
-      title: Profile Content Browser
+      title: 'Profile Content Browser'
       access:
         type: perm
         options:
-          perm: access profile_content_browser entity browser pages
+          perm: 'access profile_content_browser entity browser pages'
       pager:
         type: full
         options:
@@ -341,6 +366,16 @@ display:
         fields: false
         sorts: false
         filters: false
+      display_extenders: {}
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'user.node_grants:view'
+        - user.permissions
+      tags: {}
   block_profiles:
     id: block_profiles
     display_title: Profiles
@@ -354,3 +389,17 @@ display:
           offset: 0
       defaults:
         pager: false
+      display_extenders: {}
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_description'
+        - 'config:field.storage.node.field_first_name'
+        - 'config:field.storage.node.field_last_name'
