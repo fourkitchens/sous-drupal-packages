@@ -2,17 +2,14 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.media.content_teaser_landscape
+    - core.entity_view_mode.node.teaser
     - field.field.node.event.field_event_date
     - field.field.node.event.field_event_type
     - field.field.node.event.field_metadata
     - field.field.node.event.field_teaser_image
     - field.field.node.event.field_teaser_text
     - node.type.event
-    - smart_date.smart_date_format.default
-    - core.entity_view_mode.node.teaser
   module:
-    - smart_date
     - smart_date_recur
     - user
 id: node.event.teaser
@@ -64,3 +61,4 @@ content:
 hidden:
   field_metadata: true
   links: true
+  published_at: true

@@ -8,9 +8,7 @@ dependencies:
     - field.field.node.event.field_teaser_image
     - field.field.node.event.field_teaser_text
     - node.type.event
-    - smart_date.smart_date_format.default
   module:
-    - smart_date
     - smart_date_recur
     - user
 id: node.event.default
@@ -48,3 +46,4 @@ hidden:
   field_teaser_image: true
   field_teaser_text: true
   links: true
+  published_at: true

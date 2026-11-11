@@ -2,11 +2,10 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.media.preview
     - core.entity_view_mode.node.admin_preview
     - field.field.node.news_post.field_byline
-    - field.field.node.news_post.field_news_categories
     - field.field.node.news_post.field_metadata
+    - field.field.node.news_post.field_news_categories
     - field.field.node.news_post.field_teaser_image
     - field.field.node.news_post.field_teaser_text
     - node.type.news_post
@@ -39,3 +38,4 @@ hidden:
   field_metadata: true
   field_news_categories: true
   links: true
+  published_at: true
