@@ -113,6 +113,9 @@ jobs:
             fi
             vendor/bin/drush recipe "$PWD/recipes/sous-seo" --yes
             vendor/bin/drush recipe "$PWD/recipes/sous-alerts" --yes
+            if [[ "$composition" == admin ]]; then
+              vendor/bin/drush recipe "$PWD/recipes/sous-alerts" --yes
+            fi
             vendor/bin/drush recipe "$PWD/recipes/sous-search" --yes
             vendor/bin/drush status --field=bootstrap | grep -Fx Successful
             COMPOSITION="$composition" vendor/bin/drush php:script "$GITHUB_WORKSPACE/devops/tests/verify-composition.php"
