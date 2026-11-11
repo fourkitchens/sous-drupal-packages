@@ -2,7 +2,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.media.preview
     - core.entity_view_mode.node.admin_preview
     - field.field.node.event.field_event_date
     - field.field.node.event.field_event_type
@@ -39,3 +38,4 @@ hidden:
   field_event_type: true
   field_metadata: true
   links: true
+  published_at: true

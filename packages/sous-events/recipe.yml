@@ -45,8 +45,27 @@ config:
     - node.type.event
     - pathauto.pattern.event
     - taxonomy.vocabulary.event_types
+    - views.view.dashboard_events
     - views.view.events
   actions:
+    '?dashboard.dashboard.editor':
+      addComponentToLayout:
+        section: 2
+        position: 99
+        component:
+          # Constant so reapplying replaces this block instead of adding another.
+          uuid: 8d154da9-bc87-4a1b-ac37-503078f598ec
+          region:
+            layout_twocol_section: second
+          default_region: content
+          configuration:
+            id: 'views_block:dashboard_events-block_upcoming'
+            label: 'Upcoming events'
+            label_display: visible
+            provider: views
+            context_mapping: {}
+            views_label: ''
+            items_per_page: none
     '?user.role.site_editor':
       grantPermissions:
         - 'create url aliases'

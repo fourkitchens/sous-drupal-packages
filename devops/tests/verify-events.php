@@ -2,9 +2,11 @@
 
 /**
  * @file
- * Verify Event authoring and dated embed results in a fresh recipe fixture.
+ * Verify Event authoring, dated embeds and the Editor dashboard integration.
  */
 
+use Drupal\Core\Session\UserSession;
+use Drupal\dashboard\Entity\Dashboard;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\node\Entity\Node;
@@ -137,6 +139,62 @@ try {
     throw new \RuntimeException('The full Event page did not render its date and type.');
   }
 
+  $dashboard_components = [];
+  foreach (Dashboard::loadMultiple() as $dashboard) {
+    foreach ($dashboard->getSections() as $delta => $section) {
+      foreach ($section->getComponents() as $component) {
+        if ($component->getUuid() === '8d154da9-bc87-4a1b-ac37-503078f598ec' || $component->getPluginId() === 'views_block:dashboard_events-block_upcoming') {
+          $dashboard_components[] = [$dashboard->id(), $delta, $component];
+        }
+      }
+    }
+  }
+  if (count($dashboard_components) !== 1) {
+    throw new \RuntimeException('Dashboards must contain exactly one Events dashboard component.');
+  }
+  [$dashboard_id, $delta, $component] = $dashboard_components[0];
+  $dashboard = Dashboard::load('editor');
+  $components = array_values($dashboard->getSection(2)->getComponentsByRegion('second'));
+  $uuids = array_map(static fn($item) => $item->getUuid(), $components);
+  if ($dashboard_id !== 'editor' || $delta !== 2 || $component->getRegion() !== 'second' || $component->getUuid() !== '8d154da9-bc87-4a1b-ac37-503078f598ec' || $component->getPluginId() !== 'views_block:dashboard_events-block_upcoming' || $components[0]->getPluginId() !== 'views_block:dashboard_accessibility-block_alerts' || array_search($component->getUuid(), $uuids, TRUE) < 1) {
+    throw new \RuntimeException('Events dashboard component must follow Accessibility alerts in Editor section 2 second.');
+  }
+  foreach ([['uid' => 104, 'roles' => ['authenticated', 'site_editor']], ['uid' => 0, 'roles' => ['anonymous']]] as $values) {
+    $account = new UserSession($values);
+    $account_switcher->switchTo($account);
+    try {
+      $block = $component->getPlugin();
+      $allowed = $account->isAuthenticated();
+      if ($block->access($account) !== $allowed) {
+        throw new \RuntimeException('Events dashboard block must allow Site Editors and deny anonymous users.');
+      }
+      $build = $block->build();
+      $output = (string) \Drupal::service('renderer')->renderInIsolation($build);
+      if (!$allowed) {
+        if (trim($output) !== '') {
+          throw new \RuntimeException('Anonymous users must not see the Events dashboard block.');
+        }
+        continue;
+      }
+      $view = $block->getViewExecutable();
+      $titles = array_map(static fn($row) => $row->_entity->label(), $view->result);
+      if ($titles !== ['All-day event', 'Ongoing', 'Recurring dates', 'Unpublished future', 'Upcoming near', 'Mixed dates', 'Upcoming far', 'Many future'] || !str_contains($output, 'Unpublished future') || $view->getPager()->getPluginId() !== 'some' || $view->getItemsPerPage() !== 10 || $view->display_handler->validate()) {
+        throw new \RuntimeException('Events dashboard must list each not-ended event once, including unpublished events, soonest first: ' . json_encode($titles));
+      }
+      foreach ($view->result as $row) {
+        $dates = array_filter($row->_entity->field_event_date->getValue(), static fn($range) => $range['end_value'] >= $now);
+        $next = (int) min(array_column($dates, 'value'));
+        $formatted = \Drupal::service('date.formatter')->format($next, 'short');
+        if ((int) $view->field['field_event_date_value']->getValue($row) !== $next || (string) $view->style_plugin->getField($row->index, 'field_event_date_value') !== $formatted) {
+          throw new \RuntimeException('Events dashboard Next date must render only the minimum upcoming or ongoing occurrence.');
+        }
+      }
+    }
+    finally {
+      $account_switcher->switchBack();
+    }
+  }
+
   // A recurring event can occur once in each list when it has past and future dates.
   $expected = [
     'block_upcoming' => ['All-day event', 'Ongoing', 'Recurring dates', 'Upcoming near', 'Mixed dates', 'Upcoming far', 'Many future'],
@@ -240,7 +298,7 @@ try {
       }
     }
   }
-  echo "$case Event recipe verified.\n";
+  echo "$case Event recipe and Editor dashboard block verified.\n";
 }
 finally {
   $account_switcher->switchBack();

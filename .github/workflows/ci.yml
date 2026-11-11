@@ -98,7 +98,7 @@ jobs:
             if [[ "$composition" != admin ]]; then vendor/bin/drush recipe "$PWD/recipes/sous-$composition" --yes; fi
             for recipe in sous-events sous-news-post sous-profile; do
               vendor/bin/drush recipe "$PWD/recipes/$recipe" --yes
-              if [[ "$composition" == admin && ( "$recipe" == sous-news-post || "$recipe" == sous-profile ) ]]; then
+              if [[ "$composition" == admin ]]; then
                 vendor/bin/drush recipe "$PWD/recipes/$recipe" --yes
               fi
               if [[ "$recipe" != sous-profile && ( "$composition" == paragraphs || "$composition" == core-layout-builder ) ]]; then

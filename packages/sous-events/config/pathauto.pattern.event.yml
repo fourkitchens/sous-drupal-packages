@@ -3,11 +3,8 @@ status: true
 dependencies:
   module:
     - node
-    - smart_date
   config:
     - node.type.event
-    - field.field.node.event.field_event_date
-    - field.field.node.event.field_event_type
 id: event
 label: Event
 type: 'canonical_entities:node'
