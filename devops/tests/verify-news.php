@@ -2,9 +2,11 @@
 
 /**
  * @file
- * Verify News Post authoring, aliases and searchable rendered teaser listings.
+ * Verify News Post authoring, listings and Editor dashboard integration.
  */
 
+use Drupal\Core\Session\UserSession;
+use Drupal\dashboard\Entity\Dashboard;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
@@ -76,6 +78,44 @@ try {
   $html = (string) \Drupal::service('renderer')->renderInIsolation($build);
   if (!str_contains($html, 'Jane &lt;em&gt;Reporter&lt;/em&gt;') || str_contains($html, '<em>Reporter</em>')) {
     throw new \RuntimeException('The News byline did not render as plain text.');
+  }
+  $news_components = [];
+  foreach (Dashboard::loadMultiple() as $dashboard) {
+    foreach ($dashboard->getSections() as $delta => $section) {
+      foreach ($section->getComponents() as $component) {
+        if ($component->getUuid() === '4520663a-c6bd-4c2e-8bc5-e361f3e12c46' || $component->getPluginId() === 'views_block:dashboard_news-block_recent') {
+          $news_components[] = [$dashboard, $delta, $component];
+        }
+      }
+    }
+  }
+  if (count($news_components) !== 1) {
+    throw new \RuntimeException('Dashboards must contain exactly one News component.');
+  }
+  [$dashboard, $delta, $component] = $news_components[0];
+  $components = array_values($dashboard->getSection(2)->getComponentsByRegion('first'));
+  $uuids = array_map(static fn($item) => $item->getUuid(), $components);
+  if ($dashboard->id() !== 'editor' || $delta !== 2 || $component->getRegion() !== 'first' || $component->getUuid() !== '4520663a-c6bd-4c2e-8bc5-e361f3e12c46' || $component->getPluginId() !== 'views_block:dashboard_news-block_recent' || $components[0]->getPluginId() !== 'views_block:dashboard_editorial-block_recent' || array_search($component->getUuid(), $uuids, TRUE) < 1) {
+    throw new \RuntimeException('News dashboard component must follow Recently updated in Editor section 2 first.');
+  }
+  foreach ([['uid' => 103, 'roles' => ['authenticated', 'site_editor']], ['uid' => 0, 'roles' => ['anonymous']]] as $values) {
+    $account = new UserSession($values);
+    $account_switcher->switchTo($account);
+    try {
+      $block = $component->getPlugin();
+      $allowed = $account->isAuthenticated();
+      if ($block->access($account) !== $allowed) {
+        throw new \RuntimeException('News dashboard block must allow Site Editors and deny anonymous users.');
+      }
+      $build = $block->build();
+      $output = (string) \Drupal::service('renderer')->renderInIsolation($build);
+      if ($allowed ? !str_contains($output, $nodes['Unpublished story']->label()) : trim($output) !== '') {
+        throw new \RuntimeException('News dashboard block must show unpublished stories only to its editorial audience.');
+      }
+    }
+    finally {
+      $account_switcher->switchBack();
+    }
   }
   $all = ['Latest story', 'Archive report', 'Research dispatch', 'Announcement', 'Old campus'];
   $filters = [
@@ -163,7 +203,7 @@ try {
       throw new \RuntimeException('News did not apply filtering before its twelve-item page limit.');
     }
   }
-  echo "$case News Post recipe verified.\n";
+  echo "$case News Post recipe and Editor dashboard block verified.\n";
 }
 finally {
   $account_switcher->switchBack();

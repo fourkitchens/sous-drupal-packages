@@ -4,7 +4,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.admin_preview
     - core.entity_view_mode.node.teaser
-    - field.storage.node.field_news_categories
     - field.storage.node.field_teaser_text
     - node.type.news_post
     - taxonomy.vocabulary.news_categories
@@ -228,6 +227,17 @@ display:
         groups:
           1: AND
       group_by: false
+      display_extenders: {}
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_teaser_text'
   embed_recent:
     id: embed_recent
     display_title: 'Recent News'
@@ -257,17 +267,28 @@ display:
           group: 1
       defaults:
         filters: false
+      display_extenders: {}
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_teaser_text'
   entity_browser:
     id: entity_browser
-    display_title: News Content Browser
+    display_title: 'News Content Browser'
     display_plugin: entity_browser
     position: 2
     display_options:
-      title: News Content Browser
+      title: 'News Content Browser'
       access:
         type: perm
         options:
-          perm: access news_content_browser entity browser pages
+          perm: 'access news_content_browser entity browser pages'
       pager:
         type: full
         options:
@@ -349,6 +370,16 @@ display:
         sorts: false
         arguments: false
         filters: false
+      display_extenders: {}
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'user.node_grants:view'
+        - user.permissions
+      tags: {}
   block_news:
     id: block_news
     display_title: News
@@ -364,3 +395,15 @@ display:
       defaults:
         title: false
         pager: false
+      display_extenders: {}
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_teaser_text'

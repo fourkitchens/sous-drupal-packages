@@ -5,7 +5,6 @@ dependencies:
     - node
   config:
     - node.type.news_post
-    - field.field.node.news_post.field_news_categories
 id: news_post
 label: 'News Post'
 type: 'canonical_entities:node'

@@ -3,8 +3,8 @@ status: true
 dependencies:
   config:
     - field.field.node.news_post.field_byline
-    - field.field.node.news_post.field_news_categories
     - field.field.node.news_post.field_metadata
+    - field.field.node.news_post.field_news_categories
     - field.field.node.news_post.field_teaser_image
     - field.field.node.news_post.field_teaser_text
     - node.type.news_post
