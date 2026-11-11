@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Verify authoring forms, format processing, icons and account access natively.
+ * Verify authoring forms, format processing and icons natively.
  */
 
 use Drupal\block_content\Entity\BlockContent;
@@ -12,35 +12,22 @@ use Drupal\layout_paragraphs\Controller\ChooseComponentController;
 use Drupal\layout_paragraphs\LayoutParagraphsLayout;
 use Drupal\node\Entity\Node;
 use Drupal\path_alias\Entity\PathAlias;
-use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 
 $case = getenv('COMPOSITION');
 $entities = \Drupal::entityTypeManager();
 $modules = \Drupal::moduleHandler();
-foreach (['no_nbsp', 'login_destination', 'metatag'] as $module) {
+foreach (['no_nbsp', 'metatag'] as $module) {
   if (!$modules->moduleExists($module)) {
     throw new \RuntimeException("$module is missing from the authoring baseline.");
   }
 }
-$users = [];
 $node = NULL;
 $alias = NULL;
-$role = NULL;
 $switcher = \Drupal::service('account_switcher');
 $switcher->switchTo(User::load(1));
 try {
-  $role = Role::create(['id' => 'authoring_probe', 'label' => 'Authoring probe']);
-  $role->save();
-  foreach (['authenticated' => [], 'custom' => [$role->id()], 'superuser' => ['superuser']] as $name => $roles) {
-    $users[$name] = User::create(['name' => "authoring_$name", 'status' => 1, 'roles' => $roles]);
-    $users[$name]->save();
-    $destination = \Drupal::service('login_destination.manager')->findDestination('login', $users[$name]);
-    if (!$destination || $destination->getDestination() !== 'internal:/admin/content') {
-      throw new \RuntimeException("Login Destination does not cover $name users.");
-    }
-  }
   $bundles = array_keys($entities->getStorage('node_type')->loadMultiple());
   $config = \Drupal::service('config.storage');
   foreach (['field.field.node.page.field_tags', 'field.storage.node.field_tags', 'taxonomy.vocabulary.tags'] as $name) {
@@ -159,13 +146,7 @@ finally {
   if ($node && !$node->isNew()) {
     $node->delete();
   }
-  foreach ($users as $user) {
-    $user->delete();
-  }
-  if ($role) {
-    $role->delete();
-  }
   $switcher->switchBack();
 }
 
-print "$case authoring forms, text filters, paragraph icons, component order and account access verified.\n";
+print "$case authoring forms, text filters, paragraph icons and component order verified.\n";

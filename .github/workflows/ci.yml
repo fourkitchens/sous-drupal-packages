@@ -76,7 +76,7 @@ jobs:
           mv "$site/composer.tmp" "$site/composer.json"
           mapfile -t recipes < <(jq -r 'select(.type == "drupal-recipe") | .name' packages/*/composer.json)
           cd "$site"
-          composer require 'drupal/login_destination:^2.0.0-beta10@beta' drush/drush --no-interaction
+          composer require drush/drush --no-interaction
           composer require "${recipes[@]}" --no-interaction
           locked_versions=$(jq -r '
             .packages[] |
