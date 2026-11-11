@@ -7,6 +7,12 @@ Metatag without requiring a content composition. Alias changes create redirects;
 breadcrumbs use page titles. The native sitemap variant and other module
 settings are preserved. No tracking container ID or structured-data values are supplied.
 
+Redirect 404 logging is enabled with the module's default 10,000-row log limit.
+When Sous Dashboard is present, Superusers see Top missing pages in the Site admin
+dashboard; Site Editors do not see this block. It lists unresolved paths by request
+count, with the last-seen time and a Fix 404 pages link to the full report. The list
+refreshes every five minutes. SEO does not require Sous Dashboard.
+
 ## Installation and application
 
 The Sous installer includes SEO in every build. To add it to another site,
