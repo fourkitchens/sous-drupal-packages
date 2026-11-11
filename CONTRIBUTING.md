@@ -45,6 +45,28 @@ extension code, so an integration must not install the other composition.
 See the [Events](packages/sous-events/recipes) and
 [News Post](packages/sous-news-post/recipes) integrations for examples.
 
+## Dashboard blocks
+
+Use `editor` section 1 for work needing action now, `editor` section 2 for content
+lists, and `site_admin` section 1 for site administration. Target the regions in
+the [Dashboard layout contract](packages/sous-dashboard/README.md#layout-contract).
+
+Ship `views.view.dashboard_<topic>` with one block display, the `dashboard` tag,
+at most ten items, a more link, and empty text with a create link.
+Use an access permission the intended audience already has.
+
+Add one `addComponentToLayout` action under the optional
+`'?dashboard.dashboard.<id>'` target. Include a layout-to-region map,
+`default_region: content`, and `position: 99`. Generate its UUID once with
+`uuidgen` and keep that constant in the recipe. Follow the
+[Profile recipe](packages/sous-profile/recipe.yml) example.
+
+Never require or apply Sous Dashboard from another package. A baseline package
+that adds a block comes after Dashboard in the starter's `baseline_recipes`.
+Apply the recipe twice and verify exactly one component remains in its intended
+section and region, the intended audience can render it, and anonymous users see
+nothing.
+
 ## Drupal compatibility
 
 All packages and the recipe template require Drupal `^11.4`, the floor tested

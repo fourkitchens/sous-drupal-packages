@@ -41,3 +41,4 @@ hidden:
   field_teaser_image: true
   field_teaser_text: true
   links: true
+  published_at: true

@@ -2,7 +2,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.media.preview
     - core.entity_view_mode.node.admin_preview
     - field.field.node.profile.field_description
     - field.field.node.profile.field_first_name

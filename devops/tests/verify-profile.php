@@ -2,10 +2,12 @@
 
 /**
  * @file
- * Verify Profile fields, generated titles, authoring and rendered teasers.
+ * Verify Profile authoring, teasers, listing and Editor dashboard integration.
  */
 
 use Drupal\Core\File\FileExists;
+use Drupal\Core\Session\UserSession;
+use Drupal\dashboard\Entity\Dashboard;
 use Drupal\media\Entity\Media;
 use Drupal\node\Entity\Node;
 use Drupal\user\Entity\User;
@@ -72,6 +74,43 @@ try {
   $node = $storage->loadUnchanged($node->id());
   if ($node->label() !== 'Grace Hopper') {
     throw new \RuntimeException('Profile title did not update when its name fields changed.');
+  }
+  $dashboard = Dashboard::load('editor');
+  $profile_components = [];
+  foreach ($dashboard->getSections() as $delta => $section) {
+    foreach ($section->getComponents() as $component) {
+      if ($component->getUuid() === '97eca01d-afc7-48ad-bbf5-e5b7196de5d9' || $component->getPluginId() === 'views_block:dashboard_profiles-block_recent') {
+        $profile_components[] = [$delta, $component];
+      }
+    }
+  }
+  if (count($profile_components) !== 1) {
+    throw new \RuntimeException('Editor must contain exactly one Profile dashboard component.');
+  }
+  [$delta, $component] = $profile_components[0];
+  $components = array_values($dashboard->getSection(2)->getComponentsByRegion('first'));
+  $uuids = array_map(static fn($item) => $item->getUuid(), $components);
+  if ($delta !== 2 || $component->getRegion() !== 'first' || $component->getUuid() !== '97eca01d-afc7-48ad-bbf5-e5b7196de5d9' || $component->getPluginId() !== 'views_block:dashboard_profiles-block_recent' || $components[0]->getPluginId() !== 'views_block:dashboard_editorial-block_recent' || array_search($component->getUuid(), $uuids, TRUE) < 1) {
+    throw new \RuntimeException('Profile dashboard component must follow Recently updated in Editor section 2 first.');
+  }
+  foreach ([['uid' => 103, 'roles' => ['authenticated', 'site_editor']], ['uid' => 0, 'roles' => ['anonymous']]] as $values) {
+    $account = new UserSession($values);
+    $switcher->switchTo($account);
+    try {
+      $block = $component->getPlugin();
+      $allowed = $account->isAuthenticated();
+      if ($block->access($account) !== $allowed) {
+        throw new \RuntimeException('Profile dashboard block must allow Site Editors and deny anonymous users.');
+      }
+      $build = $block->build();
+      $output = (string) \Drupal::service('renderer')->renderInIsolation($build);
+      if ($allowed ? !str_contains($output, $node->label()) : trim($output) !== '') {
+        throw new \RuntimeException('Profile dashboard block must show the generated name only to its editorial audience.');
+      }
+    }
+    finally {
+      $switcher->switchBack();
+    }
   }
   $bio_output = $node->field_description->processed;
   if (!str_contains($bio_output, '<strong>biography</strong>') || str_contains($bio_output, '<script') || str_contains($bio_output, '&nbsp;')) {
@@ -169,4 +208,4 @@ finally {
   $switcher->switchBack();
 }
 
-print getenv('COMPOSITION') . " Profile fields, automatic names and aliases, Basic HTML Bio and searchable Profiles teasers verified.\n";
+print getenv('COMPOSITION') . " Profile fields, automatic names and aliases, Basic HTML Bio, searchable teasers and Editor dashboard block verified.\n";

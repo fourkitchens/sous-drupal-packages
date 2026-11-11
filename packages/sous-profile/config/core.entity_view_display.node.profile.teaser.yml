@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.media.content_teaser_landscape
+    - core.entity_view_mode.node.teaser
     - field.field.node.profile.field_description
     - field.field.node.profile.field_first_name
     - field.field.node.profile.field_image
@@ -11,7 +11,6 @@ dependencies:
     - field.field.node.profile.field_teaser_image
     - field.field.node.profile.field_teaser_text
     - node.type.profile
-    - core.entity_view_mode.node.teaser
   module:
     - user
 id: node.profile.teaser
@@ -42,3 +41,4 @@ hidden:
   field_description: true
   field_metadata: true
   links: true
+  published_at: true
