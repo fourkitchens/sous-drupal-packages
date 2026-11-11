@@ -26,8 +26,6 @@ install:
   - entity_usage
   # Install Field Group and dependencies
   - field_group
-  # Install Login Destination
-  - login_destination
   # Install Login History
   - login_history
   # Install Media Library Edit
@@ -62,7 +60,6 @@ config:
     - block.block.gin_page_title
     - block.block.gin_primary_local_tasks
     - block.block.gin_secondary_local_tasks
-    - login_destination.destination.admins_and_editors_login_destination
   import:
     gin:
       - gin.settings
@@ -75,8 +72,6 @@ config:
       - block.block.gin_secondary_local_tasks
     navigation:
       - system.menu.content
-    login_destination:
-      - login_destination.destination.admins_and_editors_login_destination
     # Import native management Views without overwriting project-owned variants.
     block_content:
       - views.view.block_content
@@ -160,10 +155,6 @@ config:
       simpleConfigUpdate:
         preset_accent_color: 'green'
         classic_toolbar: 'horizontal'
-    # Update login_destination settings
-    login_destination.settings:
-      simpleConfigUpdate:
-        preserve_destination: TRUE
     # Update the node settings to use the admin theme.
     node.settings:
       simpleConfigUpdate:

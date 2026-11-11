@@ -76,7 +76,7 @@ with the site's Composer files.
 Require and apply a recipe:
 
 ```sh
-ddev composer require fourkitchens/sous-admin:^2.0 drupal/login_destination:^2.0.0-beta10@beta
+ddev composer require fourkitchens/sous-admin:^2.0
 ddev composer patches-relock
 ddev composer patches-repatch
 ddev drush recipe /var/www/html/web/recipes/sous-admin

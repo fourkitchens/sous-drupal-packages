@@ -11,9 +11,9 @@ without assigning content types to it.
 
 Admin makes the No Non-breaking Space filter available without adding text
 formats. Projects that need CKEditor, Linkit and HTML filter defaults can apply
-Sous Formats independently. Login Destination redirects every role to Content.
+Sous Formats independently.
 
-Apply Admin once to a supported Minimal baseline. The strict Gin/login import
+Apply Admin once to a supported Minimal baseline. The strict Gin import
 list intentionally validates that initial baseline. Native Views stay outside
 that list so existing project-owned Views are preserved. Reapplying Admin after
 its own Gin actions or site customization can fail the strict check; package
@@ -31,7 +31,7 @@ can assign or remove only Site Editor on the Roles tab at `/user/{uid}/roles`.
 Drupal gives every signed-in user the Authenticated role automatically.
 
 Autosave Form, Config Log, Editoria11y, Entity Usage, Gin Login, Login
-History/Destination, Role Delegation, Save and Edit, Tagify, Trash, Twig Tweak,
+History, Role Delegation, Save and Edit, Tagify, Trash, Twig Tweak,
 Views AJAX History and Views Bulk Operations are enabled by default. A project
 can replace them through a project-owned recipe or reviewed module uninstall or
 configuration change. Removing a Composer
