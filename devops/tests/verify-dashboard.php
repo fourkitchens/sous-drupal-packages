@@ -24,6 +24,7 @@ $layouts = [
   'site_admin' => [
     ['layout_onecol', 'Status', NULL, ['content' => ['dashboard_site_status']]],
     ['layout_twocol_section', 'Activity', '50-50', ['first' => ['views_block:dashboard_log-block_recent', 'views_block:dashboard_accounts-block_new'], 'second' => ['views_block:dashboard_sign_ins-block_recent']]],
+    ['layout_twocol_section', 'Top errors', '50-50', ['first' => ['views_block:dashboard_top_errors-block_page_not_found'], 'second' => ['views_block:dashboard_top_errors-block_access_denied']]],
   ],
   'editor' => [
     ['layout_twocol_section', 'Start', '67-33', ['first' => ['dashboard_text_block'], 'second' => ['system_menu_block:content']]],
@@ -73,6 +74,8 @@ $links = [
   ['dashboard_editorial', 'block_scheduled', '/admin/content/scheduled'],
   ['dashboard_editorial', 'block_recent', '/admin/content'],
   ['dashboard_log', 'block_recent', '/admin/reports/dblog'],
+  ['dashboard_top_errors', 'block_page_not_found', '/admin/reports/page-not-found'],
+  ['dashboard_top_errors', 'block_access_denied', '/admin/reports/access-denied'],
   ['dashboard_sign_ins', 'block_recent', '/admin/reports/login-history'],
   ['dashboard_accounts', 'block_new', '/admin/people'],
   ['dashboard_accessibility', 'block_alerts', NULL],
@@ -90,55 +93,96 @@ foreach ($links as [$id, $display, $path]) {
 $switcher = \Drupal::service('account_switcher');
 $requests = \Drupal::requestStack();
 $dashboard_url = \Drupal::urlGenerator()->generateFromRoute('dashboard');
-foreach (['superuser' => 'site_admin', 'site_editor' => 'editor', 'authenticated' => NULL] as $role => $default) {
-  $account = new UserSession(['uid' => 100 + array_search($role, ['superuser', 'site_editor', 'authenticated'], TRUE), 'roles' => array_unique(['authenticated', $role])]);
-  $switcher->switchTo($account);
-  try {
-    if (\Drupal::service('dashboard.manager')->getDefaultDashboard()?->id() !== $default || ($role === 'site_editor' && $account->hasPermission('administer dashboard'))) {
-      throw new \RuntimeException("The $role dashboard selection or administration permission is incorrect.");
+$fixtures = ['page not found' => ['block_page_not_found', '/sous-verify-missing'], 'access denied' => ['block_access_denied', '/sous-verify-denied']];
+$wids = [];
+try {
+  foreach ($fixtures as $channel => [$display, $path]) {
+    $request = Request::create($path);
+    $previous_wid = \Drupal::database()->query('SELECT COALESCE(MAX(wid), 0) FROM {watchdog}')->fetchField();
+    $requests->push($request);
+    try {
+      \Drupal::logger($channel)->warning('@uri', ['@uri' => $path]);
     }
-    foreach ($dashboards as $id => $dashboard) {
-      $allowed = $role === 'superuser' || ($role === 'site_editor' && $id === 'editor');
-      if ($dashboard->access('view', $account) !== $allowed || \Drupal::service('access_manager')->checkNamedRoute('entity.dashboard.canonical', ['dashboard' => $id], $account) !== $allowed) {
-        throw new \RuntimeException("The $role account has incorrect access to $id.");
-      }
-    }
-    if ($role === 'superuser') {
-      foreach ($links as [$id, $display]) {
-        $view = Views::getView($id);
-        $view->setDisplay($display);
-        $handler = $view->display_handler;
-        $pager = $handler->getOption('pager');
-        $cache = $handler->getOption('cache');
-        $timed = in_array($id, ['dashboard_log', 'dashboard_sign_ins', 'dashboard_accessibility'], TRUE);
-        if (!$view->access($display, $account) || $handler->validate() || $pager['type'] !== 'some' || $pager['options']['items_per_page'] !== 10 || $cache['type'] !== ($timed ? 'time' : 'tag') || ($timed && ($cache['options']['results_lifespan'] !== 300 || $cache['options']['output_lifespan'] !== 300))) {
-          throw new \RuntimeException("Dashboard View $id display $display has invalid plugins, access, limits or caching.");
-        }
-        // Always run the query, including on repeated verification runs.
-        $handler->setOption('cache', ['type' => 'none', 'options' => []]);
-        $build = $view->executeDisplay($display);
-        if (!$view->executed || count($view->result) > 10 || !\Drupal::service('renderer')->renderInIsolation($build)) {
-          throw new \RuntimeException("Dashboard View $id display $display failed to execute and render.");
-        }
-      }
-    }
-    foreach ([NULL, '/admin/content'] as $destination) {
-      $request = Request::create('/user/login', 'GET', $destination ? ['destination' => $destination] : []);
-      $requests->push($request);
-      try {
-        \Drupal::service('dashboard.user_redirect')->userLogin($account);
-        $expected = $destination ?? ($default ? $dashboard_url : NULL);
-        if ($request->query->get('destination') !== $expected) {
-          throw new \RuntimeException("The $role sign-in redirect ignored dashboard access or the existing destination.");
-        }
-      }
-      finally {
-        $requests->pop();
-      }
+    finally {
+      $requests->pop();
+      $wids = array_merge($wids, \Drupal::database()->select('watchdog', 'w')->fields('w', ['wid'])->condition('wid', $previous_wid, '>')->condition('type', $channel)->condition('location', $request->getUri())->execute()->fetchCol());
     }
   }
-  finally {
-    $switcher->switchBack();
+  foreach (['superuser' => 'site_admin', 'site_editor' => 'editor', 'authenticated' => NULL] as $role => $default) {
+    $account = new UserSession(['uid' => 100 + array_search($role, ['superuser', 'site_editor', 'authenticated'], TRUE), 'roles' => array_unique(['authenticated', $role])]);
+    $switcher->switchTo($account);
+    try {
+      if (\Drupal::service('dashboard.manager')->getDefaultDashboard()?->id() !== $default || ($role === 'site_editor' && $account->hasPermission('administer dashboard'))) {
+        throw new \RuntimeException("The $role dashboard selection or administration permission is incorrect.");
+      }
+      foreach ($dashboards as $id => $dashboard) {
+        $allowed = $role === 'superuser' || ($role === 'site_editor' && $id === 'editor');
+        if ($dashboard->access('view', $account) !== $allowed || \Drupal::service('access_manager')->checkNamedRoute('entity.dashboard.canonical', ['dashboard' => $id], $account) !== $allowed) {
+          throw new \RuntimeException("The $role account has incorrect access to $id.");
+        }
+      }
+      if ($role === 'superuser') {
+        foreach ($links as [$id, $display]) {
+          $view = Views::getView($id);
+          $view->setDisplay($display);
+          $handler = $view->display_handler;
+          $pager = $handler->getOption('pager');
+          $cache = $handler->getOption('cache');
+          $timed = in_array($id, ['dashboard_log', 'dashboard_top_errors', 'dashboard_sign_ins', 'dashboard_accessibility'], TRUE);
+          if (!$view->access($display, $account) || $handler->validate() || $pager['type'] !== 'some' || $pager['options']['items_per_page'] !== 10 || $cache['type'] !== ($timed ? 'time' : 'tag') || ($timed && ($cache['options']['results_lifespan'] !== 300 || $cache['options']['output_lifespan'] !== 300))) {
+            throw new \RuntimeException("Dashboard View $id display $display has invalid plugins, access, limits or caching.");
+          }
+          // Always run the query, including on repeated verification runs.
+          $handler->setOption('cache', ['type' => 'none', 'options' => []]);
+          $build = $view->executeDisplay($display);
+          $output = (string) \Drupal::service('renderer')->renderInIsolation($build);
+          if (!$view->executed || count($view->result) > 10 || !$output) {
+            throw new \RuntimeException("Dashboard View $id display $display failed to execute and render.");
+          }
+          foreach ($fixtures as [$fixture_display, $path]) {
+            if ($id === 'dashboard_log' && str_contains($output, $path)) {
+              throw new \RuntimeException('Recent errors and warnings must exclude page-not-found and access-denied logs.');
+            }
+            if ($id === 'dashboard_top_errors' && $display === $fixture_display) {
+              $location = Request::create($path)->getUri();
+              $matches = array_filter($view->result, static fn($row) => $view->field['location']->getValue($row) === $location && (int) $view->field['wid']->getValue($row) >= 1);
+              if (!$matches || !str_contains($output, $location)) {
+                throw new \RuntimeException("Dashboard display $display must render its logged URL and count.");
+              }
+            }
+          }
+        }
+      }
+      if ($role === 'site_editor') {
+        foreach ($fixtures as [$display]) {
+          if (Views::getView('dashboard_top_errors')->access($display, $account)) {
+            throw new \RuntimeException("Site Editors must not access Dashboard display $display.");
+          }
+        }
+      }
+      foreach ([NULL, '/admin/content'] as $destination) {
+        $request = Request::create('/user/login', 'GET', $destination ? ['destination' => $destination] : []);
+        $requests->push($request);
+        try {
+          \Drupal::service('dashboard.user_redirect')->userLogin($account);
+          $expected = $destination ?? ($default ? $dashboard_url : NULL);
+          if ($request->query->get('destination') !== $expected) {
+            throw new \RuntimeException("The $role sign-in redirect ignored dashboard access or the existing destination.");
+          }
+        }
+        finally {
+          $requests->pop();
+        }
+      }
+    }
+    finally {
+      $switcher->switchBack();
+    }
+  }
+}
+finally {
+  if ($wids) {
+    \Drupal::database()->delete('watchdog')->condition('wid', $wids, 'IN')->execute();
   }
 }
 
