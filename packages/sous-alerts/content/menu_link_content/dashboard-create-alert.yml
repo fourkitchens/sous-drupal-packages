@@ -1,0 +1,25 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: 983b3206-1451-4bf9-9a43-ae71ca31a276
+  bundle: menu_link_content
+  default_langcode: en
+default:
+  enabled:
+    - value: true
+  title:
+    - value: Alert
+  menu_name:
+    - value: dashboard-create
+  link:
+    - uri: 'internal:/admin/content/sitewide_alert/add'
+      title: ''
+      options: {}
+  external:
+    - value: false
+  rediscover:
+    - value: true
+  weight:
+    - value: 10
+  expanded:
+    - value: false

@@ -2,6 +2,7 @@ name: 'Sous Alerts'
 description: 'Site-wide alert banners with scheduling, dismissal and a top-of-page block.'
 type: Site
 install:
+  - menu_link_content
   - sitewide_alert
   - sitewide_alert_block
 config:

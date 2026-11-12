@@ -82,9 +82,14 @@ and installs `menu_link_content` in its recipe.
 
 Use the type's label as the title, `dashboard-create` as the menu, and
 `internal:/node/add/<type>` or `internal:/media/add/<type>` as the link URI.
-Do not set a parent: links form one flat list. Set `rediscover: true`.
-Use weight 0 for content links and weights 50 and up for media links.
+For `dashboard-create`, do not set a parent: links form one flat list.
+Set `rediscover: true`.
+Use weight 0 for content-type links and weights 50 and up for media links.
 Generate each link's UUID once with `uuidgen` and keep it stable.
+
+Links for other content a package owns, such as Sous Alerts' Alert, use weight 10.
+They may also go under Navigation's Create in the `content` menu with parent
+`navigation.create`.
 
 Only link types owned by that package. A link to another package's type becomes
 a dead link when that package is absent. Do not require Sous Dashboard: the link
