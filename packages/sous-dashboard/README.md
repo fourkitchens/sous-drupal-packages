@@ -12,10 +12,11 @@ using Dashboard's tabs. Site Editors see Editor. Other authenticated accounts
 receive no dashboard access. Dashboard supplies the sign-in redirect and tabs.
 Only Superusers can rearrange blocks at `/admin/structure/dashboard`.
 
-Site admin shows site status, recent errors and warnings, new accounts and recent
-sign-ins. Editor provides welcome text, the Content menu, drafts, scheduled
-changes, recently updated content and accessibility alerts. Lists show up to ten
-items. Logs, sign-ins and accessibility results refresh every five minutes.
+Site admin shows site status, recent errors and warnings, new accounts, recent
+sign-ins, Top page not found errors and Top access denied errors. Editor provides
+welcome text, the Content menu, drafts, scheduled changes, recently updated content
+and accessibility alerts. Lists show up to ten items. Logs, sign-ins and
+accessibility results refresh every five minutes.
 
 ## Layout contract
 
@@ -28,6 +29,8 @@ installation; reapplying this recipe preserves existing dashboard configuration.
 | `site_admin` | 0       | Status       | `layout_onecol`                 | `content` | Site status                              |
 | `site_admin` | 1       | Activity     | `layout_twocol_section` (50–50) | `first`   | Recent errors and warnings; New accounts |
 | `site_admin` | 1       | Activity     | `layout_twocol_section` (50–50) | `second`  | Recent sign-ins                          |
+| `site_admin` | 2       | Top errors   | `layout_twocol_section` (50–50) | `first`   | Top page not found errors                |
+| `site_admin` | 2       | Top errors   | `layout_twocol_section` (50–50) | `second`  | Top access denied errors                 |
 | `editor`     | 0       | Start        | `layout_twocol_section` (67–33) | `first`   | Welcome and help                         |
 | `editor`     | 0       | Start        | `layout_twocol_section` (67–33) | `second`  | Create and manage                        |
 | `editor`     | 1       | Your work    | `layout_twocol_section` (50–50) | `first`   | Drafts in progress                       |
