@@ -5,13 +5,15 @@
  * Verify Dashboard layouts, role access, navigation and native sign-in redirects.
  */
 
+use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Session\UserSession;
 use Drupal\dashboard\Entity\Dashboard;
 use Drupal\filter\Entity\FilterFormat;
+use Drupal\system\Entity\Menu;
 use Drupal\views\Views;
 use Symfony\Component\HttpFoundation\Request;
 
-foreach (['dashboard', 'dblog', 'editoria11y', 'login_history'] as $module) {
+foreach (['dashboard', 'dblog', 'editoria11y', 'login_history', 'sous_component_support'] as $module) {
   if (!\Drupal::moduleHandler()->moduleExists($module)) {
     throw new \RuntimeException("Dashboard module $module is not enabled.");
   }
@@ -27,7 +29,7 @@ $layouts = [
     ['layout_twocol_section', 'Top errors', '50-50', ['first' => ['views_block:dashboard_top_errors-block_page_not_found'], 'second' => ['views_block:dashboard_top_errors-block_access_denied']]],
   ],
   'editor' => [
-    ['layout_twocol_section', 'Start', '67-33', ['first' => ['dashboard_text_block'], 'second' => ['system_menu_block:content']]],
+    ['layout_twocol_section', 'Start', '67-33', ['first' => ['dashboard_text_block'], 'second' => ['system_menu_block:dashboard-create']]],
     ['layout_twocol_section', 'Your work', '50-50', ['first' => ['views_block:dashboard_editorial-block_drafts'], 'second' => ['views_block:dashboard_editorial-block_scheduled']]],
     ['layout_twocol_section', 'Site content', '50-50', ['first' => ['views_block:dashboard_editorial-block_recent'], 'second' => ['views_block:dashboard_accessibility-block_alerts']]],
   ],
@@ -55,8 +57,8 @@ foreach (['site_admin' => ['Site admin', -10, 'Site health and accounts for Supe
 $start = $dashboards['editor']->getSection(0);
 $welcome = array_values($start->getComponentsByRegion('first'))[0]->getPlugin()->getConfiguration();
 $menu = array_values($start->getComponentsByRegion('second'))[0]->getPlugin()->getConfiguration();
-if ($welcome['text']['format'] !== 'basic_html' || !$welcome['text']['value'] || $menu['level'] !== 1 || $menu['depth'] !== 2 || $menu['expand_all_items'] !== TRUE) {
-  throw new \RuntimeException('Editor welcome text or Content menu settings have changed.');
+if ($welcome['text']['format'] !== 'basic_html' || !$welcome['text']['value'] || $menu['label'] !== 'Create' || !Menu::load('dashboard-create') || $menu['level'] !== 1 || $menu['depth'] !== 2 || $menu['expand_all_items'] !== TRUE) {
+  throw new \RuntimeException('Editor welcome text or Create menu settings have changed.');
 }
 $navigation = [];
 foreach (\Drupal::config('navigation.block_layout')->get('sections') as $section) {
@@ -120,6 +122,32 @@ try {
         if ($dashboard->access('view', $account) !== $allowed || \Drupal::service('access_manager')->checkNamedRoute('entity.dashboard.canonical', ['dashboard' => $id], $account) !== $allowed) {
           throw new \RuntimeException("The $role account has incorrect access to $id.");
         }
+      }
+      $menu_tree = \Drupal::menuTree();
+      $tree = $menu_tree->load('dashboard-create', (new MenuTreeParameters())->onlyEnabledLinks()->setMaxDepth(2));
+      $tree = $menu_tree->transform($tree, [['callable' => 'menu.default_tree_manipulators:checkAccess'], ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort']]);
+      $actual = [];
+      foreach ($tree as $item) {
+        if ($item->subtree || in_array($item->link->getRouteName(), ['entity.node.add_page', 'entity.media.add_page'], TRUE)) {
+          throw new \RuntimeException('Create must list types directly without Content or Media groups.');
+        }
+        if ($item->access->isAllowed()) {
+          $actual[] = [(string) $item->link->getTitle(), $item->link->getRouteName(), $item->link->getRouteParameters()];
+        }
+      }
+      $expected = [];
+      $entities = \Drupal::entityTypeManager();
+      foreach ([['node', 'node_type', 'entity.node.add_form'], ['media', 'media_type', 'entity.media.add_form']] as [$entity_type, $bundle_type, $route]) {
+        $types = $entities->getStorage($bundle_type)->loadMultiple();
+        uasort($types, [$entities->getDefinition($bundle_type)->getClass(), 'sort']);
+        foreach ($types as $bundle => $type) {
+          if ($role === 'superuser' || ($role === 'site_editor' && $entities->getAccessControlHandler($entity_type)->createAccess($bundle, $account))) {
+            $expected[] = [(string) $type->label(), $route, [$bundle_type => $bundle]];
+          }
+        }
+      }
+      if ($actual !== $expected) {
+        throw new \RuntimeException("The $role Create menu must list only accessible content and media types in label order.");
       }
       if ($role === 'superuser') {
         foreach ($links as [$id, $display]) {

@@ -9,30 +9,30 @@ ZIP; sharing a repository and release version does not install the entire collec
 Every package uses the `fourkitchens/` Composer namespace and the collection's
 shared version, beginning with `2.0.0`.
 
-| Package                                                       | Purpose                                                          | Installation choice        |
-| ------------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------- |
-| [sous-admin](packages/sous-admin)                             | Gin, Navigation, Superuser and management Views                  | Starter base               |
-| [sous-dashboard](packages/sous-dashboard)                     | Site admin and Editor dashboards                                 | Starter base               |
-| [sous-emulsify](packages/sous-emulsify)                       | Emulsify theme and tools                                         | Starter base               |
-| [sous-workflow](packages/sous-workflow)                       | Shared Editorial moderation and scheduled publishing             | Starter/shared dependency  |
-| [sous-content-base](packages/sous-content-base)               | Shared Page/Frontpage fields, tabs, teasers and aliases          | Shared dependency          |
-| [sous-content-types](packages/sous-content-types)             | Page and Frontpage with Body                                     | Default content            |
-| [sous-formats](packages/sous-formats)                         | Text formats, CKEditor 5 and Linkit defaults                     | Starter base               |
-| [sous-media](packages/sous-media)                             | File, Image, Video and media authoring                           | Starter base               |
-| [sous-events](packages/sous-events)                           | Recurring events, event types, teasers and upcoming/past embeds  | Optional recipe            |
-| [sous-news-post](packages/sous-news-post)                     | News Posts, bylines, categories, teasers and a Recent News embed | Optional recipe            |
-| [sous-profile](packages/sous-profile)                         | Profiles, automatic names, images, bios and searchable teasers   | Optional recipe            |
-| [sous-content-list](packages/sous-content-list)               | Hand-picked teasers and a term-filtered automatic listing        | Main course component      |
-| [sous-gallery](packages/sous-gallery)                         | An image and video gallery                                       | Main course component      |
-| [sous-component-support](packages/sous-component-support)     | Content List form behavior and inline block ordering             | Shared module dependency   |
-| [sous-seo](packages/sous-seo)                                 | Redirects, sitemaps, breadcrumbs and SEO integrations            | Starter base               |
-| [sous-alerts](packages/sous-alerts)                           | Site-wide alert banners with scheduling and dismissal            | Optional recipe            |
-| [sous-search](packages/sous-search)                           | Database search with a results block and content type filter     | Optional recipe            |
-| [sous-dev-tools](packages/sous-dev-tools)                     | Local debugging, file proxying and user impersonation            | Starter base               |
-| [sous-paragraph-types](packages/sous-paragraph-types)         | Text, media, accordion, tabs, quote, embed and table components  | Paragraphs building blocks |
-| [sous-paragraphs](packages/sous-paragraphs)                   | Layout Paragraphs on Page/Frontpage without Body                 | Optional composition       |
-| [sous-core-layout-builder](packages/sous-core-layout-builder) | Native layouts with matching nested inline block types           | Optional composition       |
-| [sous-config-split](packages/sous-config-split)               | Local/staging development tools excluded from production         | Starter base               |
+| Package                                                       | Purpose                                                                         | Installation choice        |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------- | -------------------------- |
+| [sous-admin](packages/sous-admin)                             | Gin, Navigation, Superuser and management Views                                 | Starter base               |
+| [sous-dashboard](packages/sous-dashboard)                     | Site admin and Editor dashboards                                                | Starter base               |
+| [sous-emulsify](packages/sous-emulsify)                       | Emulsify theme and tools                                                        | Starter base               |
+| [sous-workflow](packages/sous-workflow)                       | Shared Editorial moderation and scheduled publishing                            | Starter/shared dependency  |
+| [sous-content-base](packages/sous-content-base)               | Shared Page/Frontpage fields, tabs, teasers and aliases                         | Shared dependency          |
+| [sous-content-types](packages/sous-content-types)             | Page and Frontpage with Body                                                    | Default content            |
+| [sous-formats](packages/sous-formats)                         | Text formats, CKEditor 5 and Linkit defaults                                    | Starter base               |
+| [sous-media](packages/sous-media)                             | File, Image, Video and media authoring                                          | Starter base               |
+| [sous-events](packages/sous-events)                           | Recurring events, event types, teasers and upcoming/past embeds                 | Optional recipe            |
+| [sous-news-post](packages/sous-news-post)                     | News Posts, bylines, categories, teasers and a Recent News embed                | Optional recipe            |
+| [sous-profile](packages/sous-profile)                         | Profiles, automatic names, images, bios and searchable teasers                  | Optional recipe            |
+| [sous-content-list](packages/sous-content-list)               | Hand-picked teasers and a term-filtered automatic listing                       | Main course component      |
+| [sous-gallery](packages/sous-gallery)                         | An image and video gallery                                                      | Main course component      |
+| [sous-component-support](packages/sous-component-support)     | Content List form behavior, inline block ordering and the dashboard Create menu | Shared module dependency   |
+| [sous-seo](packages/sous-seo)                                 | Redirects, sitemaps, breadcrumbs and SEO integrations                           | Starter base               |
+| [sous-alerts](packages/sous-alerts)                           | Site-wide alert banners with scheduling and dismissal                           | Optional recipe            |
+| [sous-search](packages/sous-search)                           | Database search with a results block and content type filter                    | Optional recipe            |
+| [sous-dev-tools](packages/sous-dev-tools)                     | Local debugging, file proxying and user impersonation                           | Starter base               |
+| [sous-paragraph-types](packages/sous-paragraph-types)         | Text, media, accordion, tabs, quote, embed and table components                 | Paragraphs building blocks |
+| [sous-paragraphs](packages/sous-paragraphs)                   | Layout Paragraphs on Page/Frontpage without Body                                | Optional composition       |
+| [sous-core-layout-builder](packages/sous-core-layout-builder) | Native layouts with matching nested inline block types                          | Optional composition       |
+| [sous-config-split](packages/sous-config-split)               | Local/staging development tools excluded from production                        | Starter base               |
 
 Events, News Post, Profile, Alerts and Search are offered in the starter's optional recipe menu. The starter includes Content List and Gallery with the Paragraphs and Layout Builder main courses.
 

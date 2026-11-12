@@ -34,6 +34,7 @@ const permittedDirectories = new Set([
   'config',
   'content',
   'recipes',
+  'src',
 ]);
 const excluded = new Set([
   '.git',
@@ -117,9 +118,11 @@ async function packageFiles(directory, moduleName) {
           info.isDirectory()
             ? permittedDirectories.has(name)
             : permittedFile(name) ||
-                [`${moduleName}.info.yml`, `${moduleName}.module`].includes(
-                  name
-                ),
+                [
+                  `${moduleName}.info.yml`,
+                  `${moduleName}.module`,
+                  `${moduleName}.links.menu.yml`,
+                ].includes(name),
           `Unexpected package entry: ${path}`
         );
       if (info.isDirectory()) await visit(path, file);

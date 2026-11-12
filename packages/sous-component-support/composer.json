@@ -1,6 +1,6 @@
 {
   "name": "fourkitchens/sous-component-support",
-  "description": "Provides runtime support for Sous components.",
+  "description": "Provides runtime support for Sous components and the dashboard Create menu.",
   "type": "drupal-module",
   "license": "GPL-2.0-or-later",
   "require": {

@@ -1,0 +1,3 @@
+sous_component_support.create:
+  deriver: Drupal\sous_component_support\Plugin\Derivative\CreateMenuLinks
+  menu_name: dashboard-create

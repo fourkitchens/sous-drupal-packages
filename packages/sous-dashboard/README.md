@@ -14,7 +14,7 @@ Only Superusers can rearrange blocks at `/admin/structure/dashboard`.
 
 Site admin shows site status, recent errors and warnings, new accounts, recent
 sign-ins, Top page not found errors and Top access denied errors. Editor provides
-welcome text, the Content menu, drafts, scheduled changes, recently updated content
+welcome text, the Create menu, drafts, scheduled changes, recently updated content
 and accessibility alerts. Lists show up to ten items. Logs, sign-ins and
 accessibility results refresh every five minutes.
 
@@ -32,7 +32,7 @@ installation; reapplying this recipe preserves existing dashboard configuration.
 | `site_admin` | 2       | Top errors   | `layout_twocol_section` (50–50) | `first`   | Top page not found errors                |
 | `site_admin` | 2       | Top errors   | `layout_twocol_section` (50–50) | `second`  | Top access denied errors                 |
 | `editor`     | 0       | Start        | `layout_twocol_section` (67–33) | `first`   | Welcome and help                         |
-| `editor`     | 0       | Start        | `layout_twocol_section` (67–33) | `second`  | Create and manage                        |
+| `editor`     | 0       | Start        | `layout_twocol_section` (67–33) | `second`  | Create                                   |
 | `editor`     | 1       | Your work    | `layout_twocol_section` (50–50) | `first`   | Drafts in progress                       |
 | `editor`     | 1       | Your work    | `layout_twocol_section` (50–50) | `second`  | Scheduled changes                        |
 | `editor`     | 2       | Site content | `layout_twocol_section` (50–50) | `first`   | Recently updated                         |
