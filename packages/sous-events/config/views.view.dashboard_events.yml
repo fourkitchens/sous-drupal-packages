@@ -157,7 +157,7 @@ display:
           group_type: group
           plugin_id: text_custom
           empty: true
-          content: '<p>No upcoming events. <a href="/node/add/event">Create an event</a>.</p>'
+          content: '<p>No upcoming events.</p>'
           tokenize: false
       use_more: true
       use_more_always: true

@@ -21,6 +21,15 @@ foreach (['dashboard', 'dblog', 'editoria11y', 'login_history', 'sous_component_
 if (\Drupal::moduleHandler()->moduleExists('login_destination') || Views::getView('dashboard_content') || !FilterFormat::load('basic_html')) {
   throw new \RuntimeException('Dashboard requires Basic HTML without Login Destination or the default content View.');
 }
+foreach (\Drupal::entityTypeManager()->getStorage('view')->loadByProperties(['tag' => 'dashboard']) as $id => $view) {
+  foreach ($view->get('display') as $display_id => $display) {
+    foreach ($display['display_options']['empty'] ?? [] as $area) {
+      if (str_contains($area['content'] ?? '', '<a')) {
+        throw new \RuntimeException("Dashboard View $id display $display_id must use empty text without links.");
+      }
+    }
+  }
+}
 $dashboards = Dashboard::loadMultiple(['site_admin', 'editor']);
 $layouts = [
   'site_admin' => [
