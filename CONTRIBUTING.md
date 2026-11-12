@@ -33,9 +33,11 @@ Do not add another content composition as an incidental dependency of a shared r
 
 ## Composition integrations
 
-Optional content and component recipes may bundle `recipes/<composition>/recipe.yml`.
-After applying an optional side, the starter checks
-`web/recipes/$recipe/recipes/${content#sous-}` and applies it when the directory exists.
+Optional content and included component recipes may bundle `recipes/<composition>/recipe.yml`.
+The starter applies the integrations of optional sides and then of the included
+components, in that order, so components can extend the Content fields the sides create.
+For each recipe, it checks `web/recipes/$recipe/recipes/${content#sous-}` and applies
+it when the directory exists.
 Use `paragraphs` or `core-layout-builder` as the composition folder name.
 Admin only leaves `content` empty and skips these integrations.
 

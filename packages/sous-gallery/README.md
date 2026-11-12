@@ -6,9 +6,10 @@ Adds a Gallery with a heading, introductory text, and the same width options as
 Image. Use the Media Library to select and reorder any number of images and
 hosted videos. Choose Slider or Grid under Display Options.
 
-Select Gallery as an optional side with Paragraphs or Layout Builder. The
-installer applies the matching integration. On an existing site using one of
-those Sous compositions, apply the recipe and then the matching integration:
+The Sous installer includes Gallery with the Paragraphs and Layout Builder main
+courses and applies the matching integration after any content sides. On an
+existing site using one of those Sous compositions, apply the recipe and then the
+matching integration:
 
 ```sh
 ddev composer require fourkitchens/sous-gallery:^2.0

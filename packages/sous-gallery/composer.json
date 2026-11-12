@@ -22,12 +22,6 @@
     "fourkitchens/sous-formats": "^2.0",
     "fourkitchens/sous-media": "^2.0"
   },
-  "extra": {
-    "sous": {
-      "menu": true,
-      "component": true
-    }
-  },
   "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
   "support": {
     "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",

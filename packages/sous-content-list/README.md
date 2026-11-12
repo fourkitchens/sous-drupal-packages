@@ -41,10 +41,10 @@ source.
 
 ## Installation and application
 
-Choose Content List from the installer's optional sides on a Paragraphs or
-Layout Builder site. Starter-generated sites already include the GitHub
-repository for Views Reference Sift. Content List supports Sift 1.0.0-beta4
-and later 1.x betas.
+The Sous installer includes Content List with the Paragraphs and Layout Builder
+main courses and applies the matching integration after any content sides.
+Starter-generated sites already include the GitHub repository for Views Reference
+Sift. Content List supports Sift 1.0.0-beta4 and later 1.x betas.
 
 To install manually on an existing site, set up the Sous Composer index and
 installer paths from the [collection guide](../../README.md). Add this entry
