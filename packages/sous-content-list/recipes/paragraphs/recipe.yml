@@ -13,7 +13,6 @@ install:
   - viewsreference_sift
   - entity_browser
   - options
-  - sous_component_support
 config:
   strict:
     - core.entity_form_display.paragraph.content_list.default
@@ -23,20 +22,16 @@ config:
     - field.field.paragraph.content_list.field_content
     - field.field.paragraph.content_list.field_heading
     - field.field.paragraph.content_list.field_link
-    - field.field.paragraph.content_list.field_list_type
     - field.field.paragraph.content_list.field_style_columns
     - field.field.paragraph.content_list.field_style_layout_width
     - field.field.paragraph.content_list.field_text
     - field.field.paragraph.content_list.field_view
     - field.field.paragraph.content_list_item.field_heading
     - field.field.paragraph.content_list_item.field_image
-    - field.field.paragraph.content_list_item.field_item_type
     - field.field.paragraph.content_list_item.field_link
     - field.field.paragraph.content_list_item.field_text
     - field.field.paragraph.content_list_item.field_related_content
-    - field.storage.paragraph.field_item_type
     - field.storage.paragraph.field_link
-    - field.storage.paragraph.field_list_type
     - field.storage.paragraph.field_related_content
     - field.storage.paragraph.field_style_columns
     - field.storage.paragraph.field_view

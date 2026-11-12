@@ -6,7 +6,6 @@ dependencies:
     - field.field.block_content.content_list.field_content
     - field.field.block_content.content_list.field_heading
     - field.field.block_content.content_list.field_link
-    - field.field.block_content.content_list.field_list_type
     - field.field.block_content.content_list.field_style_columns
     - field.field.block_content.content_list.field_style_layout_width
     - field.field.block_content.content_list.field_text
@@ -42,7 +41,6 @@ third_party_settings:
         - field_heading
         - field_text
         - field_link
-        - field_list_type
         - group_hand_picked_items
         - group_automatic_listing
       label: Content
@@ -88,7 +86,7 @@ third_party_settings:
         show_empty_fields: false
         id: ''
         label_as_html: false
-        description: ''
+        description: 'Teasers show first, in this order.'
         required_fields: true
     group_automatic_listing:
       children:
@@ -103,7 +101,7 @@ third_party_settings:
         show_empty_fields: false
         id: ''
         label_as_html: false
-        description: ''
+        description: 'The listing shows after any hand-picked teasers.'
         required_fields: true
 id: block_content.content_list.default
 targetEntityType: block_content
@@ -137,12 +135,6 @@ content:
       placeholder_title: ''
       linkit_profile: default
       linkit_auto_link_text: false
-    third_party_settings: {}
-  field_list_type:
-    type: options_select
-    weight: 3
-    region: content
-    settings: {}
     third_party_settings: {}
   field_content:
     type: inline_entity_form_complex

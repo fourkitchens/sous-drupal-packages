@@ -8,7 +8,6 @@
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\field\Entity\FieldConfig;
-use Drupal\field_group\FormatterHelper;
 use Drupal\layout_builder\Plugin\SectionStorage\OverridesSectionStorage;
 use Drupal\layout_builder\Section;
 use Drupal\layout_builder\SectionComponent;
@@ -46,7 +45,9 @@ if ($entity_type) {
   $listing_widget = $list_form->getRenderer('field_view');
   $checks['list View widget'] = $listing_widget?->getPluginId() === 'viewsreference_select';
   $checks['item browser widget'] = $item_form->getRenderer('field_related_content')?->getPluginId() === 'entity_browser_entity_reference';
-  $checks['item type widget'] = $item_form->getRenderer('field_item_type')?->getPluginId() === 'options_select';
+  foreach (['list', 'item'] as $type) {
+    $checks["$type selector storage absent"] = !$storage->exists('field.storage.' . $entity_type . '.field_' . $type . '_type');
+  }
   $enabled_settings = FieldConfig::loadByName($entity_type, 'content_list', 'field_view')->getSetting('enabled_settings');
   $checks['list View settings'] = in_array('limit', $enabled_settings, TRUE) && in_array('sift_terms', $enabled_settings, TRUE);
   $hosts = [[$entity_type, 'tabs_item']];
@@ -117,7 +118,6 @@ try {
     'info' => 'Picked content',
     'status' => TRUE,
     'field_related_content' => $picked->id(),
-    'field_heading' => 'Inactive existing item heading',
   ] + $block_values);
   $item->save();
   $component_ids['item'] = $item->id();
@@ -125,20 +125,10 @@ try {
     'type' => 'content_list_item',
     'info' => 'Custom teaser heading',
     'status' => TRUE,
-    'field_item_type' => 'custom_content',
     'field_heading' => 'Custom teaser heading',
-    'field_related_content' => $nodes['Content List untagged post']->id(),
   ] + $block_values);
   $teaser->save();
   $component_ids['teaser'] = $teaser->id();
-  $item_widgets = ['#parents' => ['field_content', 'subform']];
-  $item_form->buildForm($item, $item_widgets, new FormState());
-  $selector = 'select[name="field_content[subform][field_item_type]"]';
-  foreach (['field_related_content' => 'existing_content', 'field_heading' => 'custom_content', 'field_image' => 'custom_content', 'field_link' => 'custom_content', 'field_text' => 'custom_content'] as $field => $source) {
-    if (($item_widgets[$field]['#states']['visible'][$selector]['value'] ?? NULL) !== $source) {
-      throw new \RuntimeException("$case Content List Item has the wrong visibility rule for $field.");
-    }
-  }
   $list = $component_storage->create([
     'type' => 'content_list',
     'info' => 'Latest',
@@ -146,31 +136,6 @@ try {
     'field_heading' => 'Latest',
     'field_content' => [['entity' => $item], ['entity' => $teaser]],
   ] + ($entity_type === 'block_content' ? ['reusable' => FALSE] : []));
-  $list_widgets = [
-    '#parents' => ['settings', 'subform'],
-    '#array_parents' => ['settings', 'subform'],
-  ];
-  $form_state = new FormState();
-  $list_form->buildForm($list, $list_widgets, $form_state);
-  field_group_attach_groups($list_widgets, [
-    'entity_type' => $entity_type,
-    'bundle' => 'content_list',
-    'display_context' => 'form',
-    'mode' => 'default',
-  ]);
-  FormatterHelper::formProcess($list_widgets, $form_state);
-  $type_widget = $list_widgets['field_list_type']['widget'];
-  if ($type_widget['#type'] !== 'select'
-    || $type_widget['#options'] !== ['hand_picked' => 'Hand-picked', 'automatic' => 'Automatic']
-    || $type_widget['#default_value'] !== ['hand_picked']) {
-    throw new \RuntimeException("$case Content List has the wrong type choices or default.");
-  }
-  $selector = 'select[name="settings[subform][field_list_type]"]';
-  foreach (['group_hand_picked_items' => 'hand_picked', 'group_automatic_listing' => 'automatic'] as $group => $type) {
-    if (($list_widgets[$group]['#states']['visible'][$selector] ?? NULL) !== ['value' => $type]) {
-      throw new \RuntimeException("$case Content List has the wrong visibility rule for $group.");
-    }
-  }
   $host = $node_storage->create([
     'type' => 'page',
     'title' => 'Content List verifier page',
@@ -215,15 +180,14 @@ try {
   $term_ids = array_values(array_map(static fn($term) => (int) $term->id(), $terms));
   $titles = array_keys($news);
   $scenarios = [
-    'automatic match any' => ['automatic', $term_ids, 'any', 3, array_slice($titles, 0, 3)],
-    'automatic match all' => ['automatic', $term_ids, 'all', 3, [$titles[2]]],
-    'automatic no terms' => ['automatic', [], 'any', 2, array_slice($titles, -2)],
-    'hand-picked' => ['hand_picked', [], 'any', 2, []],
-    'automatic' => ['automatic', [], 'any', 2, array_slice($titles, -2)],
+    'automatic match any' => [$term_ids, 'any', 3, array_slice($titles, 0, 3)],
+    'automatic match all' => [$term_ids, 'all', 3, [$titles[2]]],
+    'automatic no terms' => [[], 'any', 2, array_slice($titles, -2)],
+    'no listing' => [[], 'any', 2, []],
+    'automatic' => [[], 'any', 2, array_slice($titles, -2)],
   ];
-  foreach ($scenarios as $scenario => [$type, $selection, $match, $limit, $expected]) {
-    $list->set('field_list_type', $type);
-    $list->set('field_view', [
+  foreach ($scenarios as $scenario => [$selection, $match, $limit, $expected]) {
+    $list->set('field_view', $scenario === 'no listing' ? [] : [
       'target_id' => 'news',
       'display_id' => 'embed_recent',
       'data' => serialize([
@@ -260,17 +224,19 @@ try {
     finally {
       $switcher->switchBack();
     }
-    $hand_picked = ['Custom teaser heading', 'Picked page'];
-    $active = $type === 'automatic' ? $expected : $hand_picked;
+    $hand_picked = ['Picked page', 'Custom teaser heading'];
+    $active = array_merge($hand_picked, $expected);
     foreach (array_merge(['Latest'], $active) as $marker) {
       if (!str_contains($html, $marker)) {
         throw new \RuntimeException("$case Content List $scenario did not render $marker.");
       }
     }
-    if (str_contains($html, 'Inactive existing item heading')) {
-      throw new \RuntimeException("$case Content List displayed the inactive custom fields of an existing item.");
+    foreach ($expected as $title) {
+      if (strpos($html, 'Picked page') > strpos($html, $title)) {
+        throw new \RuntimeException("$case Content List $scenario must render hand-picked teasers before the listing.");
+      }
     }
-    foreach (array_diff(array_merge($hand_picked, $titles), $active) as $title) {
+    foreach (array_diff($titles, $expected) as $title) {
       if (str_contains($html, $title)) {
         throw new \RuntimeException("$case Content List $scenario unexpectedly rendered $title.");
       }
@@ -279,7 +245,7 @@ try {
       throw new \RuntimeException("$case Content List still links to the removed News route.");
     }
   }
-  echo "$case Content List type, visibility, anonymous rendering and Sift filters verified.\n";
+  echo "Content List sources, anonymous rendering and Sift filters verified.\n";
 }
 finally {
   $node_storage->delete($nodes);
