@@ -22,8 +22,8 @@ shared version, beginning with `2.0.0`.
 | [sous-events](packages/sous-events)                           | Recurring events, event types, teasers and upcoming/past embeds  | Optional recipe            |
 | [sous-news-post](packages/sous-news-post)                     | News Posts, bylines, categories, teasers and a Recent News embed | Optional recipe            |
 | [sous-profile](packages/sous-profile)                         | Profiles, automatic names, images, bios and searchable teasers   | Optional recipe            |
-| [sous-content-list](packages/sous-content-list)               | Hand-picked teasers and a term-filtered automatic listing        | Optional component         |
-| [sous-gallery](packages/sous-gallery)                         | An image and video gallery                                       | Optional component         |
+| [sous-content-list](packages/sous-content-list)               | Hand-picked teasers and a term-filtered automatic listing        | Main course component      |
+| [sous-gallery](packages/sous-gallery)                         | An image and video gallery                                       | Main course component      |
 | [sous-component-support](packages/sous-component-support)     | Content List form behavior and inline block ordering             | Shared module dependency   |
 | [sous-seo](packages/sous-seo)                                 | Redirects, sitemaps, breadcrumbs and SEO integrations            | Starter base               |
 | [sous-alerts](packages/sous-alerts)                           | Site-wide alert banners with scheduling and dismissal            | Optional recipe            |
@@ -34,7 +34,7 @@ shared version, beginning with `2.0.0`.
 | [sous-core-layout-builder](packages/sous-core-layout-builder) | Native layouts with matching nested inline block types           | Optional composition       |
 | [sous-config-split](packages/sous-config-split)               | Local/staging development tools excluded from production         | Starter base               |
 
-Events, News Post, Profile, Content List, Gallery, Alerts and Search are offered in the starter's optional recipe menu.
+Events, News Post, Profile, Alerts and Search are offered in the starter's optional recipe menu. The starter includes Content List and Gallery with the Paragraphs and Layout Builder main courses.
 
 The content compositions share a Body-free base. The default content package
 adds Body; Paragraphs adds its component reference instead. Page and Frontpage
