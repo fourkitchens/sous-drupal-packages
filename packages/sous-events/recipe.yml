@@ -6,6 +6,7 @@ recipes:
   - sous-media
 install:
   - node
+  - menu_link_content
   - menu_ui
   - taxonomy
   - media

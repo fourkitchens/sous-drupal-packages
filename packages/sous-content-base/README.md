@@ -7,6 +7,9 @@ Pathauto aliases. It applies Formats and Media. Title sits
 above the horizontal Content/Teaser tabs, with no SEO Title field or Info tab.
 The base attaches neither Body nor a Paragraph reference.
 
+Content Base adds Create links for Page and Frontpage to the Editor dashboard
+when Sous Dashboard is installed.
+
 Page and Frontpage each have a modal Entity Browser with a title filter and a
 grid of published content rendered in Admin Preview. Both displays belong to the
 Pages/Frontpage View (`pages`).

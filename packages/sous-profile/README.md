@@ -8,6 +8,9 @@ Pathauto uses the generated title for URLs such as `/profile/ada-lovelace`.
 Optional Profile Image accepts one Image media item; Bio uses Basic HTML.
 Content and Teaser tabs organize the form, with Metadata in the sidebar.
 
+Profile adds a Create link for Profile to the Editor dashboard when Sous
+Dashboard is installed.
+
 The full display shows the profile image and Bio; the generated title supplies
 the name. Teaser mode uses the common teaser image and text fields. Profiles
 start in Draft and use the shared Editorial workflow and scheduling controls.

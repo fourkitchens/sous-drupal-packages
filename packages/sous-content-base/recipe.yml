@@ -12,6 +12,7 @@ install:
   - text
   - user
   - views
+  - menu_link_content
   - menu_ui
   - path
   - pathauto
