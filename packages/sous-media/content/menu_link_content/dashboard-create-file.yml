@@ -1,0 +1,25 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: 1fad6bdc-96c7-4bc4-8e62-6d069a0dc210
+  bundle: menu_link_content
+  default_langcode: en
+default:
+  enabled:
+    - value: true
+  title:
+    - value: File
+  menu_name:
+    - value: dashboard-create
+  link:
+    - uri: 'internal:/media/add/file'
+      title: ''
+      options: {}
+  external:
+    - value: false
+  rediscover:
+    - value: true
+  weight:
+    - value: 50
+  expanded:
+    - value: false

@@ -1,8 +1,5 @@
 name: 'Sous Component Support'
 type: module
-description: 'Provides runtime support for Sous components and the dashboard Create menu.'
+description: 'Provides runtime support for Sous components.'
 package: Sous
 core_version_requirement: ^11.4
-dependencies:
-  - drupal:media
-  - drupal:node

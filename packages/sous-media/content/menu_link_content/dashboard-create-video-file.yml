@@ -1,0 +1,25 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: b2dd4add-1af3-480f-be52-a56ff1e49989
+  bundle: menu_link_content
+  default_langcode: en
+default:
+  enabled:
+    - value: true
+  title:
+    - value: Video File
+  menu_name:
+    - value: dashboard-create
+  link:
+    - uri: 'internal:/media/add/video_file'
+      title: ''
+      options: {}
+  external:
+    - value: false
+  rediscover:
+    - value: true
+  weight:
+    - value: 53
+  expanded:
+    - value: false

@@ -13,7 +13,7 @@ use Drupal\system\Entity\Menu;
 use Drupal\views\Views;
 use Symfony\Component\HttpFoundation\Request;
 
-foreach (['dashboard', 'dblog', 'editoria11y', 'login_history', 'sous_component_support'] as $module) {
+foreach (['dashboard', 'dblog', 'editoria11y', 'login_history', 'menu_link_content', 'menu_ui'] as $module) {
   if (!\Drupal::moduleHandler()->moduleExists($module)) {
     throw new \RuntimeException("Dashboard module $module is not enabled.");
   }
@@ -137,26 +137,24 @@ try {
       $tree = $menu_tree->transform($tree, [['callable' => 'menu.default_tree_manipulators:checkAccess'], ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort']]);
       $actual = [];
       foreach ($tree as $item) {
-        if ($item->subtree || in_array($item->link->getRouteName(), ['entity.node.add_page', 'entity.media.add_page'], TRUE)) {
-          throw new \RuntimeException('Create must list types directly without Content or Media groups.');
+        if (!$item->access->isAllowed()) {
+          continue;
         }
-        if ($item->access->isAllowed()) {
-          $actual[] = [(string) $item->link->getTitle(), $item->link->getRouteName(), $item->link->getRouteParameters()];
+        $url = $item->link->getUrlObject();
+        if (!str_starts_with($item->link->getPluginId(), 'menu_link_content:') || !$url->isRouted() || $item->subtree) {
+          throw new \RuntimeException('Create must contain flat, editable menu links to routed media forms.');
         }
+        $actual[] = [(string) $item->link->getTitle(), $url->getInternalPath()];
       }
       $expected = [];
-      $entities = \Drupal::entityTypeManager();
-      foreach ([['node', 'node_type', 'entity.node.add_form'], ['media', 'media_type', 'entity.media.add_form']] as [$entity_type, $bundle_type, $route]) {
-        $types = $entities->getStorage($bundle_type)->loadMultiple();
-        uasort($types, [$entities->getDefinition($bundle_type)->getClass(), 'sort']);
-        foreach ($types as $bundle => $type) {
-          if ($role === 'superuser' || ($role === 'site_editor' && $entities->getAccessControlHandler($entity_type)->createAccess($bundle, $account))) {
-            $expected[] = [(string) $type->label(), $route, [$bundle_type => $bundle]];
-          }
+      $media_access = \Drupal::entityTypeManager()->getAccessControlHandler('media');
+      foreach (['file' => 'File', 'image' => 'Image', 'video' => 'Video', 'video_file' => 'Video File'] as $bundle => $title) {
+        if ($media_access->createAccess($bundle, $account)) {
+          $expected[] = [$title, "media/add/$bundle"];
         }
       }
       if ($actual !== $expected) {
-        throw new \RuntimeException("The $role Create menu must list only accessible content and media types in label order.");
+        throw new \RuntimeException("The $role Create menu must contain only accessible media creation links in recipe order.");
       }
       if ($role === 'superuser') {
         foreach ($links as [$id, $display]) {

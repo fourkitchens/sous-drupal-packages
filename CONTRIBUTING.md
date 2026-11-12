@@ -71,6 +71,25 @@ Apply the recipe twice and verify exactly one component remains in its intended
 section and region, the intended audience can render it, and anonymous users see
 nothing.
 
+## Create links
+
+The package that owns a content or media type ships its Create link as default
+content in `packages/<owner>/content/menu_link_content/dashboard-create-<type>.yml`
+and installs `menu_link_content` in its recipe.
+
+Use the type's label as the title, `dashboard-create` as the menu, and
+`internal:/node/add/<type>` or `internal:/media/add/<type>` as the link URI.
+Do not set a parent: links form one flat list. Set `rediscover: true`.
+Use weight 0 for content links and weights 50 and up for media links.
+Generate each link's UUID once with `uuidgen` and keep it stable.
+
+Only link types owned by that package. A link to another package's type becomes
+a dead link when that package is absent. Do not require Sous Dashboard: the link
+stays hidden when its Create menu is absent. See Sous Media's
+[File](packages/sous-media/content/menu_link_content/dashboard-create-file.yml)
+and [Image](packages/sous-media/content/menu_link_content/dashboard-create-image.yml)
+links for examples.
+
 ## Drupal compatibility
 
 All packages and the recipe template require Drupal `^11.4`, the floor tested

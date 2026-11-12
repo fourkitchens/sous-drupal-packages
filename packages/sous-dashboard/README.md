@@ -18,6 +18,14 @@ welcome text, the Create menu, drafts, scheduled changes, recently updated conte
 and accessibility alerts. Lists show up to ten items. Logs, sign-ins and
 accessibility results refresh every five minutes.
 
+The Editor's Create menu is a flat list with one link per content or media type,
+supplied by the package that owns it. A link appears only when the account can
+create that type. Sous Media supplies links for File, Image, Video and Video File;
+content-type links follow separately.
+
+For a type added by hand, add its link at Structure → Menus → Create. Delete
+the link when deleting the type, or it becomes a dead link.
+
 ## Layout contract
 
 Packages can append blocks to these zero-based sections and regions. Preserve

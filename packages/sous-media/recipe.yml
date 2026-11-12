@@ -8,6 +8,7 @@ install:
   - link
   - media
   - media_library
+  - menu_link_content
   - responsive_image
   - taxonomy
   - views

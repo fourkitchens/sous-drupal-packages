@@ -7,6 +7,9 @@ form/view displays, Media Library defaults, media tags and authoring dependencie
 shared by Content Types and Paragraph Types and has no dependency on either
 optional content composition.
 
+When Sous Dashboard is installed, Media adds one Create link per media type to
+the Editor dashboard.
+
 The strict configuration list protects the recipe's bundles, fields, displays,
 settings and non-View provider defaults. Native `media` and `media_library`
 management Views are imported only if missing and retain project-owned
