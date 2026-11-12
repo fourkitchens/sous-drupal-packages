@@ -142,11 +142,19 @@ try {
         }
         $url = $item->link->getUrlObject();
         if (!str_starts_with($item->link->getPluginId(), 'menu_link_content:') || !$url->isRouted() || $item->subtree) {
-          throw new \RuntimeException('Create must contain flat, editable menu links to routed media forms.');
+          throw new \RuntimeException('Create must contain flat, editable menu links to routed content and media forms.');
         }
         $actual[] = [(string) $item->link->getTitle(), $url->getInternalPath()];
       }
       $expected = [];
+      $node_types = \Drupal::entityTypeManager()->getStorage('node_type')->loadMultiple();
+      uasort($node_types, static fn($a, $b) => strcmp($a->label(), $b->label()));
+      $node_access = \Drupal::entityTypeManager()->getAccessControlHandler('node');
+      foreach ($node_types as $bundle => $node_type) {
+        if ($node_access->createAccess($bundle, $account)) {
+          $expected[] = [(string) $node_type->label(), "node/add/$bundle"];
+        }
+      }
       $media_access = \Drupal::entityTypeManager()->getAccessControlHandler('media');
       foreach (['file' => 'File', 'image' => 'Image', 'video' => 'Video', 'video_file' => 'Video File'] as $bundle => $title) {
         if ($media_access->createAccess($bundle, $account)) {
@@ -154,7 +162,7 @@ try {
         }
       }
       if ($actual !== $expected) {
-        throw new \RuntimeException("The $role Create menu must contain only accessible media creation links in recipe order.");
+        throw new \RuntimeException("The $role Create menu must list each accessible content type once in label order, followed by the media types.");
       }
       if ($role === 'superuser') {
         foreach ($links as [$id, $display]) {
