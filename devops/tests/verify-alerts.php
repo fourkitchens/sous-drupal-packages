@@ -46,7 +46,7 @@ $alert = $storage->create(['status' => FALSE, 'user_id' => 1]);
 if (!$alert_access->createAccess(NULL, $editor) || !$alert->access('update', $editor)
     || !$alert->access('delete', $editor) || !$alert->access('view', $editor)
     || $editor->hasPermission('administer sitewide alert')) {
-  throw new \RuntimeException('Site Editor must be able to manage alerts without access to global alert settings.');
+  throw new \RuntimeException('Site Admin must be able to manage alerts without access to global alert settings.');
 }
 $menu_links = [
   '983b3206-1451-4bf9-9a43-ae71ca31a276' => ['Alert', 'dashboard-create', '', 'entity.sitewide_alert.add_form', 'admin/content/sitewide_alert/add'],
@@ -99,7 +99,7 @@ foreach (['site_editor' => $editor, 'superuser' => new UserSession(['uid' => 123
         $position = array_search('admin/content/sitewide_alert/add', $create_paths, TRUE);
         $nodes = array_keys(array_filter($create_paths, static fn($path) => str_starts_with($path, 'node/add/')));
         if ($position === FALSE || ($nodes && max($nodes) >= $position) || ($menu === 'dashboard-create' && $position >= array_search('media/add/file', $create_paths, TRUE))) {
-          throw new \RuntimeException("Site Editor's $menu Alert link must follow content types and precede media links.");
+          throw new \RuntimeException("Site Admin's $menu Alert link must follow content types and precede media links.");
         }
       }
     }
@@ -174,7 +174,7 @@ try {
     foreach ($dashboard_components as $id => $component) {
       $plugin = $component->getPlugin();
       if (!$plugin->access($editor)) {
-        throw new \RuntimeException("Site Editors must be able to build the live Site alerts block for $id.");
+        throw new \RuntimeException("Site Admins must be able to build the live Site alerts block for $id.");
       }
       $build = $plugin->build();
       if (($build['#attributes']['data-sitewide-alert'] ?? NULL) !== TRUE || !in_array('sitewide_alert/init', $build['#attached']['library'] ?? [], TRUE)) {

@@ -44,7 +44,7 @@ $layouts = [
     ['layout_twocol_section', 'Site content', '50-50', ['first' => ['views_block:dashboard_editorial-block_recent'], 'second' => ['views_block:dashboard_accessibility-block_alerts']]],
   ],
 ];
-foreach (['site_admin' => ['Site admin', -10, 'Site health and accounts for Superusers.'], 'editor' => ['Editor', 0, 'Content work for Site Editors.']] as $id => [$label, $weight, $description]) {
+foreach (['site_admin' => ['Site admin', -10, 'Site health and accounts for Superusers.'], 'editor' => ['Editor', 0, 'Content work for Site Admins.']] as $id => [$label, $weight, $description]) {
   $dashboard = $dashboards[$id] ?? NULL;
   if (!$dashboard || !$dashboard->status() || $dashboard->label() !== $label || $dashboard->getWeight() !== $weight || $dashboard->get('description') !== $description) {
     throw new \RuntimeException("Dashboard $id is missing its enabled baseline metadata.");
@@ -203,7 +203,7 @@ try {
       if ($role === 'site_editor') {
         foreach ($fixtures as [$display]) {
           if (Views::getView('dashboard_top_errors')->access($display, $account)) {
-            throw new \RuntimeException("Site Editors must not access Dashboard display $display.");
+            throw new \RuntimeException("Site Admins must not access Dashboard display $display.");
           }
         }
       }

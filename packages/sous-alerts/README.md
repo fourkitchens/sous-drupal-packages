@@ -23,8 +23,8 @@ complete configuration export. Package updates do not replay configuration.
 
 ## Site configuration
 
-Site Editors and Superusers manage alerts at `/admin/content/sitewide_alert`.
-Site Editors receive permission to add, administer, edit and delete alerts, and
+Site Admins and Superusers manage alerts at `/admin/content/sitewide_alert`.
+Site Admins receive permission to add, administer, edit and delete alerts, and
 to view unpublished alerts.
 Set the message, publishing status, schedule and dismissal options on each alert.
 
