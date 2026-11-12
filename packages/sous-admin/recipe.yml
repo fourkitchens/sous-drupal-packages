@@ -30,6 +30,10 @@ install:
   - login_history
   # Install Media Library Edit
   - media_library_edit
+  # Install Menu Admin per Menu and Menu Block.
+  - menu_admin_per_menu
+  - menu_block
+  - menu_link_content
   # Install Navigation
   - navigation
   - navigation_extra_tools
@@ -92,6 +96,21 @@ config:
     login_history:
       - views.view.login_history
   actions:
+    # Blocks and Files stay available as tabs on the Content page.
+    core.menu.static_menu_link_overrides:
+      simpleConfigUpdate:
+        definitions.navigation__blocks:
+          menu_name: content
+          parent: ''
+          weight: 0
+          expanded: false
+          enabled: false
+        definitions.navigation__files:
+          menu_name: content
+          parent: ''
+          weight: 0
+          expanded: false
+          enabled: false
     user.role.site_editor:
       grantPermissions:
         - 'access administration pages'

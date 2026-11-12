@@ -11,7 +11,7 @@ shared version, beginning with `2.0.0`.
 
 | Package                                                       | Purpose                                                          | Installation choice        |
 | ------------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------- |
-| [sous-admin](packages/sous-admin)                             | Gin, Navigation, Superuser and management Views                  | Starter base               |
+| [sous-admin](packages/sous-admin)                             | Gin, Navigation, roles, menu permissions and management Views    | Starter base               |
 | [sous-dashboard](packages/sous-dashboard)                     | Site admin and Editor dashboards                                 | Starter base               |
 | [sous-emulsify](packages/sous-emulsify)                       | Emulsify theme and tools                                         | Starter base               |
 | [sous-workflow](packages/sous-workflow)                       | Shared Editorial moderation and scheduled publishing             | Starter/shared dependency  |

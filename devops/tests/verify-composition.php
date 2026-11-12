@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Session\UserSession;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\user\Entity\Role;
@@ -59,7 +60,7 @@ foreach (['landscape', 'portrait', 'square'] as $aspect) {
   }
 }
 
-foreach (['editoria11y', 'gin_login', 'twig_tweak', 'role_delegation'] as $module) {
+foreach (['editoria11y', 'gin_login', 'twig_tweak', 'role_delegation', 'menu_admin_per_menu', 'menu_block', 'menu_link_content'] as $module) {
   $checks["baseline.$module"] = $modules->moduleExists($module);
 }
 
@@ -74,6 +75,55 @@ $superuser = new UserSession(['uid' => 1235, 'roles' => ['authenticated', 'super
 $checks['editor can only delegate Site Editor'] = array_keys($delegation->getAssignableRoles($account)) === ['site_editor'];
 $checks['superuser can delegate all custom roles'] = array_keys($delegation->getAssignableRoles($superuser)) === array_keys($delegation->getAllRoles());
 $checks['editor can use the Roles tab'] = \Drupal::service('access_check.role_delegation')->access($account)->isAllowed();
+
+foreach (Role::loadMultiple(['anonymous', 'authenticated', 'site_editor']) as $id => $role) {
+  $checks["no menu permissions.$id"] = !$role->hasPermission('administer menu') && !array_filter($role->getPermissions(), static fn($permission) => preg_match('/^administer .+ menu items$/', $permission));
+}
+$menu_manager = \Drupal::service('plugin.manager.menu.link');
+foreach (['navigation.blocks', 'navigation.files'] as $plugin_id) {
+  $checks["Content link disabled.$plugin_id"] = !$menu_manager->getDefinition($plugin_id)['enabled'];
+}
+$menus_plugin = 'menu_link_content:2f627ec2-be6f-4619-8dff-73a4eca280bf';
+$menu_tree = \Drupal::menuTree();
+$content_tree = $menu_tree->load('content', (new MenuTreeParameters())->onlyEnabledLinks());
+$menus = $content_tree[$menus_plugin] ?? NULL;
+$checks['Content Menus link'] = $menus && $menus->link->getParent() === '' && (string) $menus->link->getTitle() === 'Menus' && $menus->link->getUrlObject()->getRouteName() === 'entity.menu.collection' && $menus->link->getUrlObject()->getInternalPath() === 'admin/structure/menu' && (int) $menus->link->getWeight() === 10 && $menus->link->getOptions()['icon'] === ['pack_id' => 'navigation', 'icon_id' => 'system-admin-structure'];
+$checks['one Content Menus link'] = count($menu_manager->loadLinksByRoute('entity.menu.collection', [], 'content')) === 1;
+$menu_role = Role::create(['id' => 'sous_verify_footer', 'label' => 'Sous verify Footer', 'permissions' => ['access navigation', 'administer footer menu items']]);
+$menu_role->save();
+try {
+  $menu_accounts = [
+    'superuser' => $superuser,
+    'site_editor' => $account,
+    'authenticated' => new UserSession(['uid' => 1236, 'roles' => ['authenticated']]),
+    'footer' => new UserSession(['uid' => 1237, 'roles' => ['authenticated', $menu_role->id()]]),
+  ];
+  $access_manager = \Drupal::service('access_manager');
+  $switcher = \Drupal::service('account_switcher');
+  foreach ($menu_accounts as $id => $menu_account) {
+    $switcher->switchTo($menu_account);
+    try {
+      $checks["menu collection.$id"] = $access_manager->checkNamedRoute('entity.menu.collection', [], $menu_account) === in_array($id, ['superuser', 'footer'], TRUE);
+      foreach (['account', 'admin', 'content', 'dashboard-create', 'footer', 'main', 'tools'] as $menu_id) {
+        $allowed = $id === 'superuser' || ($id === 'footer' && $menu_id === 'footer');
+        $checks["menu edit.$id.$menu_id"] = $access_manager->checkNamedRoute('entity.menu.edit_form', ['menu' => $menu_id], $menu_account) === $allowed;
+      }
+      $tree = $menu_tree->load('content', (new MenuTreeParameters())->onlyEnabledLinks());
+      $tree = $menu_tree->transform($tree, [['callable' => 'menu.default_tree_manipulators:checkAccess'], ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort']]);
+      $menu_access = [];
+      foreach ($tree as $item) {
+        $menu_access[$item->link->getPluginId()] = $item->access->isAllowed();
+      }
+      $checks["Content Menus access.$id"] = ($menu_access[$menus_plugin] ?? NULL) === in_array($id, ['superuser', 'footer'], TRUE);
+    }
+    finally {
+      $switcher->switchBack();
+    }
+  }
+}
+finally {
+  $menu_role->delete();
+}
 foreach (['archive_unpublish', 'create_new_draft', 'publish'] as $transition) {
   $checks["editor transition.$transition"] = $account->hasPermission("use editorial transition $transition");
 }
