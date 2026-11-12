@@ -8,6 +8,9 @@ used by Page and Frontpage. Title sits above horizontal Content, Teaser and
 Organization tabs; Event Type belongs to Organization. Metadata is in the sidebar.
 Create Event Type terms before adding events; each Event has one required type.
 
+Events adds a Create link for Event to the Editor dashboard when Sous Dashboard
+is installed.
+
 Aliases use the first event date, type and title:
 `event/MM-YYYY/event-type/event-title`. Recurring schedules generate individual
 date values; their aliases remain based on the first date.
