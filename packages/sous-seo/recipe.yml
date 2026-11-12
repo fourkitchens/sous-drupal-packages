@@ -3,35 +3,15 @@ description: 'Adds automatic redirects, XML sitemaps, page-title breadcrumbs and
 type: Site
 install:
   - redirect
-  - redirect_404
   - simple_sitemap
   - easy_breadcrumb
   - google_tag
   - schema_metatag
-  - views
 config:
   strict: false
   import:
     simple_sitemap: '*'
   actions:
-    '?dashboard.dashboard.site_admin':
-      addComponentToLayout:
-        section: 1
-        position: 99
-        component:
-          # Constant so reapplying replaces this block instead of adding another.
-          uuid: 3a28906e-a6d0-4a86-a8b7-2e0580609cd3
-          region:
-            layout_twocol_section: second
-          default_region: content
-          configuration:
-            id: 'views_block:dashboard_missing_pages-block_top'
-            label: 'Top missing pages'
-            label_display: visible
-            provider: views
-            context_mapping: {}
-            views_label: ''
-            items_per_page: none
     redirect.settings:
       simpleConfigUpdate:
         auto_redirect: true

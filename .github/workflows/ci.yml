@@ -112,9 +112,6 @@ jobs:
               vendor/bin/drush recipe "$PWD/recipes/sous-gallery/recipes/$composition" --yes
             fi
             vendor/bin/drush recipe "$PWD/recipes/sous-seo" --yes
-            if [[ "$composition" == admin ]]; then
-              vendor/bin/drush recipe "$PWD/recipes/sous-seo" --yes
-            fi
             vendor/bin/drush recipe "$PWD/recipes/sous-alerts" --yes
             if [[ "$composition" == admin ]]; then
               vendor/bin/drush recipe "$PWD/recipes/sous-alerts" --yes
