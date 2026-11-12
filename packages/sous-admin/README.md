@@ -21,6 +21,10 @@ updates are not a reason to reapply it.
 
 The `superuser` role uses `is_admin: true` and receives every permission from
 enabled modules. Admin preserves existing roles and account assignments.
+Only Superusers manage menus. A project can let another role manage one menu,
+such as Main navigation, by granting `Administer <menu> menu items` at
+People › Permissions. Keep Administration, Content, Create, Tools and User account
+menu Superuser-only.
 Site Editor can create, edit, publish and delete content supplied by the recipes
 applied to the site. It can use the configured content browsers and does not
 grant module, configuration, role or permission administration. Keep project-owned
@@ -31,8 +35,8 @@ can assign or remove only Site Editor on the Roles tab at `/user/{uid}/roles`.
 Drupal gives every signed-in user the Authenticated role automatically.
 
 Autosave Form, Config Log, Editoria11y, Entity Usage, Gin Login, Login
-History, Role Delegation, Save and Edit, Tagify, Trash, Twig Tweak,
-Views AJAX History and Views Bulk Operations are enabled by default. A project
+History, Menu Admin per Menu, Menu Block, Role Delegation, Save and Edit, Tagify,
+Trash, Twig Tweak, Views AJAX History and Views Bulk Operations are enabled by default. A project
 can replace them through a project-owned recipe or reviewed module uninstall or
 configuration change. Removing a Composer
 requirement or recipe entry alone does not uninstall a module or preserve its data.

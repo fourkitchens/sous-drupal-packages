@@ -30,6 +30,10 @@ install:
   - login_history
   # Install Media Library Edit
   - media_library_edit
+  # Install Menu Admin per Menu and Menu Block.
+  - menu_admin_per_menu
+  - menu_block
+  - menu_link_content
   # Install Navigation
   - navigation
   - navigation_extra_tools
