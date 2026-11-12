@@ -87,7 +87,7 @@ $menus_plugin = 'menu_link_content:2f627ec2-be6f-4619-8dff-73a4eca280bf';
 $menu_tree = \Drupal::menuTree();
 $content_tree = $menu_tree->load('content', (new MenuTreeParameters())->onlyEnabledLinks());
 $menus = $content_tree[$menus_plugin] ?? NULL;
-$checks['Content Menus link'] = $menus && $menus->link->getParent() === '' && (string) $menus->link->getTitle() === 'Menus' && $menus->link->getUrlObject()->getRouteName() === 'entity.menu.collection' && $menus->link->getUrlObject()->getInternalPath() === 'admin/structure/menu' && $menus->link->getWeight() === 10 && $menus->link->getOptions()['icon'] === ['pack_id' => 'navigation', 'icon_id' => 'system-admin-structure'];
+$checks['Content Menus link'] = $menus && $menus->link->getParent() === '' && (string) $menus->link->getTitle() === 'Menus' && $menus->link->getUrlObject()->getRouteName() === 'entity.menu.collection' && $menus->link->getUrlObject()->getInternalPath() === 'admin/structure/menu' && (int) $menus->link->getWeight() === 10 && $menus->link->getOptions()['icon'] === ['pack_id' => 'navigation', 'icon_id' => 'system-admin-structure'];
 $checks['one Content Menus link'] = count($menu_manager->loadLinksByRoute('entity.menu.collection', [], 'content')) === 1;
 $menu_role = Role::create(['id' => 'sous_verify_footer', 'label' => 'Sous verify Footer', 'permissions' => ['access navigation', 'administer footer menu items']]);
 $menu_role->save();
