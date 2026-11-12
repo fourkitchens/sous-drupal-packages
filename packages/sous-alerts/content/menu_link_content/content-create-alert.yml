@@ -1,0 +1,27 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: 903fb065-214e-4dca-8645-8f225ab19ac2
+  bundle: menu_link_content
+  default_langcode: en
+default:
+  enabled:
+    - value: true
+  title:
+    - value: Alert
+  menu_name:
+    - value: content
+  parent:
+    - value: navigation.create
+  link:
+    - uri: 'internal:/admin/content/sitewide_alert/add'
+      title: ''
+      options: {}
+  external:
+    - value: false
+  rediscover:
+    - value: true
+  weight:
+    - value: 10
+  expanded:
+    - value: false

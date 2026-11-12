@@ -28,6 +28,10 @@ Site Editors receive permission to add, administer, edit and delete alerts, and
 to view unpublished alerts.
 Set the message, publishing status, schedule and dismissal options on each alert.
 
+Alerts adds Alert to the Editor's Create block and under Create in Navigation,
+and an Alerts link to Navigation's Content section. Each link shows only to
+accounts that can open it. Superusers edit the links under Structure › Menus.
+
 To show an alert only on dashboards, enable **Limit by Page** under **Page
 Visibility**, enter both paths below and leave **Negate for listed pages** unchecked:
 

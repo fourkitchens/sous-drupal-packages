@@ -5,13 +5,14 @@
  * Verify site-wide alerts, public delivery and live dashboard blocks.
  */
 
+use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\Session\UserSession;
 use Drupal\dashboard\Entity\Dashboard;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-foreach (['sitewide_alert', 'sitewide_alert_block'] as $module) {
+foreach (['sitewide_alert', 'sitewide_alert_block', 'menu_link_content'] as $module) {
   if (!\Drupal::moduleHandler()->moduleExists($module)) {
     throw new \RuntimeException("Alert module $module is not enabled.");
   }
@@ -47,6 +48,66 @@ if (!$alert_access->createAccess(NULL, $editor) || !$alert->access('update', $ed
     || $editor->hasPermission('administer sitewide alert')) {
   throw new \RuntimeException('Site Editor must be able to manage alerts without access to global alert settings.');
 }
+$menu_links = [
+  '983b3206-1451-4bf9-9a43-ae71ca31a276' => ['Alert', 'dashboard-create', '', 'entity.sitewide_alert.add_form', 'admin/content/sitewide_alert/add'],
+  '903fb065-214e-4dca-8645-8f225ab19ac2' => ['Alert', 'content', 'navigation.create', 'entity.sitewide_alert.add_form', 'admin/content/sitewide_alert/add'],
+  '0b42bddc-e89a-44e8-9e8d-7727628e19f0' => ['Alerts', 'content', '', 'entity.sitewide_alert.collection', 'admin/content/sitewide_alert'],
+];
+$menu_manager = \Drupal::service('plugin.manager.menu.link');
+foreach ($menu_links as $uuid => [$title, $menu, $parent, $route, $path]) {
+  $link = \Drupal::service('entity.repository')->loadEntityByUuid('menu_link_content', $uuid);
+  if (!$link || $link->getTitle() !== $title || $link->getMenuName() !== $menu || $link->getParentId() !== $parent || (int) $link->getWeight() !== 10 || !$link->isEnabled() || $link->getUrlObject()->getRouteName() !== $route || $link->getUrlObject()->getInternalPath() !== $path || count($menu_manager->loadLinksByRoute($route, $link->getUrlObject()->getRouteParameters(), $menu)) !== 1) {
+    throw new \RuntimeException("Alert menu link $uuid has incorrect metadata or is duplicated.");
+  }
+  if ($title === 'Alerts' && $link->getUrlObject()->getOption('icon') !== ['pack_id' => 'navigation', 'icon_id' => 'announcements-feed-announcement']) {
+    throw new \RuntimeException('The top-level Alerts link must use the Navigation announcement icon.');
+  }
+}
+$switcher = \Drupal::service('account_switcher');
+$menu_tree = \Drupal::menuTree();
+foreach (['site_editor' => $editor, 'superuser' => new UserSession(['uid' => 1235, 'roles' => ['authenticated', 'superuser']]), 'authenticated' => new UserSession(['uid' => 1236, 'roles' => ['authenticated']])] as $role => $account) {
+  $switcher->switchTo($account);
+  try {
+    foreach (['dashboard-create', 'content'] as $menu) {
+      $tree = $menu_tree->load($menu, (new MenuTreeParameters())->onlyEnabledLinks());
+      $tree = $menu_tree->transform($tree, [['callable' => 'menu.default_tree_manipulators:checkAccess'], ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort']]);
+      $items = [];
+      foreach ($tree as $item) {
+        $items[$item->link->getPluginId()] = $item;
+      }
+      $create_tree = $menu === 'dashboard-create' ? $tree : ($items['navigation.create']->subtree ?? []);
+      $create_items = [];
+      $create_paths = [];
+      foreach ($create_tree as $item) {
+        $create_items[$item->link->getPluginId()] = $item;
+        if ($item->access->isAllowed()) {
+          $create_paths[] = $item->link->getUrlObject()->getInternalPath();
+        }
+      }
+      foreach ($menu_links as $uuid => [$title, $link_menu, $parent]) {
+        if ($link_menu !== $menu) {
+          continue;
+        }
+        $allowed = $role !== 'authenticated' && ($parent === '' || $role === 'superuser' || $items['navigation.create']->access->isAllowed());
+        $link_items = $parent === '' ? $items : $create_items;
+        $accessible = isset($link_items["menu_link_content:$uuid"]) && $link_items["menu_link_content:$uuid"]->access->isAllowed();
+        if ($accessible !== $allowed) {
+          throw new \RuntimeException("The $role account has incorrect access to Alert menu link $uuid.");
+        }
+      }
+      if ($role === 'site_editor' && ($menu === 'dashboard-create' || getenv('COMPOSITION') !== 'admin')) {
+        $position = array_search('admin/content/sitewide_alert/add', $create_paths, TRUE);
+        $nodes = array_keys(array_filter($create_paths, static fn($path) => str_starts_with($path, 'node/add/')));
+        if ($position === FALSE || ($nodes && max($nodes) >= $position) || ($menu === 'dashboard-create' && $position >= array_search('media/add/file', $create_paths, TRUE))) {
+          throw new \RuntimeException("Site Editor's $menu Alert link must follow content types and precede media links.");
+        }
+      }
+    }
+  }
+  finally {
+    $switcher->switchBack();
+  }
+}
 $dashboard_components = [];
 foreach (['site_admin' => '4110daa8-d05b-4008-9ad5-e6e9ebbcd960', 'editor' => '593fc280-4e25-4884-bd75-95c9c5299a2a'] as $id => $uuid) {
   $dashboard = Dashboard::load($id);
@@ -73,7 +134,6 @@ foreach (['site_admin' => '4110daa8-d05b-4008-9ad5-e6e9ebbcd960', 'editor' => '5
 }
 $tomorrow = new \DateTimeImmutable('+1 day', new \DateTimeZone('UTC'));
 $fixtures = [];
-$switcher = \Drupal::service('account_switcher');
 $switcher->switchTo(new AnonymousUserSession());
 try {
   foreach ([
@@ -131,4 +191,4 @@ finally {
   $storage->delete($fixtures);
 }
 
-print getenv('COMPOSITION') . " alert settings, block placement, anonymous delivery and live dashboard blocks verified.\n";
+print getenv('COMPOSITION') . " alert settings, menu links, block placement, anonymous delivery and live dashboard blocks verified.\n";

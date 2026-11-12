@@ -143,9 +143,12 @@ try {
         }
         $url = $item->link->getUrlObject();
         if (!str_starts_with($item->link->getPluginId(), 'menu_link_content:') || !$url->isRouted() || $item->subtree) {
-          throw new \RuntimeException('Create must contain flat, editable menu links to routed content and media forms.');
+          throw new \RuntimeException('Create must contain flat, editable menu links to routed add forms.');
         }
-        $actual[] = [(string) $item->link->getTitle(), $url->getInternalPath()];
+        $path = $url->getInternalPath();
+        if (str_starts_with($path, 'node/add/') || str_starts_with($path, 'media/add/')) {
+          $actual[] = [(string) $item->link->getTitle(), $path];
+        }
       }
       $expected = [];
       $node_types = \Drupal::entityTypeManager()->getStorage('node_type')->loadMultiple();

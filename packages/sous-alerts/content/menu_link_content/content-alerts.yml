@@ -1,0 +1,28 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: 0b42bddc-e89a-44e8-9e8d-7727628e19f0
+  bundle: menu_link_content
+  default_langcode: en
+default:
+  enabled:
+    - value: true
+  title:
+    - value: Alerts
+  menu_name:
+    - value: content
+  link:
+    - uri: 'internal:/admin/content/sitewide_alert'
+      title: ''
+      options:
+        icon:
+          pack_id: navigation
+          icon_id: announcements-feed-announcement
+  external:
+    - value: false
+  rediscover:
+    - value: true
+  weight:
+    - value: 10
+  expanded:
+    - value: false

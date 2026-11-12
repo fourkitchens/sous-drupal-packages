@@ -20,8 +20,9 @@ accessibility results refresh every five minutes.
 
 The Editor's Create menu is a flat list with one link per content or media type,
 supplied by the package that owns it. A link appears only when the account can
-create that type. Sous Media supplies links for File, Image, Video and Video File;
-content-type links follow separately.
+create that type. Content-type links come first, followed by Sous Media's File,
+Image, Video and Video File. Optional packages can also link other content they
+own, such as Alerts' Alert after the content types.
 
 For a type added by hand, add its link at Structure → Menus → Create. Delete
 the link when deleting the type, or it becomes a dead link.
