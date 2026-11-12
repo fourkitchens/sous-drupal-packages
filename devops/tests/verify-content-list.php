@@ -231,8 +231,9 @@ try {
         throw new \RuntimeException("$case Content List $scenario did not render $marker.");
       }
     }
+    $last_picked = max(array_map(static fn($marker) => strpos($html, $marker), $hand_picked));
     foreach ($expected as $title) {
-      if (strpos($html, 'Picked page') > strpos($html, $title)) {
+      if ($last_picked > strpos($html, $title)) {
         throw new \RuntimeException("$case Content List $scenario must render hand-picked teasers before the listing.");
       }
     }
