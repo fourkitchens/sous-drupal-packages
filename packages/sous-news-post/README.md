@@ -8,6 +8,9 @@ above horizontal Content, Teaser and Organization tabs; Categories belongs to
 Organization. Metadata is in the sidebar. Create News Categories terms before
 adding posts; Tagify Select supports assigning multiple categories.
 
+News Post adds a Create link for News Post to the Editor dashboard when Sous
+Dashboard is installed.
+
 Aliases use the first assigned category and title:
 `news/news-category/news-title`. Reorder the categories to choose the category
 used in a new alias.
