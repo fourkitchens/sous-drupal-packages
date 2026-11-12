@@ -17,7 +17,6 @@ install:
   - style_selector
   - text
   - inline_entity_form
-  - sous_component_support
   - tablefield
 config:
   actions:
