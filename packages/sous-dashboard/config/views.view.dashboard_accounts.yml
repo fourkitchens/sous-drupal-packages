@@ -294,7 +294,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: '<p>No accounts found. <a href="/admin/people/create">Add an account</a>.</p>'
+          content: '<p>No accounts found.</p>'
           tokenize: false
       sorts:
         created:

@@ -200,7 +200,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: '<p>No news posts yet. <a href="/node/add/news_post">Create a news post</a>.</p>'
+          content: '<p>No news posts yet.</p>'
           tokenize: false
       sorts:
         created:

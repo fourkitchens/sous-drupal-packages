@@ -176,7 +176,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: '<p>No active alerts. <a href="/admin/content/sitewide_alert/add">Create an alert</a>.</p>'
+          content: '<p>No active alerts.</p>'
           tokenize: false
       sorts:
         changed:

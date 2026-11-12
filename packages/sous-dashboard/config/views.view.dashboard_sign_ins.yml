@@ -175,7 +175,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: '<p>No recent sign-ins. <a href="/admin/reports/login-history">View all sign-ins</a>.</p>'
+          content: '<p>No recent sign-ins.</p>'
           tokenize: false
       sorts:
         login:

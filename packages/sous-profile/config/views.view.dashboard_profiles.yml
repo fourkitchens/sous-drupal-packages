@@ -308,7 +308,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: '<p>No profiles yet. <a href="/node/add/profile">Create a profile</a>.</p>'
+          content: '<p>No profiles yet.</p>'
           tokenize: false
       sorts:
         changed:

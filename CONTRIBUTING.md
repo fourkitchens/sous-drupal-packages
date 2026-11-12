@@ -54,7 +54,9 @@ lists, and `site_admin` section 1 for site administration. Target the regions in
 the [Dashboard layout contract](packages/sous-dashboard/README.md#layout-contract).
 
 Ship `views.view.dashboard_<topic>` with one block display, the `dashboard` tag,
-at most ten items, a more link, and empty text with a create link.
+at most ten items, a more link, and plain empty text with no links.
+Dashboard renders links in empty text as buttons whose Gin colors fail contrast,
+and people add content and media from the Editor's Create block.
 Use an access permission the intended audience already has.
 
 Add one `addComponentToLayout` action under the optional

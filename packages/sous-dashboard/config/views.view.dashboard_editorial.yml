@@ -309,7 +309,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: '<p>No drafts in progress. <a href="/node/add">Create content</a>.</p>'
+          content: '<p>No drafts in progress.</p>'
           tokenize: false
       sorts:
         changed:
@@ -500,7 +500,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: '<p>No recently updated content. <a href="/node/add">Create content</a>.</p>'
+          content: '<p>No recently updated content.</p>'
           tokenize: false
       filters:
         latest_revision:
@@ -589,7 +589,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: '<p>No scheduled changes. <a href="/admin/content">Manage content</a> to schedule publishing or unpublishing.</p>'
+          content: '<p>No scheduled changes.</p>'
           tokenize: false
       sorts:
         publish_on:

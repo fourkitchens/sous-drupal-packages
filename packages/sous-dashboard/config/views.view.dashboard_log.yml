@@ -209,7 +209,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: '<p>No recent errors or warnings. <a href="/admin/reports/dblog">View all log messages</a>.</p>'
+          content: '<p>No recent errors or warnings.</p>'
           tokenize: false
       sorts:
         timestamp:
