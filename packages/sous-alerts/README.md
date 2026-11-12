@@ -46,9 +46,10 @@ the alert form.
 
 ## Theming
 
-Override `sitewide-alert.html.twig` in the project theme to customize public banners.
-Project theme overrides affect public pages only; dashboards use the admin
-theme's default Sitewide Alert markup and styles.
+Override `sitewide-alert.html.twig` in the project theme to customize alert markup.
+The alert endpoint uses the public theme, so this override also affects alerts
+loaded on dashboards. Dashboards use the admin theme around the alerts and load
+Sitewide Alert's default styles.
 Keep `{{ attributes }}` on the wrapper to retain `data-uuid`, which JavaScript uses
 to load and dismiss alerts. Keep the `js-dismiss-button` class on the dismiss button.
 

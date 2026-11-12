@@ -63,7 +63,7 @@ foreach (['site_admin' => '4110daa8-d05b-4008-9ad5-e6e9ebbcd960', 'editor' => '5
   }
   [$delta, $component] = $matches[0];
   $components = array_values($dashboard->getSection(0)->getComponentsByRegion('content'));
-  if ($delta !== 0 || $component->getRegion() !== 'content' || $component->getUuid() !== $uuid || $component->getPluginId() !== 'sitewide_alert_block' || $component->getConfiguration()['label_display'] !== '0' || $components[0]->getUuid() !== $uuid) {
+  if ($delta !== 0 || $component->getRegion() !== 'content' || $component->getUuid() !== $uuid || $component->getPluginId() !== 'sitewide_alert_block' || $component->getPlugin()->getConfiguration()['label_display'] !== '0' || $components[0]->getUuid() !== $uuid) {
     throw new \RuntimeException("Live Site alerts must be first in Dashboard $id section 0 content with a hidden label.");
   }
   if ($id === 'site_admin' && $components[1]->getPluginId() !== 'dashboard_site_status') {
