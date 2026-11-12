@@ -1,0 +1,28 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: 2f627ec2-be6f-4619-8dff-73a4eca280bf
+  bundle: menu_link_content
+  default_langcode: en
+default:
+  enabled:
+    - value: true
+  title:
+    - value: Menus
+  menu_name:
+    - value: content
+  link:
+    - uri: 'internal:/admin/structure/menu'
+      title: ''
+      options:
+        icon:
+          pack_id: navigation
+          icon_id: system-admin-structure
+  external:
+    - value: false
+  rediscover:
+    - value: true
+  weight:
+    - value: 10
+  expanded:
+    - value: false

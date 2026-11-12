@@ -93,6 +93,17 @@ stays hidden when its Create menu is absent. See Sous Media's
 and [Image](packages/sous-media/content/menu_link_content/dashboard-create-image.yml)
 links for examples.
 
+## Navigation links
+
+A package that adds an admin list may ship a top-level link in core Navigation's
+Content menu as `content/menu_link_content/content-<name>.yml`.
+Use `content` as the menu, no parent, weight 10 (after Content and Media, before
+Trash), and `rediscover: true`. Set an icon from Navigation's `navigation` icon
+pack in the link options, and generate its UUID once with `uuidgen`.
+Route access decides who sees the link. See Sous Admin's
+[Menus link](packages/sous-admin/content/menu_link_content/content-menus.yml)
+for an example.
+
 ## Drupal compatibility
 
 All packages and the recipe template require Drupal `^11.4`, the floor tested

@@ -96,6 +96,21 @@ config:
     login_history:
       - views.view.login_history
   actions:
+    # Blocks and Files stay available as tabs on the Content page.
+    core.menu.static_menu_link_overrides:
+      simpleConfigUpdate:
+        definitions.navigation__blocks:
+          menu_name: content
+          parent: ''
+          weight: 0
+          expanded: false
+          enabled: false
+        definitions.navigation__files:
+          menu_name: content
+          parent: ''
+          weight: 0
+          expanded: false
+          enabled: false
     user.role.site_editor:
       grantPermissions:
         - 'access administration pages'

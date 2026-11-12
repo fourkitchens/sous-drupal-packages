@@ -9,6 +9,9 @@ providers used by those management screens. It does not create Page/Frontpage
 or apply Sous Media bundle defaults. It applies [Sous Workflow](../sous-workflow)
 without assigning content types to it.
 
+Navigation's Content section hides Blocks and Files from everyone, which stay
+as tabs on Content, and shows Menus to anyone who can manage a menu.
+
 Admin makes the No Non-breaking Space filter available without adding text
 formats. Projects that need CKEditor, Linkit and HTML filter defaults can apply
 Sous Formats independently.
