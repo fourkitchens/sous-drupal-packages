@@ -54,7 +54,7 @@ config:
   actions:
     '?dashboard.dashboard.editor':
       addComponentToLayout:
-        section: 2
+        section: 3
         position: 99
         component:
           # Constant so reapplying replaces this block instead of adding another.

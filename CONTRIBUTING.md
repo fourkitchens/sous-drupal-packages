@@ -49,11 +49,14 @@ See the [Events](packages/sous-events/recipes) and
 
 ## Dashboard blocks
 
-Use `editor` section 1 for work needing action now, `editor` section 2 for content
+Use `editor` section 2 for work needing action now, `editor` section 3 for content
 lists, and `site_admin` section 1 for site administration. Target the regions in
 the [Dashboard layout contract](packages/sous-dashboard/README.md#layout-contract).
 
-Ship `views.view.dashboard_<topic>` with one block display, the `dashboard` tag,
+Section 0, Status, is full width on both dashboards and comes first. Packages add notices there at position 0, ahead of any baseline block.
+Follow the [Sous Alerts recipe](packages/sous-alerts/recipe.yml) for notice placement.
+
+For a list, ship `views.view.dashboard_<topic>` with one block display, the `dashboard` tag,
 at most ten items, a more link, and plain empty text with no links.
 Dashboard renders links in empty text as buttons whose Gin colors fail contrast,
 and people add content and media from the Editor's Create block.
@@ -61,15 +64,15 @@ Use an access permission the intended audience already has.
 
 Add one `addComponentToLayout` action under the optional
 `'?dashboard.dashboard.<id>'` target. Include a layout-to-region map,
-`default_region: content`, and `position: 99`. Generate its UUID once with
+`default_region: content`, and `position: 99` for lists. Generate its UUID once with
 `uuidgen` and keep that constant in the recipe. Follow the
 [Profile recipe](packages/sous-profile/recipe.yml) example.
 
 Never require or apply Sous Dashboard from another package. A baseline package
 that adds a block comes after Dashboard in the starter's `baseline_recipes`.
 Apply the recipe twice and verify exactly one component remains in its intended
-section and region, the intended audience can render it, and anonymous users see
-nothing.
+section and region and the intended audience can render it. Unless the block is
+a public notice such as Sous Alerts, verify anonymous users see nothing.
 
 ## Create links
 

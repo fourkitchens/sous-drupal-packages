@@ -7,12 +7,19 @@ dependencies:
     - views.view.dashboard_editorial
   module:
     - layout_builder
+    - layout_discovery
     - system
     - views
 id: editor
 label: Editor
 description: 'Content work for Site Editors.'
 layout:
+  - layout_id: layout_onecol
+    layout_settings:
+      label: Status
+      context_mapping: {}
+    components: {}
+    third_party_settings: {}
   - layout_id: layout_twocol_section
     layout_settings:
       label: Start
