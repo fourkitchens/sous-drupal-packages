@@ -21,7 +21,6 @@
     "drupal/field_group": "^4.0",
     "drupal/style_selector": "^2.0",
     "drupal/viewsreference": "^2.0",
-    "fourkitchens/sous-component-support": "^2.0",
     "fourkitchens/sous-formats": "^2.0",
     "fourkitchens/sous-media": "^2.0",
     "fourkitchens/viewsreference_sift": "^1.0.0-beta4"

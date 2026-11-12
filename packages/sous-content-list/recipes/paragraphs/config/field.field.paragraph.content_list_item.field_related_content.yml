@@ -9,7 +9,7 @@ field_name: field_related_content
 entity_type: paragraph
 bundle: content_list_item
 label: Content
-description: ''
+description: 'Pick existing content to show its teaser, or leave this empty and fill in the custom teaser fields below.'
 required: false
 translatable: false
 default_value: {}

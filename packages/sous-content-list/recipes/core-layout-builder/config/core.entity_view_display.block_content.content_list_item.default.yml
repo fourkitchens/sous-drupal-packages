@@ -6,7 +6,6 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - field.field.block_content.content_list_item.field_heading
     - field.field.block_content.content_list_item.field_image
-    - field.field.block_content.content_list_item.field_item_type
     - field.field.block_content.content_list_item.field_link
     - field.field.block_content.content_list_item.field_related_content
     - field.field.block_content.content_list_item.field_text
@@ -63,5 +62,4 @@ content:
     third_party_settings: {}
     weight: 4
     region: content
-hidden:
-  field_item_type: true
+hidden: {}

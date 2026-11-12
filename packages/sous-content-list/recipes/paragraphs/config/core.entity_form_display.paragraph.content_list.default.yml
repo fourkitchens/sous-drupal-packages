@@ -5,7 +5,6 @@ dependencies:
     - field.field.paragraph.content_list.field_content
     - field.field.paragraph.content_list.field_heading
     - field.field.paragraph.content_list.field_link
-    - field.field.paragraph.content_list.field_list_type
     - field.field.paragraph.content_list.field_style_columns
     - field.field.paragraph.content_list.field_style_layout_width
     - field.field.paragraph.content_list.field_text
@@ -44,7 +43,6 @@ third_party_settings:
         - field_heading
         - field_text
         - field_link
-        - field_list_type
         - group_hand_picked_items
         - group_automatic_listing
       label: Content
@@ -90,7 +88,7 @@ third_party_settings:
         show_empty_fields: false
         id: ''
         label_as_html: false
-        description: ''
+        description: 'Teasers show first, in this order.'
         required_fields: false
     group_automatic_listing:
       children:
@@ -105,7 +103,7 @@ third_party_settings:
         show_empty_fields: false
         id: ''
         label_as_html: false
-        description: ''
+        description: 'The listing shows after any hand-picked teasers.'
         required_fields: false
 id: paragraph.content_list.default
 targetEntityType: paragraph
@@ -139,12 +137,6 @@ content:
       linkit_auto_link_text: false
       placeholder_url: ''
       placeholder_title: ''
-    third_party_settings: {}
-  field_list_type:
-    type: options_select
-    weight: 4
-    region: content
-    settings: {}
     third_party_settings: {}
   field_content:
     type: paragraphs

@@ -2,11 +2,10 @@
 
 `fourkitchens/sous-content-list` · `drupal-recipe` · GPL-2.0-or-later
 
-Adds a Content List with a heading, introduction, call to action, and a
-**List Type** selector. Choose **Hand-picked** to add teasers individually or
-**Automatic** to configure an automatic listing. In a **Content List Item**,
-choose **Existing Content** to pick a node teaser or **Custom Content** to
-enter an image, heading, text, and link.
+A Content List has a heading, introduction and call to action, plus hand-picked
+teasers, an automatic listing, or both. Hand-picked teasers render first.
+A Content List Item shows an existing item's teaser, or a custom image, heading,
+text and link.
 
 The Paragraphs integration adds Content List and nested Content List Item
 paragraphs. The Layout Builder integration provides the same types as inline
@@ -36,8 +35,7 @@ display up to the item limit.
 The package ships no templates. A theme can use
 `paragraph--content-list.html.twig` and
 `block--inline-block--content-list.html.twig` with the same field names. Use
-the rendered `field_content` and `field_view` so Drupal can show the selected
-source.
+the rendered `field_content` and `field_view` so Drupal renders both sources.
 
 ## Installation and application
 
