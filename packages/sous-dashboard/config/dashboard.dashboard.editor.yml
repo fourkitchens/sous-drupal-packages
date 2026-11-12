@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - system.menu.content
+    - system.menu.dashboard-create
     - views.view.dashboard_accessibility
     - views.view.dashboard_editorial
   module:
@@ -29,7 +29,7 @@ layout:
           provider: dashboard
           context_mapping: {}
           text:
-            value: '<p>Welcome. Use <strong>Create and manage</strong> to add content, or pick up a draft below.</p><p>Questions? Contact your site administrator.</p>'
+            value: '<p>Welcome. Use <strong>Create</strong> to add content or media, or pick up a draft below.</p><p>Questions? Contact your site administrator.</p>'
             format: basic_html
         weight: 0
         additional: {}
@@ -37,8 +37,8 @@ layout:
         uuid: 253daf77-e36b-4b5f-a1c8-0b05c9787ce2
         region: second
         configuration:
-          id: 'system_menu_block:content'
-          label: 'Create and manage'
+          id: 'system_menu_block:dashboard-create'
+          label: Create
           label_display: visible
           provider: system
           context_mapping: {}

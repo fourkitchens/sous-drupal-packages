@@ -8,6 +8,7 @@ install:
   - dblog
   - editoria11y
   - login_history
+  - sous_component_support
   - views
 config:
   # Projects own the layouts after install; reapplying never overwrites them.
