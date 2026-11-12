@@ -2,13 +2,13 @@
 
 `fourkitchens/sous-dashboard` · `drupal-recipe` · GPL-2.0-or-later
 
-Adds Site admin and Editor dashboards that Superusers and Site Editors land on
+Adds Site admin and Editor dashboards that Superusers and Site Admins land on
 after signing in. Apply it after Sous Admin and Sous Formats: Admin supplies
-Navigation, the Content menu and the Site Editor role; Formats supplies Basic HTML.
+Navigation, the Content menu and the Site Admin role; Formats supplies Basic HTML.
 The recipe applies Sous Workflow and imports Scheduler's scheduled-content list.
 
 Superusers see Site admin first and can switch between Site admin and Editor
-using Dashboard's tabs. Site Editors see Editor. Other authenticated accounts
+using Dashboard's tabs. Site Admins see Editor. Other authenticated accounts
 receive no dashboard access. Dashboard supplies the sign-in redirect and tabs.
 Only Superusers can rearrange blocks at `/admin/structure/dashboard`.
 

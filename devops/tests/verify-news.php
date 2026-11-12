@@ -105,7 +105,7 @@ try {
       $block = $component->getPlugin();
       $allowed = $account->isAuthenticated();
       if ($block->access($account) !== $allowed) {
-        throw new \RuntimeException('News dashboard block must allow Site Editors and deny anonymous users.');
+        throw new \RuntimeException('News dashboard block must allow Site Admins and deny anonymous users.');
       }
       $build = $block->build();
       $output = (string) \Drupal::service('renderer')->renderInIsolation($build);

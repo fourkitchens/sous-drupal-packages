@@ -1,5 +1,5 @@
 name: 'Sous Dashboard'
-description: 'Adds Site admin and Editor dashboards that Superusers and Site Editors land on after signing in.'
+description: 'Adds Site admin and Editor dashboards that Superusers and Site Admins land on after signing in.'
 type: Site
 recipes:
   - sous-workflow

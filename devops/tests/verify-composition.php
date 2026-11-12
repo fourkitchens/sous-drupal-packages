@@ -66,15 +66,37 @@ foreach (['editoria11y', 'gin_login', 'twig_tweak', 'role_delegation', 'menu_adm
 
 $editor = Role::load('site_editor');
 $account = new UserSession(['uid' => 1234, 'roles' => ['authenticated', 'site_editor']]);
-$checks['Site Editor role'] = $editor?->label() === 'Site Editor' && !$editor->isAdmin();
-foreach (['administer modules', 'administer site configuration', 'administer users', 'administer permissions', 'administer content types', 'administer workflows', 'assign all roles', 'assign superuser role'] as $permission) {
+$checks['Site Admin role'] = $editor?->label() === 'Site Admin' && !$editor->isAdmin();
+$checks['site admin can administer users'] = $account->hasPermission('administer users');
+foreach (['administer modules', 'administer site configuration', 'administer permissions', 'administer content types', 'administer workflows', 'assign all roles', 'assign superuser role'] as $permission) {
   $checks["editor denied $permission"] = !$account->hasPermission($permission);
 }
 $delegation = \Drupal::service('delegatable_roles');
 $superuser = new UserSession(['uid' => 1235, 'roles' => ['authenticated', 'superuser']]);
-$checks['editor can only delegate Site Editor'] = array_keys($delegation->getAssignableRoles($account)) === ['site_editor'];
+$checks['site admin can only delegate Site Admin'] = array_keys($delegation->getAssignableRoles($account)) === ['site_editor'];
 $checks['superuser can delegate all custom roles'] = array_keys($delegation->getAssignableRoles($superuser)) === array_keys($delegation->getAllRoles());
-$checks['editor can use the Roles tab'] = \Drupal::service('access_check.role_delegation')->access($account)->isAllowed();
+$checks['site admin uses account form for roles'] = !\Drupal::service('access_check.role_delegation')->access($account)->isAllowed();
+$switcher = \Drupal::service('account_switcher');
+$switcher->switchTo($account);
+try {
+  foreach (['default', 'register'] as $operation) {
+    $target = $entities->getStorage('user')->create(['name' => 'Sous role verification']);
+    if ($operation === 'default') {
+      $target->set('uid', 1238)->enforceIsNew(FALSE);
+    }
+    $form = \Drupal::service('entity.form_builder')->getForm($target, $operation);
+    $checks["restricted role widget.$operation"] = $form['role_change']['#access'] === TRUE && array_keys($form['role_change']['widget']['#options']) === ['site_editor'] && $form['account']['roles']['#access'] === FALSE;
+  }
+  $target = $entities->getStorage('user')->create(['roles' => ['superuser', 'site_editor'], 'role_change' => []]);
+  $modules->invoke('role_delegation', 'user_presave', [$target]);
+  $checks['delegation preserves Superuser when removing Site Admin'] = $target->hasRole('superuser') && !$target->hasRole('site_editor');
+  $target = $entities->getStorage('user')->create(['role_change' => [['target_id' => 'superuser'], ['target_id' => 'site_editor']]]);
+  $modules->invoke('role_delegation', 'user_presave', [$target]);
+  $checks['delegation rejects Superuser when assigning Site Admin'] = !$target->hasRole('superuser') && $target->hasRole('site_editor');
+}
+finally {
+  $switcher->switchBack();
+}
 
 foreach (Role::loadMultiple(['anonymous', 'authenticated', 'site_editor']) as $id => $role) {
   $menu_permissions = array_filter($role->getPermissions(), static fn($permission) => preg_match('/^administer .+ menu items$/', $permission));
@@ -374,7 +396,7 @@ foreach (['paragraph' => $paragraphs, 'block_content' => $case === 'core-layout-
 if ($paragraphs) {
   $access_manager = \Drupal::service('access_manager');
   $library_items = $entities->getStorage('paragraphs_library_item');
-  $library_item = $library_items->create(['label' => 'Site Editor access check']);
+  $library_item = $library_items->create(['label' => 'Site Admin access check']);
   $checks['editor library item create'] = $entities->getAccessControlHandler('paragraphs_library_item')->createAccess(NULL, $account);
   $checks['editor library item update'] = $library_item->access('update', $account);
   $checks['editor library item delete'] = $library_item->access('delete', $account);

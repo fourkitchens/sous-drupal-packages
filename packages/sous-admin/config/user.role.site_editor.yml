@@ -1,6 +1,6 @@
 langcode: en
 status: true
 id: site_editor
-label: 'Site Editor'
+label: 'Site Admin'
 weight: 1
 is_admin: false

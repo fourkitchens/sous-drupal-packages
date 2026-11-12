@@ -12,7 +12,7 @@ dependencies:
     - views
 id: editor
 label: Editor
-description: 'Content work for Site Editors.'
+description: 'Content work for Site Admins.'
 layout:
   - layout_id: layout_onecol
     layout_settings:

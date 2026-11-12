@@ -1,5 +1,5 @@
 name: 'Sous Admin'
-description: 'Provides Gin administration, editorial tools, navigation, and roles for Superusers and Site Editors.'
+description: 'Provides Gin administration, editorial tools, navigation, and roles for Superusers and Site Admins.'
 type: 'Site'
 recipes:
   - sous-workflow
@@ -125,6 +125,7 @@ config:
         - 'access user profiles'
         - 'administer footer menu items'
         - 'administer main menu items'
+        - 'administer users'
         - 'assign site_editor role'
         - 'delete any file'
         - 'mark as hidden in editoria11y'
