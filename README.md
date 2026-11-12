@@ -24,7 +24,6 @@ shared version, beginning with `2.0.0`.
 | [sous-profile](packages/sous-profile)                         | Profiles, automatic names, images, bios and searchable teasers   | Optional recipe            |
 | [sous-content-list](packages/sous-content-list)               | Hand-picked teasers and a term-filtered automatic listing        | Main course component      |
 | [sous-gallery](packages/sous-gallery)                         | An image and video gallery                                       | Main course component      |
-| [sous-component-support](packages/sous-component-support)     | Content List form behavior and inline block ordering             | Shared module dependency   |
 | [sous-seo](packages/sous-seo)                                 | Redirects, sitemaps, breadcrumbs and SEO integrations            | Starter base               |
 | [sous-alerts](packages/sous-alerts)                           | Site-wide alert banners with scheduling and dismissal            | Optional recipe            |
 | [sous-search](packages/sous-search)                           | Database search with a results block and content type filter     | Optional recipe            |

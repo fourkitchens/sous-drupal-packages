@@ -90,7 +90,7 @@ function archiveBase(value) {
   return url.href;
 }
 
-async function packageFiles(directory, moduleName) {
+async function packageFiles(directory) {
   const files = [];
   async function visit(folder, prefix = '') {
     const entries = (await readdir(folder)).sort();
@@ -116,10 +116,7 @@ async function packageFiles(directory, moduleName) {
         check(
           info.isDirectory()
             ? permittedDirectories.has(name)
-            : permittedFile(name) ||
-                [`${moduleName}.info.yml`, `${moduleName}.module`].includes(
-                  name
-                ),
+            : permittedFile(name),
           `Unexpected package entry: ${path}`
         );
       if (info.isDirectory()) await visit(path, file);
@@ -139,10 +136,7 @@ function validateManifest(manifest, name) {
     manifest.name === name,
     `Expected Composer name ${name}, got ${manifest.name}.`
   );
-  check(
-    ['drupal-recipe', 'drupal-module'].includes(manifest.type),
-    `${name} must be a Drupal recipe or module.`
-  );
+  check(manifest.type === 'drupal-recipe', `${name} must be a Drupal recipe.`);
   check(
     manifest.license === 'GPL-2.0-or-later',
     `${name} must declare GPL-2.0-or-later.`
@@ -190,22 +184,14 @@ export async function validatePackages(root) {
         !(await lstat(directory)).isSymbolicLink(),
       `Invalid package directory: ${directory}`
     );
-    const moduleName = folder.replaceAll('-', '_');
-    const files = await packageFiles(directory, moduleName);
+    const files = await packageFiles(directory);
     for (const required of ['composer.json', 'README.md', 'LICENSE'])
       check(files.includes(required), `${name} is missing ${required}.`);
     const manifest = JSON.parse(
       await readFile(join(directory, 'composer.json'), 'utf8')
     );
     validateManifest(manifest, name);
-    if (manifest.type === 'drupal-module') {
-      check(
-        files.includes(`${moduleName}.info.yml`),
-        `${name} is missing ${moduleName}.info.yml.`
-      );
-    } else {
-      await validateRecipe(directory, name, manifest.description);
-    }
+    await validateRecipe(directory, name, manifest.description);
     for (const file of [
       ...(typeof manifest.bin === 'string'
         ? [manifest.bin]

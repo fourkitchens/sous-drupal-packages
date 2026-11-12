@@ -23,7 +23,6 @@
     "drupal/media_library_edit": "^3.0.3",
     "drupal/style_selector": "^2.0",
     "drupal/tablefield": "^3.0",
-    "fourkitchens/sous-component-support": "^2.0",
     "fourkitchens/sous-content-types": "^2.0"
   },
   "homepage": "https://github.com/fourkitchens/sous-drupal-packages",

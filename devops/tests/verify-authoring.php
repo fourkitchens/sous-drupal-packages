@@ -5,7 +5,6 @@
  * Verify authoring forms, format processing and icons natively.
  */
 
-use Drupal\block_content\Entity\BlockContent;
 use Drupal\Component\Utility\Html;
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\layout_paragraphs\Controller\ChooseComponentController;
@@ -125,19 +124,6 @@ try {
       }
     }
   }
-  elseif ($case === 'core-layout-builder') {
-    $nested = [
-      'accordion_item' => ['text', 'image', 'video', 'gallery'],
-      'tabs_item' => ['text', 'text_with_media', 'image', 'video', 'gallery', 'quote', 'table', 'accordion', 'accordion_item', 'tabs', 'tabs_item', 'content_list', 'embed'],
-    ];
-    foreach ($nested as $bundle => $order) {
-      $form = \Drupal::service('entity.form_builder')->getForm(BlockContent::create(['type' => $bundle]));
-      $options = $form['field_content']['widget']['actions']['bundle']['#options'] ?? [];
-      if (array_keys($options) !== $order) {
-        throw new \RuntimeException("$bundle inline block component chooser is out of order.");
-      }
-    }
-  }
 }
 finally {
   if ($alias) {
@@ -149,4 +135,4 @@ finally {
   $switcher->switchBack();
 }
 
-print "$case authoring forms, text filters, paragraph icons and component order verified.\n";
+print "$case authoring forms and text filters verified.\n";
