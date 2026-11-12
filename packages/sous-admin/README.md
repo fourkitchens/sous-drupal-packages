@@ -24,10 +24,10 @@ updates are not a reason to reapply it.
 
 The `superuser` role uses `is_admin: true` and receives every permission from
 enabled modules. Admin preserves existing roles and account assignments.
-Only Superusers manage menus. A project can let another role manage one menu,
-such as Main navigation, by granting `Administer <menu> menu items` at
-People › Permissions. Keep Administration, Content, Create, Tools and User account
-menu Superuser-only.
+Superusers manage every menu; Site Editors manage Footer and Main navigation.
+A project can let another role manage one menu by granting
+`Administer <menu> menu items` at People › Permissions. Keep Administration,
+Content, Create, Tools and User account menu Superuser-only.
 Site Editor can create, edit, publish and delete content supplied by the recipes
 applied to the site. It can use the configured content browsers and does not
 grant module, configuration, role or permission administration. Keep project-owned

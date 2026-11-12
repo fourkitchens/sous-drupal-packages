@@ -77,7 +77,10 @@ $checks['superuser can delegate all custom roles'] = array_keys($delegation->get
 $checks['editor can use the Roles tab'] = \Drupal::service('access_check.role_delegation')->access($account)->isAllowed();
 
 foreach (Role::loadMultiple(['anonymous', 'authenticated', 'site_editor']) as $id => $role) {
-  $checks["no menu permissions.$id"] = !$role->hasPermission('administer menu') && !array_filter($role->getPermissions(), static fn($permission) => preg_match('/^administer .+ menu items$/', $permission));
+  $menu_permissions = array_filter($role->getPermissions(), static fn($permission) => preg_match('/^administer .+ menu items$/', $permission));
+  sort($menu_permissions);
+  $expected = $id === 'site_editor' ? ['administer footer menu items', 'administer main menu items'] : [];
+  $checks["menu permissions.$id"] = !$role->hasPermission('administer menu') && $menu_permissions === $expected;
 }
 $menu_manager = \Drupal::service('plugin.manager.menu.link');
 foreach (['navigation.blocks', 'navigation.files'] as $plugin_id) {
@@ -103,9 +106,9 @@ try {
   foreach ($menu_accounts as $id => $menu_account) {
     $switcher->switchTo($menu_account);
     try {
-      $checks["menu collection.$id"] = $access_manager->checkNamedRoute('entity.menu.collection', [], $menu_account) === in_array($id, ['superuser', 'footer'], TRUE);
+      $checks["menu collection.$id"] = $access_manager->checkNamedRoute('entity.menu.collection', [], $menu_account) === in_array($id, ['superuser', 'site_editor', 'footer'], TRUE);
       foreach (['account', 'admin', 'content', 'dashboard-create', 'footer', 'main', 'tools'] as $menu_id) {
-        $allowed = $id === 'superuser' || ($id === 'footer' && $menu_id === 'footer');
+        $allowed = $id === 'superuser' || ($id === 'site_editor' && in_array($menu_id, ['footer', 'main'], TRUE)) || ($id === 'footer' && $menu_id === 'footer');
         $checks["menu edit.$id.$menu_id"] = $access_manager->checkNamedRoute('entity.menu.edit_form', ['menu' => $menu_id], $menu_account) === $allowed;
       }
       $tree = $menu_tree->load('content', (new MenuTreeParameters())->onlyEnabledLinks());
@@ -114,7 +117,7 @@ try {
       foreach ($tree as $item) {
         $menu_access[$item->link->getPluginId()] = $item->access->isAllowed();
       }
-      $checks["Content Menus access.$id"] = ($menu_access[$menus_plugin] ?? NULL) === in_array($id, ['superuser', 'footer'], TRUE);
+      $checks["Content Menus access.$id"] = ($menu_access[$menus_plugin] ?? NULL) === in_array($id, ['superuser', 'site_editor', 'footer'], TRUE);
     }
     finally {
       $switcher->switchBack();

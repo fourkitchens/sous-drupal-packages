@@ -123,6 +123,8 @@ config:
         - 'access taxonomy overview'
         - 'access trash'
         - 'access user profiles'
+        - 'administer footer menu items'
+        - 'administer main menu items'
         - 'assign site_editor role'
         - 'delete any file'
         - 'mark as hidden in editoria11y'
