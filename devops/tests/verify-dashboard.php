@@ -38,6 +38,7 @@ $layouts = [
     ['layout_twocol_section', 'Top errors', '50-50', ['first' => ['views_block:dashboard_top_errors-block_page_not_found'], 'second' => ['views_block:dashboard_top_errors-block_access_denied']]],
   ],
   'editor' => [
+    ['layout_onecol', 'Status', NULL, ['content' => []]],
     ['layout_twocol_section', 'Start', '67-33', ['first' => ['dashboard_text_block'], 'second' => ['system_menu_block:dashboard-create']]],
     ['layout_twocol_section', 'Your work', '50-50', ['first' => ['views_block:dashboard_editorial-block_drafts'], 'second' => ['views_block:dashboard_editorial-block_scheduled']]],
     ['layout_twocol_section', 'Site content', '50-50', ['first' => ['views_block:dashboard_editorial-block_recent'], 'second' => ['views_block:dashboard_accessibility-block_alerts']]],
@@ -57,13 +58,13 @@ foreach (['site_admin' => ['Site admin', -10, 'Site health and accounts for Supe
     foreach ($regions as $region => $expected) {
       $components = array_values($section->getComponentsByRegion($region));
       $plugins = array_map(static fn($component) => $component->getPluginId(), $components);
-      if (array_slice($plugins, 0, count($expected)) !== $expected) {
+      if (array_values(array_intersect($plugins, $expected)) !== $expected) {
         throw new \RuntimeException("Dashboard $id section $delta region $region has changed its baseline blocks.");
       }
     }
   }
 }
-$start = $dashboards['editor']->getSection(0);
+$start = $dashboards['editor']->getSection(1);
 $welcome = array_values($start->getComponentsByRegion('first'))[0]->getPlugin()->getConfiguration();
 $menu = array_values($start->getComponentsByRegion('second'))[0]->getPlugin()->getConfiguration();
 if ($welcome['text']['format'] !== 'basic_html' || !$welcome['text']['value'] || $menu['label'] !== 'Create' || !Menu::load('dashboard-create') || $menu['level'] !== 1 || $menu['depth'] !== 2 || $menu['expand_all_items'] !== TRUE) {

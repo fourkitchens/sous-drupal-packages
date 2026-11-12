@@ -154,10 +154,10 @@ try {
   }
   [$dashboard_id, $delta, $component] = $dashboard_components[0];
   $dashboard = Dashboard::load('editor');
-  $components = array_values($dashboard->getSection(2)->getComponentsByRegion('second'));
+  $components = array_values($dashboard->getSection(3)->getComponentsByRegion('second'));
   $uuids = array_map(static fn($item) => $item->getUuid(), $components);
-  if ($dashboard_id !== 'editor' || $delta !== 2 || $component->getRegion() !== 'second' || $component->getUuid() !== '8d154da9-bc87-4a1b-ac37-503078f598ec' || $component->getPluginId() !== 'views_block:dashboard_events-block_upcoming' || $components[0]->getPluginId() !== 'views_block:dashboard_accessibility-block_alerts' || array_search($component->getUuid(), $uuids, TRUE) < 1) {
-    throw new \RuntimeException('Events dashboard component must follow Accessibility alerts in Editor section 2 second.');
+  if ($dashboard_id !== 'editor' || $delta !== 3 || $component->getRegion() !== 'second' || $component->getUuid() !== '8d154da9-bc87-4a1b-ac37-503078f598ec' || $component->getPluginId() !== 'views_block:dashboard_events-block_upcoming' || $components[0]->getPluginId() !== 'views_block:dashboard_accessibility-block_alerts' || array_search($component->getUuid(), $uuids, TRUE) < 1) {
+    throw new \RuntimeException('Events dashboard component must follow Accessibility alerts in Editor section 3 second.');
   }
   foreach ([['uid' => 104, 'roles' => ['authenticated', 'site_editor']], ['uid' => 0, 'roles' => ['anonymous']]] as $values) {
     $account = new UserSession($values);

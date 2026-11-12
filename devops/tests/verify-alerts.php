@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Verify site-wide alerts, public delivery and Editor dashboard integration.
+ * Verify site-wide alerts, public delivery and live dashboard blocks.
  */
 
 use Drupal\Core\Session\AnonymousUserSession;
@@ -11,15 +11,15 @@ use Drupal\dashboard\Entity\Dashboard;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-foreach (['sitewide_alert', 'sitewide_alert_block', 'views'] as $module) {
+foreach (['sitewide_alert', 'sitewide_alert_block'] as $module) {
   if (!\Drupal::moduleHandler()->moduleExists($module)) {
     throw new \RuntimeException("Alert module $module is not enabled.");
   }
 }
 
 $settings = \Drupal::config('sitewide_alert.settings');
-if ($settings->get('display_order') !== 'descending' || $settings->get('automatic_refresh') !== FALSE) {
-  throw new \RuntimeException('Alerts must display newest first with automatic refresh disabled.');
+if ($settings->get('display_order') !== 'descending' || $settings->get('automatic_refresh') !== FALSE || $settings->get('server_side_render') !== FALSE) {
+  throw new \RuntimeException('Alerts must display newest first with automatic refresh and server-side rendering disabled.');
 }
 
 $entities = \Drupal::entityTypeManager();
@@ -47,24 +47,29 @@ if (!$alert_access->createAccess(NULL, $editor) || !$alert->access('update', $ed
     || $editor->hasPermission('administer sitewide alert')) {
   throw new \RuntimeException('Site Editor must be able to manage alerts without access to global alert settings.');
 }
-$matches = [];
-foreach (Dashboard::loadMultiple() as $dashboard) {
+$dashboard_components = [];
+foreach (['site_admin' => '4110daa8-d05b-4008-9ad5-e6e9ebbcd960', 'editor' => '593fc280-4e25-4884-bd75-95c9c5299a2a'] as $id => $uuid) {
+  $dashboard = Dashboard::load($id);
+  $matches = [];
   foreach ($dashboard->getSections() as $delta => $section) {
     foreach ($section->getComponents() as $component) {
-      if ($component->getUuid() === '593fc280-4e25-4884-bd75-95c9c5299a2a' || $component->getPluginId() === 'views_block:dashboard_alerts-block_active') {
-        $matches[] = [$dashboard, $delta, $component];
+      if ($component->getUuid() === $uuid || $component->getPluginId() === 'sitewide_alert_block') {
+        $matches[] = [$delta, $component];
       }
     }
   }
-}
-if (count($matches) !== 1) {
-  throw new \RuntimeException('Dashboards must contain exactly one Site alerts component.');
-}
-[$dashboard, $delta, $component] = $matches[0];
-$components = array_values($dashboard->getSection(1)->getComponentsByRegion('second'));
-$uuids = array_map(static fn($item) => $item->getUuid(), $components);
-if ($dashboard->id() !== 'editor' || $delta !== 1 || $component->getRegion() !== 'second' || $component->getUuid() !== '593fc280-4e25-4884-bd75-95c9c5299a2a' || $component->getPluginId() !== 'views_block:dashboard_alerts-block_active' || $components[0]->getPluginId() !== 'views_block:dashboard_editorial-block_scheduled' || array_search($component->getUuid(), $uuids, TRUE) < 1) {
-  throw new \RuntimeException('Site alerts must follow Scheduled changes in Editor section 1 second.');
+  if (count($matches) !== 1) {
+    throw new \RuntimeException("Dashboard $id must contain exactly one live Site alerts component.");
+  }
+  [$delta, $component] = $matches[0];
+  $components = array_values($dashboard->getSection(0)->getComponentsByRegion('content'));
+  if ($delta !== 0 || $component->getRegion() !== 'content' || $component->getUuid() !== $uuid || $component->getPluginId() !== 'sitewide_alert_block' || $component->getPlugin()->getConfiguration()['label_display'] !== '0' || $components[0]->getUuid() !== $uuid) {
+    throw new \RuntimeException("Live Site alerts must be first in Dashboard $id section 0 content with a hidden label.");
+  }
+  if ($id === 'site_admin' && $components[1]->getPluginId() !== 'dashboard_site_status') {
+    throw new \RuntimeException('Site status must follow live Site alerts in Site admin.');
+  }
+  $dashboard_components[$id] = $component;
 }
 $tomorrow = new \DateTimeImmutable('+1 day', new \DateTimeZone('UTC'));
 $fixtures = [];
@@ -104,29 +109,21 @@ try {
       || isset($alerts[$fixtures['unpublished']->uuid()]) || isset($alerts[$fixtures['scheduled']->uuid()])) {
     throw new \RuntimeException('Anonymous alert response must contain the published message and omit unpublished and future alerts.');
   }
-  foreach ([$editor, new AnonymousUserSession()] as $account) {
-    $switcher->switchTo($account);
-    try {
+  $switcher->switchTo($editor);
+  try {
+    foreach ($dashboard_components as $id => $component) {
       $plugin = $component->getPlugin();
-      $allowed = $account->isAuthenticated();
-      if ($plugin->access($account) !== $allowed) {
-        throw new \RuntimeException('Site alerts dashboard block must allow Site Editors and deny anonymous users.');
+      if (!$plugin->access($editor)) {
+        throw new \RuntimeException("Site Editors must be able to build the live Site alerts block for $id.");
       }
       $build = $plugin->build();
-      $output = (string) \Drupal::service('renderer')->renderInIsolation($build);
-      if (!$allowed) {
-        if (trim($output) !== '') {
-          throw new \RuntimeException('Anonymous users must receive no Site alerts dashboard output.');
-        }
-        continue;
-      }
-      if (!str_contains($output, $fixtures['published']->label()) || !str_contains($output, $fixtures['scheduled']->label()) || str_contains($output, $fixtures['unpublished']->label()) || strpos($output, $fixtures['scheduled']->label()) > strpos($output, $fixtures['published']->label()) || !str_contains($output, $fixtures['published']->toUrl('edit-form')->toString()) || !str_contains($output, $tomorrow->format('Y-m-d')) || !str_contains($output, $tomorrow->modify('+1 day')->format('Y-m-d'))) {
-        throw new \RuntimeException('Site alerts dashboard must show active and future scheduled alerts newest first, with edit links and schedule dates.');
+      if (($build['#attributes']['data-sitewide-alert'] ?? NULL) !== TRUE || !in_array('sitewide_alert/init', $build['#attached']['library'] ?? [], TRUE)) {
+        throw new \RuntimeException("Dashboard $id must use Sitewide Alert client-side rendering.");
       }
     }
-    finally {
-      $switcher->switchBack();
-    }
+  }
+  finally {
+    $switcher->switchBack();
   }
 }
 finally {
@@ -134,4 +131,4 @@ finally {
   $storage->delete($fixtures);
 }
 
-print getenv('COMPOSITION') . " alert settings, block placement, anonymous delivery and Editor dashboard block verified.\n";
+print getenv('COMPOSITION') . " alert settings, block placement, anonymous delivery and live dashboard blocks verified.\n";

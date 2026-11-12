@@ -4,28 +4,42 @@ type: Site
 install:
   - sitewide_alert
   - sitewide_alert_block
-  - views
 config:
   strict: false
   actions:
+    '?dashboard.dashboard.site_admin':
+      addComponentToLayout:
+        section: 0
+        # First, above Site status.
+        position: 0
+        component:
+          # Constant so reapplying replaces this block instead of adding another.
+          uuid: 4110daa8-d05b-4008-9ad5-e6e9ebbcd960
+          region:
+            layout_onecol: content
+          default_region: content
+          configuration:
+            id: sitewide_alert_block
+            label: 'Site alerts'
+            label_display: '0'
+            provider: sitewide_alert_block
+            context_mapping: {}
     '?dashboard.dashboard.editor':
       addComponentToLayout:
-        section: 1
-        position: 99
+        section: 0
+        position: 0
         component:
           # Constant so reapplying replaces this block instead of adding another.
           uuid: 593fc280-4e25-4884-bd75-95c9c5299a2a
           region:
-            layout_twocol_section: second
+            layout_onecol: content
           default_region: content
           configuration:
-            id: 'views_block:dashboard_alerts-block_active'
+            id: sitewide_alert_block
             label: 'Site alerts'
-            label_display: visible
-            provider: views
+            label_display: '0'
+            provider: sitewide_alert_block
             context_mapping: {}
-            views_label: ''
-            items_per_page: none
     sitewide_alert.settings:
       simpleConfigUpdate:
         display_order: descending

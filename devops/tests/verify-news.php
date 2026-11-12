@@ -93,10 +93,10 @@ try {
     throw new \RuntimeException('Dashboards must contain exactly one News component.');
   }
   [$dashboard, $delta, $component] = $news_components[0];
-  $components = array_values($dashboard->getSection(2)->getComponentsByRegion('first'));
+  $components = array_values($dashboard->getSection(3)->getComponentsByRegion('first'));
   $uuids = array_map(static fn($item) => $item->getUuid(), $components);
-  if ($dashboard->id() !== 'editor' || $delta !== 2 || $component->getRegion() !== 'first' || $component->getUuid() !== '4520663a-c6bd-4c2e-8bc5-e361f3e12c46' || $component->getPluginId() !== 'views_block:dashboard_news-block_recent' || $components[0]->getPluginId() !== 'views_block:dashboard_editorial-block_recent' || array_search($component->getUuid(), $uuids, TRUE) < 1) {
-    throw new \RuntimeException('News dashboard component must follow Recently updated in Editor section 2 first.');
+  if ($dashboard->id() !== 'editor' || $delta !== 3 || $component->getRegion() !== 'first' || $component->getUuid() !== '4520663a-c6bd-4c2e-8bc5-e361f3e12c46' || $component->getPluginId() !== 'views_block:dashboard_news-block_recent' || $components[0]->getPluginId() !== 'views_block:dashboard_editorial-block_recent' || array_search($component->getUuid(), $uuids, TRUE) < 1) {
+    throw new \RuntimeException('News dashboard component must follow Recently updated in Editor section 3 first.');
   }
   foreach ([['uid' => 103, 'roles' => ['authenticated', 'site_editor']], ['uid' => 0, 'roles' => ['anonymous']]] as $values) {
     $account = new UserSession($values);

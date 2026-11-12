@@ -32,6 +32,8 @@ Packages can append blocks to these zero-based sections and regions. Preserve
 the baseline blocks and their order. Site owners can customize the layouts after
 installation; reapplying this recipe preserves existing dashboard configuration.
 
+Section 0, Status, is full width on both dashboards and comes first. Packages add notices there at position 0, ahead of any baseline block.
+
 | Dashboard    | Section | Label        | Layout                          | Region    | Baseline blocks                          |
 | ------------ | ------- | ------------ | ------------------------------- | --------- | ---------------------------------------- |
 | `site_admin` | 0       | Status       | `layout_onecol`                 | `content` | Site status                              |
@@ -39,12 +41,13 @@ installation; reapplying this recipe preserves existing dashboard configuration.
 | `site_admin` | 1       | Activity     | `layout_twocol_section` (50–50) | `second`  | Recent sign-ins                          |
 | `site_admin` | 2       | Top errors   | `layout_twocol_section` (50–50) | `first`   | Top page not found errors                |
 | `site_admin` | 2       | Top errors   | `layout_twocol_section` (50–50) | `second`  | Top access denied errors                 |
-| `editor`     | 0       | Start        | `layout_twocol_section` (67–33) | `first`   | Welcome and help                         |
-| `editor`     | 0       | Start        | `layout_twocol_section` (67–33) | `second`  | Create                                   |
-| `editor`     | 1       | Your work    | `layout_twocol_section` (50–50) | `first`   | Drafts in progress                       |
-| `editor`     | 1       | Your work    | `layout_twocol_section` (50–50) | `second`  | Scheduled changes                        |
-| `editor`     | 2       | Site content | `layout_twocol_section` (50–50) | `first`   | Recently updated                         |
-| `editor`     | 2       | Site content | `layout_twocol_section` (50–50) | `second`  | Accessibility alerts                     |
+| `editor`     | 0       | Status       | `layout_onecol`                 | `content` | None                                     |
+| `editor`     | 1       | Start        | `layout_twocol_section` (67–33) | `first`   | Welcome and help                         |
+| `editor`     | 1       | Start        | `layout_twocol_section` (67–33) | `second`  | Create                                   |
+| `editor`     | 2       | Your work    | `layout_twocol_section` (50–50) | `first`   | Drafts in progress                       |
+| `editor`     | 2       | Your work    | `layout_twocol_section` (50–50) | `second`  | Scheduled changes                        |
+| `editor`     | 3       | Site content | `layout_twocol_section` (50–50) | `first`   | Recently updated                         |
+| `editor`     | 3       | Site content | `layout_twocol_section` (50–50) | `second`  | Accessibility alerts                     |
 
 ## Install and apply
 
