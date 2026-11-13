@@ -60,15 +60,18 @@ foreach (['landscape', 'portrait', 'square'] as $aspect) {
   }
 }
 
-foreach (['editoria11y', 'gin_login', 'twig_tweak', 'role_delegation', 'menu_admin_per_menu', 'menu_block', 'menu_link_content'] as $module) {
+foreach (['editoria11y', 'gin_login', 'twig_tweak', 'administerusersbyrole', 'role_delegation', 'menu_admin_per_menu', 'menu_block', 'menu_link_content'] as $module) {
   $checks["baseline.$module"] = $modules->moduleExists($module);
 }
 
 $editor = Role::load('site_editor');
 $account = new UserSession(['uid' => 1234, 'roles' => ['authenticated', 'site_editor']]);
 $checks['Site Admin role'] = $editor?->label() === 'Site Admin' && !$editor->isAdmin();
-$checks['site admin can administer users'] = $account->hasPermission('administer users');
-foreach (['administer modules', 'administer site configuration', 'administer permissions', 'administer content types', 'administer workflows', 'assign all roles', 'assign superuser role'] as $permission) {
+$checks['site admin cannot administer all users'] = !$account->hasPermission('administer users');
+$checks['site admin can create users'] = $entities->getAccessControlHandler('user')->createAccess(NULL, $account);
+$checks['Site Admin role is safe'] = \Drupal::config('administerusersbyrole.settings')->get('roles.site_editor') === 'safe';
+$checks['Superuser role is unmanaged'] = !isset(\Drupal::service('administerusersbyrole.access')->managedRoles()['superuser']);
+foreach (['administer modules', 'administer site configuration', 'administer permissions', 'administer content types', 'administer workflows', 'assign all roles', 'assign superuser role', 'role-assign users by role'] as $permission) {
   $checks["editor denied $permission"] = !$account->hasPermission($permission);
 }
 $delegation = \Drupal::service('delegatable_roles');
@@ -77,6 +80,38 @@ $checks['site admin can only delegate Site Admin'] = array_keys($delegation->get
 $checks['superuser can delegate all custom roles'] = array_keys($delegation->getAssignableRoles($superuser)) === array_keys($delegation->getAllRoles());
 $checks['site admin uses account form for roles'] = !\Drupal::service('access_check.role_delegation')->access($account)->isAllowed();
 $switcher = \Drupal::service('account_switcher');
+$test_users = [];
+try {
+  foreach (['authenticated' => [], 'site_editor' => ['site_editor'], 'superuser' => ['superuser'], 'superuser_site_editor' => ['superuser', 'site_editor']] as $id => $roles) {
+    $test_users[$id] = $entities->getStorage('user')->create(['name' => "Sous account verification $id", 'status' => 1, 'roles' => $roles]);
+    $test_users[$id]->save();
+    $allowed = !in_array('superuser', $roles, TRUE);
+    foreach (['update', 'delete'] as $operation) {
+      $checks["user $operation.$id"] = $test_users[$id]->access($operation, $account) === $allowed;
+    }
+    $checks["user status edit.$id"] = $test_users[$id]->get('status')->access('edit', $account) === $allowed;
+  }
+  $switcher->switchTo($account);
+  try {
+    $people = Views::getView('administerusersbyrole_people');
+    $people->setDisplay('page_1');
+    $checks['site admin People access'] = $people->access('page_1', $account);
+    $people->setItemsPerPage(0);
+    $people->execute();
+    $listed = array_map(static fn($row) => (string) $row->_entity->id(), $people->result);
+    foreach ($test_users as $id => $user) {
+      $checks["People lists.$id"] = in_array((string) $user->id(), $listed, TRUE) === !$user->hasRole('superuser');
+    }
+  }
+  finally {
+    $switcher->switchBack();
+  }
+}
+finally {
+  foreach ($test_users as $user) {
+    $user->delete();
+  }
+}
 $switcher->switchTo($account);
 try {
   foreach (['default', 'register'] as $operation) {

@@ -41,6 +41,7 @@ install:
   - no_nbsp
   # Install Publication Date
   - publication_date
+  - administerusersbyrole
   - role_delegation
   # Install Save and Edit
   - save_edit
@@ -65,6 +66,8 @@ config:
     - block.block.gin_primary_local_tasks
     - block.block.gin_secondary_local_tasks
   import:
+    administerusersbyrole:
+      - views.view.administerusersbyrole_people
     gin:
       - gin.settings
       - block.block.gin_breadcrumbs
@@ -123,11 +126,14 @@ config:
         - 'access taxonomy overview'
         - 'access trash'
         - 'access user profiles'
+        - 'access users overview'
         - 'administer footer menu items'
         - 'administer main menu items'
-        - 'administer users'
         - 'assign site_editor role'
+        - 'cancel users by role'
+        - 'create users'
         - 'delete any file'
+        - 'edit users by role'
         - 'mark as hidden in editoria11y'
         - 'schedule publishing of nodes'
         - 'use editorial transition archive_unpublish'
@@ -190,3 +196,7 @@ config:
     system.theme:
       simpleConfigUpdate:
         admin: gin
+    # Role saves rewrite these settings, so set Safe after all role grants.
+    administerusersbyrole.settings:
+      simpleConfigUpdate:
+        roles.site_editor: safe
