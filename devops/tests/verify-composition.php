@@ -60,7 +60,7 @@ foreach (['landscape', 'portrait', 'square'] as $aspect) {
   }
 }
 
-foreach (['editoria11y', 'gin_login', 'twig_tweak', 'administerusersbyrole', 'role_delegation', 'menu_admin_per_menu', 'menu_block', 'menu_link_content'] as $module) {
+foreach (['editoria11y', 'gin_login', 'twig_tweak', 'administerusersbyrole', 'config_perms', 'role_delegation', 'menu_admin_per_menu', 'menu_block', 'menu_link_content'] as $module) {
   $checks["baseline.$module"] = $modules->moduleExists($module);
 }
 
@@ -71,14 +71,15 @@ $checks['site admin cannot administer all users'] = !$account->hasPermission('ad
 $checks['site admin can create users'] = $entities->getAccessControlHandler('user')->createAccess(NULL, $account);
 $checks['Site Admin role is safe'] = \Drupal::config('administerusersbyrole.settings')->get('roles.site_editor') === 'safe';
 $checks['Superuser role is unmanaged'] = !isset(\Drupal::service('administerusersbyrole.access')->managedRoles()['superuser']);
-foreach (['administer modules', 'administer site configuration', 'administer permissions', 'administer content types', 'administer workflows', 'assign all roles', 'assign superuser role', 'role-assign users by role'] as $permission) {
+foreach (['administer modules', 'administer site configuration', 'administer permissions', 'administer content types', 'administer workflows', 'assign all roles', 'assign superuser role', 'role-assign users by role', 'Access standalone role assignment'] as $permission) {
   $checks["editor denied $permission"] = !$account->hasPermission($permission);
 }
 $delegation = \Drupal::service('delegatable_roles');
 $superuser = new UserSession(['uid' => 1235, 'roles' => ['authenticated', 'superuser']]);
 $checks['site admin can only delegate Site Admin'] = array_keys($delegation->getAssignableRoles($account)) === ['site_editor'];
 $checks['superuser can delegate all custom roles'] = array_keys($delegation->getAssignableRoles($superuser)) === array_keys($delegation->getAllRoles());
-$checks['site admin uses account form for roles'] = !\Drupal::service('access_check.role_delegation')->access($account)->isAllowed();
+$access_manager = \Drupal::service('access_manager');
+$checks['only standalone roles permission mapping'] = $storage->listAll('config_perms.custom_perms_entity.') === ['config_perms.custom_perms_entity.standalone_role_assignment'];
 $switcher = \Drupal::service('account_switcher');
 $test_users = [];
 try {
@@ -90,6 +91,8 @@ try {
       $checks["user $operation.$id"] = $test_users[$id]->access($operation, $account) === $allowed;
     }
     $checks["user status edit.$id"] = $test_users[$id]->get('status')->access('edit', $account) === $allowed;
+    $checks["site admin uses account form for roles.$id"] = !$access_manager->checkNamedRoute('role_delegation.edit_form', ['user' => $test_users[$id]->id()], $account);
+    $checks["superuser standalone roles access.$id"] = $access_manager->checkNamedRoute('role_delegation.edit_form', ['user' => $test_users[$id]->id()], $superuser);
   }
   $switcher->switchTo($account);
   try {

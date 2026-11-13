@@ -40,14 +40,18 @@ Admin accounts. They cannot edit, block or cancel any account with the Superuser
 role, including accounts that also have Site Admin. The People list hides those
 protected accounts. Role Delegation lets Site Admins assign or remove only Site
 Admin on the account edit form; they cannot assign or remove Superuser.
+Custom Permissions reserves the separate Roles page for Superusers. Keep
+`Access standalone role assignment` Superuser-only so that page cannot bypass
+the account edit restrictions.
 A project's new roles stay unmanaged until a Superuser marks them Safe (shown as
 Allowed) at Configuration › People › Administer Users by Role and grants
 `Assign <role> role` to Site Admin. Drupal gives every signed-in user the
 Authenticated role automatically.
 
-Administer Users by Role, Autosave Form, Config Log, Editoria11y, Entity Usage,
-Gin Login, Login History, Menu Admin per Menu, Menu Block, Role Delegation, Save and Edit, Tagify,
-Trash, Twig Tweak, Views AJAX History and Views Bulk Operations are enabled by default. A project
+Administer Users by Role, Autosave Form, Config Log, Custom Permissions,
+Editoria11y, Entity Usage, Gin Login, Login History, Menu Admin per Menu, Menu
+Block, Role Delegation, Save and Edit, Tagify, Trash, Twig Tweak, Views AJAX
+History and Views Bulk Operations are enabled by default. A project
 can replace them through a project-owned recipe or reviewed module uninstall or
 configuration change. Removing a Composer
 requirement or recipe entry alone does not uninstall a module or preserve its data.

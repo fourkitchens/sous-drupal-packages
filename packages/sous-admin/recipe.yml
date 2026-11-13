@@ -42,6 +42,7 @@ install:
   # Install Publication Date
   - publication_date
   - administerusersbyrole
+  - config_perms
   - role_delegation
   # Install Save and Edit
   - save_edit
