@@ -67,7 +67,7 @@ config:
             context_mapping: {}
             views_label: ''
             items_per_page: none
-    '?user.role.site_editor':
+    '?user.role.site_admin':
       grantPermissions:
         - 'create url aliases'
         - 'access event_content_browser entity browser pages'

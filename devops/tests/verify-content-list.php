@@ -26,7 +26,7 @@ $bundles = ['content_list', 'content_list_item'];
 $checks = [
   'browser' => $storage->exists('entity_browser.browser.content_list_browser'),
   'browser View' => $storage->exists('views.view.content_list_browser'),
-  'editor browser access' => Role::load('site_editor')->hasPermission('access content_list_browser entity browser pages'),
+  'editor browser access' => Role::load('site_admin')->hasPermission('access content_list_browser entity browser pages'),
 ];
 foreach (['paragraphs.paragraphs_type' => 'paragraph', 'block_content.type' => 'block_content'] as $prefix => $type) {
   $checks["$type uses a single item bundle"] = !$storage->exists("$prefix.content_list_teaser");

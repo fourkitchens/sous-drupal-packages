@@ -64,26 +64,26 @@ foreach (['editoria11y', 'gin_login', 'twig_tweak', 'administerusersbyrole', 'co
   $checks["baseline.$module"] = $modules->moduleExists($module);
 }
 
-$editor = Role::load('site_editor');
-$account = new UserSession(['uid' => 1234, 'roles' => ['authenticated', 'site_editor']]);
+$editor = Role::load('site_admin');
+$account = new UserSession(['uid' => 1234, 'roles' => ['authenticated', 'site_admin']]);
 $checks['Site Admin role'] = $editor?->label() === 'Site Admin' && !$editor->isAdmin();
 $checks['site admin cannot administer all users'] = !$account->hasPermission('administer users');
 $checks['site admin can create users'] = $entities->getAccessControlHandler('user')->createAccess(NULL, $account);
-$checks['Site Admin role is safe'] = \Drupal::config('administerusersbyrole.settings')->get('roles.site_editor') === 'safe';
+$checks['Site Admin role is safe'] = \Drupal::config('administerusersbyrole.settings')->get('roles.site_admin') === 'safe';
 $checks['Superuser role is unmanaged'] = !isset(\Drupal::service('administerusersbyrole.access')->managedRoles()['superuser']);
 foreach (['administer modules', 'administer site configuration', 'administer permissions', 'administer content types', 'administer workflows', 'assign all roles', 'assign superuser role', 'role-assign users by role', 'Access standalone role assignment'] as $permission) {
   $checks["editor denied $permission"] = !$account->hasPermission($permission);
 }
 $delegation = \Drupal::service('delegatable_roles');
 $superuser = new UserSession(['uid' => 1235, 'roles' => ['authenticated', 'superuser']]);
-$checks['site admin can only delegate Site Admin'] = array_keys($delegation->getAssignableRoles($account)) === ['site_editor'];
+$checks['site admin can only delegate Site Admin'] = array_keys($delegation->getAssignableRoles($account)) === ['site_admin'];
 $checks['superuser can delegate all custom roles'] = array_keys($delegation->getAssignableRoles($superuser)) === array_keys($delegation->getAllRoles());
 $access_manager = \Drupal::service('access_manager');
 $checks['only standalone roles permission mapping'] = $storage->listAll('config_perms.custom_perms_entity.') === ['config_perms.custom_perms_entity.standalone_role_assignment'];
 $switcher = \Drupal::service('account_switcher');
 $test_users = [];
 try {
-  foreach (['authenticated' => [], 'site_editor' => ['site_editor'], 'superuser' => ['superuser'], 'superuser_site_editor' => ['superuser', 'site_editor']] as $id => $roles) {
+  foreach (['authenticated' => [], 'site_admin' => ['site_admin'], 'superuser' => ['superuser'], 'superuser_site_admin' => ['superuser', 'site_admin']] as $id => $roles) {
     $test_users[$id] = $entities->getStorage('user')->create(['name' => "Sous account verification $id", 'status' => 1, 'roles' => $roles]);
     $test_users[$id]->save();
     $allowed = !in_array('superuser', $roles, TRUE);
@@ -123,23 +123,23 @@ try {
       $target->set('uid', 1238)->enforceIsNew(FALSE);
     }
     $form = \Drupal::service('entity.form_builder')->getForm($target, $operation);
-    $checks["restricted role widget.$operation"] = $form['role_change']['#access'] === TRUE && array_keys($form['role_change']['widget']['#options']) === ['site_editor'] && $form['account']['roles']['#access'] === FALSE;
+    $checks["restricted role widget.$operation"] = $form['role_change']['#access'] === TRUE && array_keys($form['role_change']['widget']['#options']) === ['site_admin'] && $form['account']['roles']['#access'] === FALSE;
   }
-  $target = $entities->getStorage('user')->create(['roles' => ['superuser', 'site_editor'], 'role_change' => []]);
+  $target = $entities->getStorage('user')->create(['roles' => ['superuser', 'site_admin'], 'role_change' => []]);
   $modules->invoke('role_delegation', 'user_presave', [$target]);
-  $checks['delegation preserves Superuser when removing Site Admin'] = $target->hasRole('superuser') && !$target->hasRole('site_editor');
-  $target = $entities->getStorage('user')->create(['role_change' => [['target_id' => 'superuser'], ['target_id' => 'site_editor']]]);
+  $checks['delegation preserves Superuser when removing Site Admin'] = $target->hasRole('superuser') && !$target->hasRole('site_admin');
+  $target = $entities->getStorage('user')->create(['role_change' => [['target_id' => 'superuser'], ['target_id' => 'site_admin']]]);
   $modules->invoke('role_delegation', 'user_presave', [$target]);
-  $checks['delegation rejects Superuser when assigning Site Admin'] = !$target->hasRole('superuser') && $target->hasRole('site_editor');
+  $checks['delegation rejects Superuser when assigning Site Admin'] = !$target->hasRole('superuser') && $target->hasRole('site_admin');
 }
 finally {
   $switcher->switchBack();
 }
 
-foreach (Role::loadMultiple(['anonymous', 'authenticated', 'site_editor']) as $id => $role) {
+foreach (Role::loadMultiple(['anonymous', 'authenticated', 'site_admin']) as $id => $role) {
   $menu_permissions = array_filter($role->getPermissions(), static fn($permission) => preg_match('/^administer .+ menu items$/', $permission));
   sort($menu_permissions);
-  $expected = $id === 'site_editor' ? ['administer footer menu items', 'administer main menu items'] : [];
+  $expected = $id === 'site_admin' ? ['administer footer menu items', 'administer main menu items'] : [];
   $checks["menu permissions.$id"] = !$role->hasPermission('administer menu') && $menu_permissions === $expected;
 }
 $menu_manager = \Drupal::service('plugin.manager.menu.link');
@@ -157,7 +157,7 @@ $menu_role->save();
 try {
   $menu_accounts = [
     'superuser' => $superuser,
-    'site_editor' => $account,
+    'site_admin' => $account,
     'authenticated' => new UserSession(['uid' => 1236, 'roles' => ['authenticated']]),
     'footer' => new UserSession(['uid' => 1237, 'roles' => ['authenticated', $menu_role->id()]]),
   ];
@@ -166,9 +166,9 @@ try {
   foreach ($menu_accounts as $id => $menu_account) {
     $switcher->switchTo($menu_account);
     try {
-      $checks["menu collection.$id"] = $access_manager->checkNamedRoute('entity.menu.collection', [], $menu_account) === in_array($id, ['superuser', 'site_editor', 'footer'], TRUE);
+      $checks["menu collection.$id"] = $access_manager->checkNamedRoute('entity.menu.collection', [], $menu_account) === in_array($id, ['superuser', 'site_admin', 'footer'], TRUE);
       foreach (['account', 'admin', 'content', 'dashboard-create', 'footer', 'main', 'tools'] as $menu_id) {
-        $allowed = $id === 'superuser' || ($id === 'site_editor' && in_array($menu_id, ['footer', 'main'], TRUE)) || ($id === 'footer' && $menu_id === 'footer');
+        $allowed = $id === 'superuser' || ($id === 'site_admin' && in_array($menu_id, ['footer', 'main'], TRUE)) || ($id === 'footer' && $menu_id === 'footer');
         $checks["menu edit.$id.$menu_id"] = $access_manager->checkNamedRoute('entity.menu.edit_form', ['menu' => $menu_id], $menu_account) === $allowed;
       }
       $tree = $menu_tree->load('content', (new MenuTreeParameters())->onlyEnabledLinks());
@@ -177,7 +177,7 @@ try {
       foreach ($tree as $item) {
         $menu_access[$item->link->getPluginId()] = $item->access->isAllowed();
       }
-      $checks["Content Menus access.$id"] = ($menu_access[$menus_plugin] ?? NULL) === in_array($id, ['superuser', 'site_editor', 'footer'], TRUE);
+      $checks["Content Menus access.$id"] = ($menu_access[$menus_plugin] ?? NULL) === in_array($id, ['superuser', 'site_admin', 'footer'], TRUE);
     }
     finally {
       $switcher->switchBack();
@@ -189,6 +189,22 @@ finally {
 }
 foreach (['archive_unpublish', 'create_new_draft', 'publish'] as $transition) {
   $checks["editor transition.$transition"] = $account->hasPermission("use editorial transition $transition");
+}
+foreach (['schedule publishing of media', 'view scheduled media', 'create terms in media_tags', 'edit terms in media_tags', 'delete terms in media_tags'] as $permission) {
+  $checks["Site Admin media permission.$permission"] = $account->hasPermission($permission);
+}
+foreach (array_keys($media_types->loadMultiple()) as $bundle) {
+  foreach (['view', 'revert', 'delete'] as $operation) {
+    $checks["Site Admin media revisions.$operation.$bundle"] = $account->hasPermission("$operation any $bundle media revisions");
+  }
+}
+if ($content) {
+  $checks['Site Admin URL aliases'] = $account->hasPermission('create url aliases');
+}
+if ($case === 'core-layout-builder') {
+  foreach (['administer block content', 'create and edit custom blocks'] as $permission) {
+    $checks["Site Admin block permission.$permission"] = $account->hasPermission($permission);
+  }
 }
 foreach (['node', 'media', 'taxonomy_term', 'block_content'] as $entity_type) {
   $access = $entities->getAccessControlHandler($entity_type);
@@ -207,6 +223,12 @@ foreach (['page', 'frontpage'] as $type) {
   $checks["layout.$type"] = (bool) $display?->getThirdPartySetting('layout_builder', 'enabled', FALSE) === ($case === 'core-layout-builder');
   if (!$content) {
     continue;
+  }
+  foreach (['view', 'revert', 'delete'] as $operation) {
+    $checks["Site Admin content revisions.$operation.$type"] = $account->hasPermission("$operation $type revisions");
+  }
+  if ($case === 'core-layout-builder') {
+    $checks["Site Admin layout override.$type"] = $account->hasPermission("configure editable $type node layout overrides");
   }
   $form = $entities->getStorage('entity_form_display')->load("node.$type.default");
   $groups = $form->getThirdPartySettings('field_group');
@@ -283,6 +305,9 @@ foreach (['local', 'staging'] as $id) {
   $checks[$name] = $storage->exists($name) && \Drupal::config($name)->get('status') === FALSE;
 }
 if ($paragraphs) {
+  foreach (['access component_library entity browser pages', 'administer paragraphs library', 'bypass paragraphs type content access', 'duplicate layout paragraphs components', 'edit layout paragraphs plugin config', 'reorder layout paragraphs components'] as $permission) {
+    $checks["Site Admin paragraphs permission.$permission"] = $account->hasPermission($permission);
+  }
   $widget_settings = \Drupal::config('layout_paragraphs.widget_settings');
   $checks['component menu'] = $widget_settings->get('display_mode') === 'grid' && $widget_settings->get('show_search') && $widget_settings->get('show_icons') && $widget_settings->get('show_description');
   $modal = \Drupal::config('layout_paragraphs.modal_settings');

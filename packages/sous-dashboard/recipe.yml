@@ -19,7 +19,7 @@ config:
     scheduler:
       - views.view.scheduler_scheduled_content
   actions:
-    '?user.role.site_editor':
+    '?user.role.site_admin':
       grantPermissions:
         - 'view editor dashboard'
     # Recipes install modules in sync mode, so Navigation skips Dashboard's link.

@@ -13,6 +13,7 @@ use Drupal\node\Entity\Node;
 use Drupal\smart_date_recur\Entity\SmartDateRule;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
 use Drupal\views\Views;
 
@@ -33,6 +34,11 @@ $checks = [
 if ($case === 'paragraphs') {
   $checks['paragraph widget'] = $form->getRenderer('field_content')->getPluginId() === 'layout_paragraphs' && $display->getRenderer('field_content')->getPluginId() === 'layout_paragraphs';
 }
+$site_admin = Role::load('site_admin');
+foreach (['create url aliases', 'access event_content_browser entity browser pages', 'create terms in event_types', 'edit terms in event_types', 'delete terms in event_types', 'create event content', 'edit any event content', 'delete any event content', 'view event revisions', 'revert event revisions', 'delete event revisions'] as $permission) {
+  $checks["Site Admin permission.$permission"] = $site_admin->hasPermission($permission);
+}
+$checks['Site Admin layout overrides'] = $site_admin->hasPermission('configure editable event node layout overrides') === ($case === 'core-layout-builder');
 foreach ($checks as $name => $passed) {
   if (!$passed) {
     throw new \RuntimeException("$case event $name failed.");
@@ -159,7 +165,7 @@ try {
   if ($dashboard_id !== 'editor' || $delta !== 3 || $component->getRegion() !== 'second' || $component->getUuid() !== '8d154da9-bc87-4a1b-ac37-503078f598ec' || $component->getPluginId() !== 'views_block:dashboard_events-block_upcoming' || $components[0]->getPluginId() !== 'views_block:dashboard_accessibility-block_alerts' || array_search($component->getUuid(), $uuids, TRUE) < 1) {
     throw new \RuntimeException('Events dashboard component must follow Accessibility alerts in Editor section 3 second.');
   }
-  foreach ([['uid' => 104, 'roles' => ['authenticated', 'site_editor']], ['uid' => 0, 'roles' => ['anonymous']]] as $values) {
+  foreach ([['uid' => 104, 'roles' => ['authenticated', 'site_admin']], ['uid' => 0, 'roles' => ['anonymous']]] as $values) {
     $account = new UserSession($values);
     $account_switcher->switchTo($account);
     try {

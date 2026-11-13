@@ -6,6 +6,7 @@
  */
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Session\UserSession;
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\layout_paragraphs\Controller\ChooseComponentController;
 use Drupal\layout_paragraphs\LayoutParagraphsLayout;
@@ -72,6 +73,12 @@ try {
   $formats = FilterFormat::loadMultiple(['basic_html', 'full_html', 'limited_html', 'restricted_html']);
   if (count($formats) !== 4) {
     throw new \RuntimeException('A provided HTML format is missing.');
+  }
+  $site_admin = new UserSession(['uid' => 1234, 'roles' => ['authenticated', 'site_admin']]);
+  foreach (['basic_html', 'limited_html', 'restricted_html'] as $id) {
+    if (!$formats[$id]->access('use', $site_admin)) {
+      throw new \RuntimeException("Site Admin cannot use the $id text format.");
+    }
   }
   if ($formats) {
     $node = Node::create(['type' => $bundles[0], 'uid' => 1, 'title' => 'Authoring filter target', 'moderation_state' => 'published']);

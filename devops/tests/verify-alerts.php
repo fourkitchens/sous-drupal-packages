@@ -40,7 +40,7 @@ foreach ($blocks->loadByProperties(['theme' => $theme, 'region' => 'content_top'
 
 $storage = $entities->getStorage('sitewide_alert');
 
-$editor = new UserSession(['uid' => 1234, 'roles' => ['authenticated', 'site_editor']]);
+$editor = new UserSession(['uid' => 1234, 'roles' => ['authenticated', 'site_admin']]);
 $alert_access = $entities->getAccessControlHandler('sitewide_alert');
 $alert = $storage->create(['status' => FALSE, 'user_id' => 1]);
 if (!$alert_access->createAccess(NULL, $editor) || !$alert->access('update', $editor)
@@ -65,7 +65,7 @@ foreach ($menu_links as $uuid => [$title, $menu, $parent, $route, $path]) {
 }
 $switcher = \Drupal::service('account_switcher');
 $menu_tree = \Drupal::menuTree();
-foreach (['site_editor' => $editor, 'superuser' => new UserSession(['uid' => 1235, 'roles' => ['authenticated', 'superuser']]), 'authenticated' => new UserSession(['uid' => 1236, 'roles' => ['authenticated']])] as $role => $account) {
+foreach (['site_admin' => $editor, 'superuser' => new UserSession(['uid' => 1235, 'roles' => ['authenticated', 'superuser']]), 'authenticated' => new UserSession(['uid' => 1236, 'roles' => ['authenticated']])] as $role => $account) {
   $switcher->switchTo($account);
   try {
     foreach (['dashboard-create', 'content'] as $menu) {
@@ -95,7 +95,7 @@ foreach (['site_editor' => $editor, 'superuser' => new UserSession(['uid' => 123
           throw new \RuntimeException("The $role account has incorrect access to Alert menu link $uuid.");
         }
       }
-      if ($role === 'site_editor' && ($menu === 'dashboard-create' || getenv('COMPOSITION') !== 'admin')) {
+      if ($role === 'site_admin' && ($menu === 'dashboard-create' || getenv('COMPOSITION') !== 'admin')) {
         $position = array_search('admin/content/sitewide_alert/add', $create_paths, TRUE);
         $nodes = array_keys(array_filter($create_paths, static fn($path) => str_starts_with($path, 'node/add/')));
         if ($position === FALSE || ($nodes && max($nodes) >= $position) || ($menu === 'dashboard-create' && $position >= array_search('media/add/file', $create_paths, TRUE))) {

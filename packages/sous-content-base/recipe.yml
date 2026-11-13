@@ -26,7 +26,7 @@ config:
     node:
       - core.entity_view_mode.node.teaser
   actions:
-    '?user.role.site_editor':
+    '?user.role.site_admin':
       grantPermissions:
         - 'create url aliases'
         - 'access page_content_browser entity browser pages'

@@ -11,6 +11,7 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
 use Drupal\views\Views;
 
@@ -30,6 +31,11 @@ $checks = [
 if ($case === 'paragraphs') {
   $checks['paragraph widget'] = $form->getRenderer('field_content')->getPluginId() === 'layout_paragraphs' && $display->getRenderer('field_content')->getPluginId() === 'layout_paragraphs';
 }
+$site_admin = Role::load('site_admin');
+foreach (['create url aliases', 'access news_content_browser entity browser pages', 'create terms in news_categories', 'edit terms in news_categories', 'delete terms in news_categories', 'create news_post content', 'edit any news_post content', 'delete any news_post content', 'view news_post revisions', 'revert news_post revisions', 'delete news_post revisions'] as $permission) {
+  $checks["Site Admin permission.$permission"] = $site_admin->hasPermission($permission);
+}
+$checks['Site Admin layout overrides'] = $site_admin->hasPermission('configure editable news_post node layout overrides') === ($case === 'core-layout-builder');
 foreach ($checks as $name => $passed) {
   if (!$passed) {
     throw new \RuntimeException("$case news $name failed.");
@@ -98,7 +104,7 @@ try {
   if ($dashboard->id() !== 'editor' || $delta !== 3 || $component->getRegion() !== 'first' || $component->getUuid() !== '4520663a-c6bd-4c2e-8bc5-e361f3e12c46' || $component->getPluginId() !== 'views_block:dashboard_news-block_recent' || $components[0]->getPluginId() !== 'views_block:dashboard_editorial-block_recent' || array_search($component->getUuid(), $uuids, TRUE) < 1) {
     throw new \RuntimeException('News dashboard component must follow Recently updated in Editor section 3 first.');
   }
-  foreach ([['uid' => 103, 'roles' => ['authenticated', 'site_editor']], ['uid' => 0, 'roles' => ['anonymous']]] as $values) {
+  foreach ([['uid' => 103, 'roles' => ['authenticated', 'site_admin']], ['uid' => 0, 'roles' => ['anonymous']]] as $values) {
     $account = new UserSession($values);
     $account_switcher->switchTo($account);
     try {

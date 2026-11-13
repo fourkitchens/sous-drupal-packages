@@ -33,7 +33,7 @@ applied to the site. The role can use the configured content browsers and does n
 grant module, configuration, role or permission administration. Keep project-owned
 role changes in the complete site export.
 
-Site Admin retains the machine name `site_editor`.
+Site Admin uses the machine name `site_admin`.
 Superusers can assign every custom role from the account edit form. Site Admins
 can create team accounts and edit, block or cancel authenticated-only and Site
 Admin accounts. They cannot edit, block or cancel any account with the Superuser

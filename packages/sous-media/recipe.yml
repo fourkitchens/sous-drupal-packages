@@ -119,7 +119,7 @@ config:
     # Contrib.
     focal_point: '*'
   actions:
-    '?user.role.site_editor':
+    '?user.role.site_admin':
       grantPermissions:
         - 'schedule publishing of media'
         - 'view scheduled media'

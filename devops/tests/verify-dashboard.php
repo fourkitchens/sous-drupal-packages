@@ -120,15 +120,15 @@ try {
       $wids = array_merge($wids, \Drupal::database()->select('watchdog', 'w')->fields('w', ['wid'])->condition('wid', $previous_wid, '>')->condition('type', $channel)->condition('location', $request->getUri())->execute()->fetchCol());
     }
   }
-  foreach (['superuser' => 'site_admin', 'site_editor' => 'editor', 'authenticated' => NULL] as $role => $default) {
-    $account = new UserSession(['uid' => 100 + array_search($role, ['superuser', 'site_editor', 'authenticated'], TRUE), 'roles' => array_unique(['authenticated', $role])]);
+  foreach (['superuser' => 'site_admin', 'site_admin' => 'editor', 'authenticated' => NULL] as $role => $default) {
+    $account = new UserSession(['uid' => 100 + array_search($role, ['superuser', 'site_admin', 'authenticated'], TRUE), 'roles' => array_unique(['authenticated', $role])]);
     $switcher->switchTo($account);
     try {
-      if (\Drupal::service('dashboard.manager')->getDefaultDashboard()?->id() !== $default || ($role === 'site_editor' && $account->hasPermission('administer dashboard'))) {
+      if (\Drupal::service('dashboard.manager')->getDefaultDashboard()?->id() !== $default || ($role === 'site_admin' && $account->hasPermission('administer dashboard'))) {
         throw new \RuntimeException("The $role dashboard selection or administration permission is incorrect.");
       }
       foreach ($dashboards as $id => $dashboard) {
-        $allowed = $role === 'superuser' || ($role === 'site_editor' && $id === 'editor');
+        $allowed = $role === 'superuser' || ($role === 'site_admin' && $id === 'editor');
         if ($dashboard->access('view', $account) !== $allowed || \Drupal::service('access_manager')->checkNamedRoute('entity.dashboard.canonical', ['dashboard' => $id], $account) !== $allowed) {
           throw new \RuntimeException("The $role account has incorrect access to $id.");
         }
@@ -200,7 +200,7 @@ try {
           }
         }
       }
-      if ($role === 'site_editor') {
+      if ($role === 'site_admin') {
         foreach ($fixtures as [$display]) {
           if (Views::getView('dashboard_top_errors')->access($display, $account)) {
             throw new \RuntimeException("Site Admins must not access Dashboard display $display.");

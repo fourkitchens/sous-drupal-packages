@@ -10,10 +10,17 @@ use Drupal\Core\Session\UserSession;
 use Drupal\dashboard\Entity\Dashboard;
 use Drupal\media\Entity\Media;
 use Drupal\node\Entity\Node;
+use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
 use Drupal\workflows\Entity\Workflow;
 use Drupal\views\Views;
 
+$site_admin = Role::load('site_admin');
+foreach (['create url aliases', 'access profile_content_browser entity browser pages', 'create profile content', 'edit any profile content', 'delete any profile content', 'view profile revisions', 'revert profile revisions', 'delete profile revisions'] as $permission) {
+  if (!$site_admin->hasPermission($permission)) {
+    throw new \RuntimeException("Site Admin is missing Profile permission: $permission.");
+  }
+}
 $entities = \Drupal::entityTypeManager();
 $storage = $entities->getStorage('node');
 $display = $entities->getStorage('entity_form_display')->load('node.profile.default');
@@ -93,7 +100,7 @@ try {
   if ($delta !== 3 || $component->getRegion() !== 'first' || $component->getUuid() !== '97eca01d-afc7-48ad-bbf5-e5b7196de5d9' || $component->getPluginId() !== 'views_block:dashboard_profiles-block_recent' || $components[0]->getPluginId() !== 'views_block:dashboard_editorial-block_recent' || array_search($component->getUuid(), $uuids, TRUE) < 1) {
     throw new \RuntimeException('Profile dashboard component must follow Recently updated in Editor section 3 first.');
   }
-  foreach ([['uid' => 103, 'roles' => ['authenticated', 'site_editor']], ['uid' => 0, 'roles' => ['anonymous']]] as $values) {
+  foreach ([['uid' => 103, 'roles' => ['authenticated', 'site_admin']], ['uid' => 0, 'roles' => ['anonymous']]] as $values) {
     $account = new UserSession($values);
     $switcher->switchTo($account);
     try {

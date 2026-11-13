@@ -115,7 +115,7 @@ config:
           weight: 0
           expanded: false
           enabled: false
-    user.role.site_editor:
+    user.role.site_admin:
       grantPermissions:
         - 'access administration pages'
         - 'access block library'
@@ -130,7 +130,7 @@ config:
         - 'access users overview'
         - 'administer footer menu items'
         - 'administer main menu items'
-        - 'assign site_editor role'
+        - 'assign site_admin role'
         - 'cancel users by role'
         - 'create users'
         - 'delete any file'
@@ -200,4 +200,4 @@ config:
     # Role saves rewrite these settings, so set Safe after all role grants.
     administerusersbyrole.settings:
       simpleConfigUpdate:
-        roles.site_editor: safe
+        roles.site_admin: safe

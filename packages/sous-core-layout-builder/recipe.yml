@@ -28,7 +28,7 @@ config:
       enableLayoutBuilder: {}
       allowLayoutOverrides: true
     core.entity_view_display.node.frontpage.full: *frontpage_display
-    '?user.role.site_editor':
+    '?user.role.site_admin':
       grantPermissions:
         - 'administer block content'
         - 'create and edit custom blocks'
