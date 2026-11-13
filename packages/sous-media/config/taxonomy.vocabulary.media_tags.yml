@@ -1,6 +1,6 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies: {}
 name: 'Media Tags'
 vid: media_tags
 description: 'Provides a tag vocabulary for media.'

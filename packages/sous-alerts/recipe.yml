@@ -1,0 +1,72 @@
+name: 'Sous Alerts'
+description: 'Site-wide alert banners with scheduling, dismissal and a top-of-page block.'
+type: Site
+install:
+  - menu_link_content
+  - sitewide_alert
+  - sitewide_alert_block
+config:
+  strict: false
+  actions:
+    '?dashboard.dashboard.site_admin':
+      addComponentToLayout:
+        section: 0
+        # First, above Site status.
+        position: 0
+        component:
+          # Constant so reapplying replaces this block instead of adding another.
+          uuid: 4110daa8-d05b-4008-9ad5-e6e9ebbcd960
+          region:
+            layout_onecol: content
+          default_region: content
+          configuration:
+            id: sitewide_alert_block
+            label: 'Site alerts'
+            label_display: '0'
+            provider: sitewide_alert_block
+            context_mapping: {}
+    '?dashboard.dashboard.editor':
+      addComponentToLayout:
+        section: 0
+        position: 0
+        component:
+          # Constant so reapplying replaces this block instead of adding another.
+          uuid: 593fc280-4e25-4884-bd75-95c9c5299a2a
+          region:
+            layout_onecol: content
+          default_region: content
+          configuration:
+            id: sitewide_alert_block
+            label: 'Site alerts'
+            label_display: '0'
+            provider: sitewide_alert_block
+            context_mapping: {}
+    sitewide_alert.settings:
+      simpleConfigUpdate:
+        display_order: descending
+        automatic_refresh: false
+    '?user.role.site_admin':
+      grantPermissions:
+        - 'add sitewide alert entities'
+        - 'administer sitewide alert entities'
+        - 'delete sitewide alert entities'
+        - 'edit sitewide alert entities'
+        - 'view unpublished sitewide alert entities'
+    user.role.anonymous:
+      grantPermissions:
+        - 'view published sitewide alert entities'
+    user.role.authenticated:
+      grantPermissions:
+        - 'view published sitewide alert entities'
+    block.block.sous_sitewide_alert:
+      placeBlockInDefaultTheme:
+        plugin: sitewide_alert_block
+        # Core uses the fallback region only when given a region map.
+        region: {}
+        default_region: content_top
+        position: first
+        settings:
+          id: sitewide_alert_block
+          label: 'Sitewide Alert'
+          label_display: '0'
+          provider: sitewide_alert_block

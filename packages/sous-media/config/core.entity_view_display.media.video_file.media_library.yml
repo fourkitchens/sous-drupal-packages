@@ -1,0 +1,41 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.media_library
+    - field.field.media.video_file.field_caption
+    - field.field.media.video_file.field_copyright
+    - field.field.media.video_file.field_description
+    - field.field.media.video_file.field_media_file
+    - field.field.media.video_file.field_tags
+    - field.field.media.video_file.field_transcript
+    - image.style.medium
+    - media.type.video_file
+  module:
+    - image
+id: media.video_file.media_library
+targetEntityType: media
+bundle: video_file
+mode: media_library
+content:
+  thumbnail:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: medium
+      image_loading:
+        attribute: lazy
+    third_party_settings: {}
+    weight: 0
+    region: content
+hidden:
+  created: true
+  field_caption: true
+  field_copyright: true
+  field_description: true
+  field_media_file: true
+  field_tags: true
+  field_transcript: true
+  name: true
+  uid: true

@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {}
+id: accordion
+label: Accordion
+revision: true
+description: 'Toggle between hiding and showing large amounts of content under collapsible headers to enhance usability and manage space efficiently.'

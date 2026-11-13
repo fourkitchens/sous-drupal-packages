@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.block_content.field_related_content
+    - block_content.type.content_list_item
+id: block_content.content_list_item.field_related_content
+field_name: field_related_content
+entity_type: block_content
+bundle: content_list_item
+label: Content
+description: 'Pick existing content to show its teaser, or leave this empty and fill in the custom teaser fields below.'
+required: false
+translatable: false
+default_value: {}
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

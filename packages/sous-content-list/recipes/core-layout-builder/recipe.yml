@@ -1,0 +1,44 @@
+name: 'Sous Content List with Layout Builder'
+description: 'Adds Content List inline blocks to a Layout Builder composition.'
+type: Site
+install:
+  - block_content
+  - entity_reference_revisions
+  - field_group
+  - inline_entity_form
+  - link
+  - linkit
+  - media_library
+  - style_selector
+  - viewsreference
+  - viewsreference_sift
+  - entity_browser
+  - options
+config:
+  strict:
+    - block_content.type.content_list
+    - block_content.type.content_list_item
+    - core.entity_form_display.block_content.content_list.default
+    - core.entity_form_display.block_content.content_list_item.default
+    - core.entity_view_display.block_content.content_list.default
+    - core.entity_view_display.block_content.content_list_item.default
+    - field.field.block_content.content_list.field_content
+    - field.field.block_content.content_list.field_heading
+    - field.field.block_content.content_list.field_link
+    - field.field.block_content.content_list.field_style_columns
+    - field.field.block_content.content_list.field_style_layout_width
+    - field.field.block_content.content_list.field_text
+    - field.field.block_content.content_list.field_view
+    - field.field.block_content.content_list_item.field_heading
+    - field.field.block_content.content_list_item.field_image
+    - field.field.block_content.content_list_item.field_link
+    - field.field.block_content.content_list_item.field_text
+    - field.field.block_content.content_list_item.field_related_content
+    - field.storage.block_content.field_link
+    - field.storage.block_content.field_related_content
+    - field.storage.block_content.field_style_columns
+    - field.storage.block_content.field_view
+  actions:
+    field.field.block_content.tabs_item.field_content:
+      setProperties:
+        settings.handler_settings.target_bundles.content_list: content_list

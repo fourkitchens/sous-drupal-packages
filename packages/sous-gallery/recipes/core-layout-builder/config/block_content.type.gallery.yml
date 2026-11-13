@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {}
+id: gallery
+label: Gallery
+revision: true
+description: 'Displays a collection of images and videos.'

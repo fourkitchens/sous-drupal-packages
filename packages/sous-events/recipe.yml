@@ -1,0 +1,86 @@
+name: 'Sous Events'
+description: 'Adds events with recurring dates, event types, teasers and lists of upcoming and past events.'
+type: Site
+recipes:
+  - sous-workflow
+  - sous-media
+install:
+  - node
+  - menu_link_content
+  - menu_ui
+  - taxonomy
+  - media
+  - media_library
+  - entity_browser
+  - field_group
+  - metatag
+  - path
+  - pathauto
+  - smart_date
+  - smart_date_recur
+  - tagify
+  - views
+config:
+  import:
+    metatag: '*'
+    node:
+      - core.entity_view_mode.node.teaser
+    smart_date: '*'
+  strict:
+    - core.entity_form_display.node.event.default
+    - core.entity_view_display.node.event.admin_preview
+    - core.entity_view_display.node.event.default
+    - core.entity_view_display.node.event.full
+    - core.entity_view_display.node.event.teaser
+    - entity_browser.browser.event_content_browser
+    - field.field.node.event.field_event_date
+    - field.field.node.event.field_event_type
+    - field.field.node.event.field_metadata
+    - field.field.node.event.field_teaser_image
+    - field.field.node.event.field_teaser_text
+    - field.storage.node.field_event_date
+    - field.storage.node.field_event_type
+    - field.storage.node.field_metadata
+    - field.storage.node.field_teaser_image
+    - field.storage.node.field_teaser_text
+    - node.type.event
+    - pathauto.pattern.event
+    - taxonomy.vocabulary.event_types
+    - views.view.dashboard_events
+    - views.view.events
+  actions:
+    '?dashboard.dashboard.editor':
+      addComponentToLayout:
+        section: 3
+        position: 99
+        component:
+          # Constant so reapplying replaces this block instead of adding another.
+          uuid: 8d154da9-bc87-4a1b-ac37-503078f598ec
+          region:
+            layout_twocol_section: second
+          default_region: content
+          configuration:
+            id: 'views_block:dashboard_events-block_upcoming'
+            label: 'Upcoming events'
+            label_display: visible
+            provider: views
+            context_mapping: {}
+            views_label: ''
+            items_per_page: none
+    '?user.role.site_admin':
+      grantPermissions:
+        - 'create url aliases'
+        - 'access event_content_browser entity browser pages'
+        - 'create terms in event_types'
+        - 'edit terms in event_types'
+        - 'delete terms in event_types'
+      grantPermissionsForEachNodeType:
+        - 'create %bundle content'
+        - 'edit any %bundle content'
+        - 'delete any %bundle content'
+        - 'view %bundle revisions'
+        - 'revert %bundle revisions'
+        - 'delete %bundle revisions'
+    workflows.workflow.editorial:
+      addNodeTypes:
+        - event

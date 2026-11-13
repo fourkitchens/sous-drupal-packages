@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - role_delegation
+id: standalone_role_assignment
+label: 'Access standalone role assignment'
+route: role_delegation.edit_form

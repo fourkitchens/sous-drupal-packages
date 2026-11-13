@@ -1,0 +1,6 @@
+disallowed_types:
+  layout_onecol:
+    content:
+      negate: false
+      numeric_limit: 0
+      paragraph_types: {}

@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_show_texture
+    - paragraphs.paragraphs_type.embed
+id: paragraph.embed.field_show_texture
+field_name: field_show_texture
+entity_type: paragraph
+bundle: embed
+label: 'Show Texture'
+description: ''
+required: false
+translatable: false
+default_value: {}
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

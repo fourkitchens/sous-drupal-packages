@@ -1,27 +1,33 @@
 {
-    "name": "fourkitchens/sous-core-layout-builder",
-    "description": "Core Layout Builder composition for Sous Page and Frontpage content.",
-    "keywords": [
-        "recipe",
-        "Drupal recipes",
-        "drupal recipe"
-    ],
-    "type": "drupal-recipe",
-    "license": "GPL-2.0-or-later",
-    "authors": [
-        {
-            "name": "Four Kitchens",
-            "role": "Maintainer"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {
-        "drupal/core": "^11.4.11",
-        "fourkitchens/sous-content-types": "^2.0"
-    },
-    "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
-    "support": {
-        "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
-        "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-core-layout-builder"
+  "name": "fourkitchens/sous-core-layout-builder",
+  "description": "Enables Layout Builder for Page and Frontpage with text, media, accordion, tab, quote, embed and table blocks.",
+  "keywords": [
+    "recipe",
+    "Drupal recipes",
+    "drupal recipe"
+  ],
+  "type": "drupal-recipe",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Four Kitchens",
+      "role": "Maintainer"
     }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "drupal/core": "^11.4",
+    "drupal/entity_reference_revisions": "^1.14",
+    "drupal/field_group": "^4.0.0",
+    "drupal/inline_entity_form": "^3.0",
+    "drupal/media_library_edit": "^3.0.3",
+    "drupal/style_selector": "^2.0",
+    "drupal/tablefield": "^3.0",
+    "fourkitchens/sous-content-types": "^2.0"
+  },
+  "homepage": "https://github.com/fourkitchens/sous-drupal-packages",
+  "support": {
+    "issues": "https://github.com/fourkitchens/sous-drupal-packages/issues",
+    "source": "https://github.com/fourkitchens/sous-drupal-packages/tree/main/packages/sous-core-layout-builder"
+  }
 }

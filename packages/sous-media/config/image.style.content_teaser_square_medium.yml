@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: content_teaser_square_medium
+label: Content | Teaser (square) | Medium
+effects:
+  f6547a22-6a9d-4bb4-a7aa-916dc5817742:
+    uuid: f6547a22-6a9d-4bb4-a7aa-916dc5817742
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 300
+      height: 300
+      crop_type: focal_point
+  b700edb7-d8d0-4ff2-889a-55efeae2b712:
+    uuid: b700edb7-d8d0-4ff2-889a-55efeae2b712
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

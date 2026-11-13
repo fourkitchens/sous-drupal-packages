@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.block_content.field_embed_code
+    - block_content.type.embed
+id: block_content.embed.field_embed_code
+field_name: field_embed_code
+entity_type: block_content
+bundle: embed
+label: 'Embed Code'
+description: 'Paste third-party embed code here (JavaScript, iframes, etc.). ⚠️ Use with caution. Only add code from verified, trusted sources. Malicious or poorly written code can compromise site security, harm visitors, or break the page entirely.'
+required: false
+translatable: false
+default_value: {}
+default_value_callback: ''
+settings: {}
+field_type: string_long

@@ -1,102 +1,159 @@
 name: 'Sous Paragraphs'
-description: 'Optional Paragraphs composition for Sous Page and Frontpage content types.'
-type: 'Site'
+description: 'Adds Layout Paragraphs authoring to Page and Frontpage with reusable components.'
+type: Site
 recipes:
-  - sous-content-types
+  - sous-content-base
   - sous-paragraph-types
 install:
+  - layout_discovery
+  - layout_builder
+  - layout_paragraphs
+  - layout_paragraphs_library
+  - layout_paragraphs_permissions
+  - layout_paragraphs_limit
   - paragraphs_features
+  - paragraphs_type_permissions
 config:
   import:
     paragraphs_ee: '*'
     paragraphs_features: '*'
   actions:
-    # Update page form display settings
     core.entity_form_display.node.page.default:
       setComponent:
         name: field_content
         options:
-          type: paragraphs
-          weight: 123
+          type: layout_paragraphs
+          weight: 7
           region: content
           settings:
-            title: Component
-            title_plural: Components
-            edit_mode: open
-            closed_mode: summary
-            autocollapse: none
-            closed_mode_threshold: 0
-            add_mode: dropdown
+            view_mode: default
+            preview_view_mode: default
             form_display_mode: default
-            default_paragraph_type: _none
-            features:
-              add_above: add_above
-              collapse_edit_all: collapse_edit_all
-              convert: '0'
-              duplicate: '0'
-          third_party_settings:
-            paragraphs_features:
-              add_in_between: false
-              add_in_between_link_count: 3
-              delete_confirmation: true
-              show_drag_and_drop: true
-              show_collapse_all: true
-            paragraphs_ee:
-              paragraphs_ee:
-                dialog_off_canvas: false
-                dialog_style: tiles
-      # Keep Body visible while retaining the base recipe's other authoring tabs.
-      simpleConfigUpdate:
+            nesting_depth: 0
+            require_layouts: 0
+            empty_message: ''
+            widget_settings_source: default
+            widget_settings:
+              show_search: true
+              show_icons: true
+              show_description: false
+              display_mode: list
+          third_party_settings: {}
+      setProperties:
         third_party_settings.field_group.group_content.children:
-          - body
           - field_content
-    # Update page view display settings
-    core.entity_view_display.node.page.default:
+    core.entity_view_display.node.page.default: &page_display
       setComponent:
         name: field_content
         options:
-          type: entity_reference_revisions_entity_view
+          type: layout_paragraphs
           label: hidden
           settings:
             view_mode: default
             link: ''
-          third_party_settings: {  }
-          weight: 10
+          third_party_settings: {}
+          weight: 1
           region: content
+    core.entity_view_display.node.page.full: *page_display
     core.entity_form_display.node.frontpage.default:
       setComponent:
         name: field_content
         options:
-          type: paragraphs
-          weight: 122
-          region: content
-          settings:
-            title: Component
-            title_plural: Components
-            edit_mode: open
-            closed_mode: summary
-            autocollapse: none
-            closed_mode_threshold: 0
-            add_mode: dropdown
-            form_display_mode: default
-            default_paragraph_type: _none
-            features:
-              add_above: add_above
-              collapse_edit_all: collapse_edit_all
-          third_party_settings: { }
-      simpleConfigUpdate:
-        third_party_settings.field_group.group_content.children:
-          - body
-          - field_content
-    core.entity_view_display.node.frontpage.default:
-      setComponent:
-        name: field_content
-        options:
-          type: entity_reference_revisions_entity_view
-          label: hidden
-          weight: 10
+          type: layout_paragraphs
+          weight: 7
           region: content
           settings:
             view_mode: default
+            preview_view_mode: default
+            form_display_mode: default
+            nesting_depth: 0
+            require_layouts: 0
+            empty_message: ''
+            widget_settings_source: default
+            widget_settings:
+              show_search: true
+              show_icons: true
+              show_description: false
+              display_mode: list
+          third_party_settings: {}
+      setProperties:
+        third_party_settings.field_group.group_content.children:
+          - field_content
+    core.entity_view_display.node.frontpage.default: &frontpage_display
+      setComponent:
+        name: field_content
+        options:
+          type: layout_paragraphs
+          label: hidden
+          settings:
+            view_mode: default
             link: ''
-          third_party_settings: { }
+          third_party_settings: {}
+          weight: 1
+          region: content
+    core.entity_view_display.node.frontpage.full: *frontpage_display
+    '?user.role.site_admin':
+      grantPermissions:
+        - 'access component_library entity browser pages'
+        - 'administer paragraphs library'
+        - 'bypass paragraphs type content access'
+        - 'duplicate layout paragraphs components'
+        - 'edit layout paragraphs plugin config'
+        - 'reorder layout paragraphs components'
+    user.role.anonymous:
+      grantPermissions:
+        - 'view paragraph content layout'
+        - 'view paragraph content text'
+        - 'view paragraph content text_with_media'
+        - 'view paragraph content video'
+        - 'view paragraph content image'
+        - 'view paragraph content accordion'
+        - 'view paragraph content quote'
+        - 'view paragraph content embed'
+        - 'view paragraph content table'
+        - 'view paragraph content tabs'
+        - 'view paragraph content from_library'
+        - 'view paragraph content accordion_item'
+        - 'view paragraph content tabs_item'
+    user.role.authenticated:
+      grantPermissions:
+        - 'view paragraph content layout'
+        - 'view paragraph content text'
+        - 'view paragraph content text_with_media'
+        - 'view paragraph content video'
+        - 'view paragraph content image'
+        - 'view paragraph content accordion'
+        - 'view paragraph content quote'
+        - 'view paragraph content embed'
+        - 'view paragraph content table'
+        - 'view paragraph content tabs'
+        - 'view paragraph content from_library'
+        - 'view paragraph content accordion_item'
+        - 'view paragraph content tabs_item'
+    layout_paragraphs.settings:
+      simpleConfigUpdate:
+        show_paragraph_labels: 0
+        show_layout_labels: 0
+        show_layout_plugin_labels: 0
+        paragraph_behaviors_label: Behaviors
+        paragraph_behaviors_position: -99
+        empty_message: 'No components to add.'
+        button_labels:
+          enable_tooltips: true
+          default: 'Add Component'
+          root: 'Add Component'
+          layout: 'Add Component'
+    layout_paragraphs.modal_settings:
+      simpleConfigUpdate:
+        width: 80%
+        height: 80%
+        autoresize: true
+    layout_paragraphs.widget_settings:
+      simpleConfigUpdate:
+        show_search: true
+        show_icons: true
+        show_description: true
+        display_mode: grid
+    paragraphs_features.settings:
+      simpleConfigUpdate:
+        dropdown_to_button: false

@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {}
+id: behavioral_components
+label: 'Behavioral Components'
+description: ''
+weight: -8

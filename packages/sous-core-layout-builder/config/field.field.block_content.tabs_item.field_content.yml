@@ -1,0 +1,49 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.block_content.field_content
+    - block_content.type.tabs_item
+    - block_content.type.text
+    - block_content.type.text_with_media
+    - block_content.type.image
+    - block_content.type.video
+    - block_content.type.accordion
+    - block_content.type.accordion_item
+    - block_content.type.quote
+    - block_content.type.embed
+    - block_content.type.table
+    - block_content.type.tabs
+  module:
+    - entity_reference_revisions
+id: block_content.tabs_item.field_content
+field_name: field_content
+entity_type: block_content
+bundle: tabs_item
+label: Content
+description: ''
+required: true
+translatable: false
+default_value: {}
+default_value_callback: ''
+settings:
+  handler: 'default:block_content'
+  handler_settings:
+    target_bundles:
+      text: text
+      text_with_media: text_with_media
+      image: image
+      video: video
+      quote: quote
+      table: table
+      accordion: accordion
+      accordion_item: accordion_item
+      tabs: tabs
+      tabs_item: tabs_item
+      embed: embed
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference_revisions

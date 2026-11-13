@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.events
+  module:
+    - views
+name: event_content_browser
+label: Event Content Browser
+display: modal
+display_configuration:
+  width: '950'
+  height: ''
+  link_text: Select Events
+  auto_open: false
+  use_admin_theme: true
+selection_display: no_display
+selection_display_configuration: {}
+widget_selector: tabs
+widget_selector_configuration: {}
+widgets:
+  2b013b35-5e6b-4813-b6cb-e5eefaafe92d:
+    id: view
+    uuid: 2b013b35-5e6b-4813-b6cb-e5eefaafe92d
+    label: Event Library
+    weight: 1
+    settings:
+      submit_text: Select Events
+      auto_select: false
+      view: events
+      view_display: entity_browser

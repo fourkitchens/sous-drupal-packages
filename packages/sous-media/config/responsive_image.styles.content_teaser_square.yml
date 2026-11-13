@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.content_teaser_square_medium
+    - image.style.content_teaser_square_small
+    - image.style.content_teaser_square_xsmall
+  theme:
+    - emulsify
+id: content_teaser_square
+label: Content | Teaser (square)
+image_style_mappings:
+  - image_mapping_type: image_style
+    image_mapping: content_teaser_square_medium
+    breakpoint_id: emulsify.medium
+    multiplier: 1x
+  - image_mapping_type: image_style
+    image_mapping: content_teaser_square_small
+    breakpoint_id: emulsify.small
+    multiplier: 1x
+  - image_mapping_type: image_style
+    image_mapping: content_teaser_square_xsmall
+    breakpoint_id: emulsify.xsmall
+    multiplier: 1x
+breakpoint_group: emulsify
+fallback_image_style: content_teaser_square_medium

@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {}
+id: accordion_item
+label: 'Accordion Item'
+revision: true
+description: 'Organizes content within the accordion component.'

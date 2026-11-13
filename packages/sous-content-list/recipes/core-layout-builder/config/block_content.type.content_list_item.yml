@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {}
+id: content_list_item
+label: 'Content List Item'
+revision: true
+description: 'Displays an existing content teaser or a custom teaser.'

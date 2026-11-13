@@ -1,0 +1,37 @@
+name: 'Sous Dashboard'
+description: 'Adds Site admin and Editor dashboards that Superusers and Site Admins land on after signing in.'
+type: Site
+recipes:
+  - sous-workflow
+install:
+  - dashboard
+  - dblog
+  - editoria11y
+  - login_history
+  - menu_link_content
+  - menu_ui
+  - views
+config:
+  # Projects own the layouts after install; reapplying never overwrites them.
+  strict: false
+  import:
+    # Scheduled changes links to Scheduler's list, which no other recipe imports.
+    scheduler:
+      - views.view.scheduler_scheduled_content
+  actions:
+    '?user.role.site_admin':
+      grantPermissions:
+        - 'view editor dashboard'
+    # Recipes install modules in sync mode, so Navigation skips Dashboard's link.
+    '?navigation.block_layout':
+      simpleConfigUpdate:
+        sections.0.components.39fc0823-1d8b-423b-8ab5-f804ee2b1fa7:
+          uuid: 39fc0823-1d8b-423b-8ab5-f804ee2b1fa7
+          region: content
+          configuration:
+            id: navigation_dashboard
+            label: Dashboard
+            label_display: '0'
+            provider: dashboard
+          weight: -10
+          additional: {}

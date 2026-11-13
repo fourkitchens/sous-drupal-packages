@@ -1,0 +1,34 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.block_content.field_content
+    - block_content.type.accordion_item
+    - block_content.type.image
+    - block_content.type.text
+    - block_content.type.video
+  module:
+    - entity_reference_revisions
+id: block_content.accordion_item.field_content
+field_name: field_content
+entity_type: block_content
+bundle: accordion_item
+label: Content
+description: ''
+required: false
+translatable: false
+default_value: {}
+default_value_callback: ''
+settings:
+  handler: 'default:block_content'
+  handler_settings:
+    target_bundles:
+      text: text
+      image: image
+      video: video
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference_revisions

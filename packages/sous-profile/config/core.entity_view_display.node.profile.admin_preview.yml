@@ -1,0 +1,45 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.admin_preview
+    - field.field.node.profile.field_description
+    - field.field.node.profile.field_first_name
+    - field.field.node.profile.field_image
+    - field.field.node.profile.field_last_name
+    - field.field.node.profile.field_metadata
+    - field.field.node.profile.field_teaser_image
+    - field.field.node.profile.field_teaser_text
+    - node.type.profile
+  module:
+    - user
+id: node.profile.admin_preview
+targetEntityType: node
+bundle: profile
+mode: admin_preview
+content:
+  field_teaser_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: preview
+      link: false
+    third_party_settings: {}
+    weight: 0
+    region: content
+  field_teaser_text:
+    type: basic_string
+    label: hidden
+    settings: {}
+    third_party_settings: {}
+    weight: 1
+    region: content
+hidden:
+  content_moderation_control: true
+  field_description: true
+  field_first_name: true
+  field_image: true
+  field_last_name: true
+  field_metadata: true
+  links: true
+  published_at: true

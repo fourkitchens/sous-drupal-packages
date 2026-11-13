@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.block_content.field_view
+    - block_content.type.content_list
+  module:
+    - viewsreference
+id: block_content.content_list.field_view
+field_name: field_view
+entity_type: block_content
+bundle: content_list
+label: 'Teaser listing'
+description: ''
+required: false
+translatable: false
+default_value: {}
+default_value_callback: ''
+settings:
+  handler: 'default:view'
+  handler_settings: {}
+  plugin_types:
+    embed: embed
+  preselect_views:
+    events: events
+    news: news
+    profiles: profiles
+  enabled_settings:
+    limit: limit
+    sift_terms: sift_terms
+field_type: viewsreference

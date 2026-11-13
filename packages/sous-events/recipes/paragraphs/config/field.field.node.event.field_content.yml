@@ -1,0 +1,80 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_content
+    - node.type.event
+    - paragraphs.paragraphs_type.layout
+    - paragraphs.paragraphs_type.text
+    - paragraphs.paragraphs_type.text_with_media
+    - paragraphs.paragraphs_type.video
+    - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.accordion
+    - paragraphs.paragraphs_type.quote
+    - paragraphs.paragraphs_type.embed
+    - paragraphs.paragraphs_type.table
+    - paragraphs.paragraphs_type.tabs
+    - paragraphs.paragraphs_type.from_library
+  module:
+    - entity_reference_revisions
+id: node.event.field_content
+field_name: field_content
+entity_type: node
+bundle: event
+label: Content
+description: ''
+required: false
+translatable: false
+default_value: {}
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      layout: layout
+      text: text
+      text_with_media: text_with_media
+      image: image
+      video: video
+      quote: quote
+      table: table
+      accordion: accordion
+      tabs: tabs
+      from_library: from_library
+      embed: embed
+    negate: 0
+    target_bundles_drag_drop:
+      layout:
+        weight: -50
+        enabled: true
+      text:
+        weight: -49
+        enabled: true
+      text_with_media:
+        weight: -48
+        enabled: true
+      image:
+        weight: -47
+        enabled: true
+      video:
+        weight: -46
+        enabled: true
+      quote:
+        weight: -44
+        enabled: true
+      table:
+        weight: -43
+        enabled: true
+      accordion:
+        weight: -42
+        enabled: true
+      tabs:
+        weight: -40
+        enabled: true
+      from_library:
+        weight: -37
+        enabled: true
+      embed:
+        weight: -36
+        enabled: true
+field_type: entity_reference_revisions

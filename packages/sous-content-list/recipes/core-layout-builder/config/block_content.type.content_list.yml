@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {}
+id: content_list
+label: 'Content List'
+revision: true
+description: 'Hand-picked teasers or an automatic teaser listing that can be filtered by terms.'

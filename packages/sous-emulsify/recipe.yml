@@ -1,5 +1,5 @@
 name: 'Sous Emulsify'
-description: 'A recipe that installs Emulsify dependencies and sets Emulsify as the default theme.'
+description: 'Sets Emulsify as the default theme and adds tools for theme development.'
 type: 'Site'
 install:
   - emulsify
@@ -7,5 +7,5 @@ install:
 config:
   actions:
     system.theme:
-      simple_config_update:
+      simpleConfigUpdate:
         default: emulsify

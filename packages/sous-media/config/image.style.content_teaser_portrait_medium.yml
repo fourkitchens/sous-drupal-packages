@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: content_teaser_portrait_medium
+label: Content | Teaser (portrait) | Medium
+effects:
+  dbd54fab-11ed-4c85-9cc9-e273ea60cd56:
+    uuid: dbd54fab-11ed-4c85-9cc9-e273ea60cd56
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 340
+      height: 445
+      crop_type: focal_point
+  82d5ee14-6fad-44ab-b6f8-f6bd16350132:
+    uuid: 82d5ee14-6fad-44ab-b6f8-f6bd16350132
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

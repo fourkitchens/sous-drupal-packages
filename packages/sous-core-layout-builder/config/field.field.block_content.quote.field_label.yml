@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.block_content.field_label
+    - block_content.type.quote
+id: block_content.quote.field_label
+field_name: field_label
+entity_type: block_content
+bundle: quote
+label: Attribution
+description: ''
+required: true
+translatable: false
+default_value: {}
+default_value_callback: ''
+settings: {}
+field_type: string

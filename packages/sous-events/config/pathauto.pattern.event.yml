@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+  config:
+    - node.type.event
+id: event
+label: Event
+type: 'canonical_entities:node'
+pattern: '/event/[node:field_event_date:0:value-custom:m]-[node:field_event_date:0:value-custom:Y]/[node:field_event_type:entity:name]/[node:title]'
+selection_criteria:
+  cf172171-9f3f-4eba-a145-14d11ceec080:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: cf172171-9f3f-4eba-a145-14d11ceec080
+    context_mapping:
+      node: node
+    bundles:
+      event: event
+selection_logic: and
+weight: -5
+relationships: {}

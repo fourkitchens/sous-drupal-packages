@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {}
+id: video_file
+label: Video File
+description: Upload an approved MP4 or WebM file. Use Video for YouTube or Vimeo.
+source: video_file
+queue_thumbnail_downloads: false
+new_revision: true
+source_configuration:
+  source_field: field_media_file
+field_map:
+  name: name

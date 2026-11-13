@@ -1,0 +1,11 @@
+name: 'Sous Search'
+description: 'Site search with a placeable results block and content type filter.'
+type: Site
+install:
+  - search_api
+  - search_api_db
+  - facets
+  - facets_exposed_filters
+  - views
+config:
+  strict: false

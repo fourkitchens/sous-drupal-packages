@@ -1,0 +1,20 @@
+name: 'Sous Workflow'
+description: 'Provides Draft, Published and Archived moderation states with scheduled state changes.'
+type: Site
+install:
+  - workflows
+  - content_moderation
+  - node
+  - scheduler
+  - scheduler_content_moderation_integration
+  - views
+config:
+  # Keep project changes and the content types added by earlier recipes.
+  strict: []
+  import:
+    content_moderation:
+      - views.view.moderated_content
+  actions:
+    core.entity_view_mode.node.full:
+      setProperties:
+        label: Full

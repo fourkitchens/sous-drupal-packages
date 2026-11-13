@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {}
+id: dashboard-create
+label: Create
+description: 'Add content and media from the Editor dashboard.'
+locked: true

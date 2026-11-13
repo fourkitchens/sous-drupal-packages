@@ -1,0 +1,6 @@
+name: 'Sous Gallery'
+description: 'Adds a Gallery component for images and videos.'
+type: Site
+recipes:
+  - sous-formats
+  - sous-media

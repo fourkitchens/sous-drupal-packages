@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.block_content.field_style_columns
+    - block_content.type.content_list
+  module:
+    - style_selector
+id: block_content.content_list.field_style_columns
+field_name: field_style_columns
+entity_type: block_content
+bundle: content_list
+label: Columns
+description: ''
+required: true
+translatable: false
+default_value:
+  - value: column-three
+default_value_callback: ''
+settings: {}
+field_type: style_selector_css_class

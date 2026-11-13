@@ -1,0 +1,53 @@
+name: 'Sous Content Base'
+description: 'Provides shared Page and Frontpage fields, authoring tabs, teasers and URL aliases.'
+type: Site
+recipes:
+  - sous-workflow
+  - sous-formats
+  - sous-media
+install:
+  - media
+  - media_library
+  - node
+  - text
+  - user
+  - views
+  - menu_link_content
+  - menu_ui
+  - path
+  - pathauto
+  - entity_browser
+  - field_group
+  - metatag
+  - publication_date
+config:
+  import:
+    metatag: '*'
+    node:
+      - core.entity_view_mode.node.teaser
+  actions:
+    '?user.role.site_admin':
+      grantPermissions:
+        - 'create url aliases'
+        - 'access page_content_browser entity browser pages'
+        - 'access frontpage_content_browser entity browser pages'
+      grantPermissionsForEachNodeType:
+        - 'create %bundle content'
+        - 'edit any %bundle content'
+        - 'delete any %bundle content'
+        - 'view %bundle revisions'
+        - 'revert %bundle revisions'
+        - 'delete %bundle revisions'
+    workflows.workflow.editorial:
+      addNodeTypes:
+        - page
+        - frontpage
+    core.entity_form_display.node.page.default:
+      setComponent:
+        name: path
+        options:
+          type: path
+          weight: 30
+          region: content
+          settings: {}
+          third_party_settings: {}

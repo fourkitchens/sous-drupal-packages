@@ -1,0 +1,44 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.profile.field_description
+    - field.field.node.profile.field_first_name
+    - field.field.node.profile.field_image
+    - field.field.node.profile.field_last_name
+    - field.field.node.profile.field_metadata
+    - field.field.node.profile.field_teaser_image
+    - field.field.node.profile.field_teaser_text
+    - node.type.profile
+  module:
+    - text
+    - user
+id: node.profile.default
+targetEntityType: node
+bundle: profile
+mode: default
+content:
+  field_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {}
+    weight: 0
+    region: content
+  field_description:
+    type: text_default
+    label: hidden
+    settings: {}
+    third_party_settings: {}
+    weight: 1
+    region: content
+hidden:
+  field_first_name: true
+  field_last_name: true
+  field_metadata: true
+  field_teaser_image: true
+  field_teaser_text: true
+  links: true
+  published_at: true

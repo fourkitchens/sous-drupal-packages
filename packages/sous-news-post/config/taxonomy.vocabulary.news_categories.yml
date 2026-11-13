@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {}
+name: 'News Categories'
+vid: news_categories
+description: 'Categories used to organize news posts.'
+weight: 0
+new_revision: false
